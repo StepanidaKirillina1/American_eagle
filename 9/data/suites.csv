@@ -1,0 +1,4 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Thu Jun 26 06:42:08 GMT 2025","Thu Jun 26 06:42:08 GMT 2025","509","","api.CartTest","","api.CartTest","getCartItemsCountTest","getCartItemsCountTest()",""
+"passed","Thu Jun 26 06:42:07 GMT 2025","Thu Jun 26 06:42:08 GMT 2025","754","","api.CartTest","","api.CartTest","addToCartAsGuestTest","addToCartAsGuestTest()",""
+"passed","Thu Jun 26 06:42:08 GMT 2025","Thu Jun 26 06:42:09 GMT 2025","1114","","api.CartTest","","api.CartTest","testOriginalTotalPrice","testOriginalTotalPrice()",""
