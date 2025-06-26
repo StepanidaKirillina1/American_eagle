@@ -39,7 +39,7 @@ jobs:
           SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
           AUTHORIZATION: ${{secrets.AUTHORIZATION}}
           COOKIE: ${{secrets.COOKIE}}
-        run: ./gradlew clean test -Dauthorization=$AUTHORIZATION -DCookie=$COOKIE
+        run: ./gradlew clean test "-Dauthorization=$AUTHORIZATION" "-DCookie=$COOKIE"
 
       - name: Copy History
         uses: actions/checkout@v2
