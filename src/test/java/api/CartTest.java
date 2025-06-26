@@ -9,6 +9,8 @@ import org.junit.jupiter.api.*;
 import testData.ProductId;
 import testData.TestData;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -19,7 +21,7 @@ public class CartTest {
     CartPayloadData cartPayloadData = new CartPayloadData();
     ProductController productController = new ProductController();
 
-    private static final int ITEM_QUANTITY = 1;
+    private static final int ITEM_QUANTITY = 3;
 
     @Test
     @Order(1)
@@ -33,7 +35,7 @@ public class CartTest {
 
     @Test
     @Order(2)
-    public void getBagItemsCountTest() {
+    public void getCartItemsCountTest() {
         cartController.getCartItemsCount()
                 .then()
                 .statusCode(200)
@@ -48,8 +50,10 @@ public class CartTest {
                         .statusCode(200)
                                 .extract().body().jsonPath().getList("data.items", CartItem.class);
 
-        double expectedPrice = productController.getProductById(ProductId.PRODUCT_ID_1).getSkus().get(0).getSalePrice() * ITEM_QUANTITY;
+        double price = productController.getProductById(ProductId.PRODUCT_ID_1).getSkus().get(0).getSalePrice() * ITEM_QUANTITY;
+        BigDecimal expectedPrice = new BigDecimal(price);
+        expectedPrice = expectedPrice.setScale(2, RoundingMode.HALF_EVEN);
 
-        Assertions.assertEquals(expectedPrice, cartItems.get(0).getOriginalPrice());
+        Assertions.assertEquals(expectedPrice, BigDecimal.valueOf(cartItems.get(0).getOriginalPrice()));
     }
 }

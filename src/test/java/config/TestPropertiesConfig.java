@@ -4,7 +4,7 @@ import org.aeonbits.owner.Config;
 
 @Config.Sources({
         "classpath:${env}.properties",
-        "classpath:default.properties"
+        "classpath:test.properties"
 })
 
 public interface TestPropertiesConfig extends Config {
