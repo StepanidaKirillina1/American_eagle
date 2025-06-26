@@ -19,6 +19,8 @@ public class ProductController {
                 .contentType(ContentType.JSON)
                 .header("Accept", "application/json")
                 .header("Aesite", "AEO_US")
+                .header("Aelang", "en_US")
+                .header("Aecountry", "US")
                 //.header("x-access-token", tokenController.getToken())
                 .header("Authorization", "Bearer " + tokenController.getToken())
                 .baseUri(API_BASE_URL);
