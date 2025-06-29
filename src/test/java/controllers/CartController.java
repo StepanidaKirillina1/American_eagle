@@ -4,6 +4,10 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import models.CartPayloadData;
+import models.Item;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static testData.TestData.API_BASE_URL;
@@ -12,6 +16,7 @@ public class CartController {
     RequestSpecification requestSpecification;
     TokenController tokenController = new TokenController();
     private static final String CART_ENDPOINT = "bag/v1";
+    List<Item> items = new ArrayList<>();
 
     public CartController() {
         this.requestSpecification = given()
