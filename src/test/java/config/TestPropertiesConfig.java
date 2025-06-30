@@ -13,4 +13,10 @@ public interface TestPropertiesConfig extends Config {
 
     @Key("Cookie")
     String getCookieValue();
+
+    @Key("login")
+    String getLogin();
+
+    @Key("password")
+    String getPassword();
 }

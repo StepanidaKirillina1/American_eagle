@@ -5,10 +5,6 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import models.CartPayloadData;
 import models.CartResponseData;
-import models.Item;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static testData.TestData.API_BASE_URL;
@@ -17,7 +13,6 @@ public class CartController {
     RequestSpecification requestSpecification;
     TokenController tokenController = new TokenController();
     private static final String CART_ENDPOINT = "bag/v1";
-    List<Item> items = new ArrayList<>();
 
     public CartController() {
         this.requestSpecification = given()
@@ -26,8 +21,8 @@ public class CartController {
                 .header("Aesite", "AEO_US")
                 .header("Aelang", "en_US")
                 .header("Aecountry", "US")
-                //.header("x-access-token", tokenController.getToken())
-                .header("Authorization", "Bearer " + tokenController.getToken())
+                //.header("x-access-token", tokenController.getGuestToken())
+                .header("Authorization", "Bearer " + tokenController.getGuestToken())
                 .baseUri(API_BASE_URL);
     }
 

@@ -38,7 +38,9 @@ jobs:
         env:
           AUTHORIZATION: ${{secrets.AUTHORIZATION}}
           COOKIE: ${{secrets.COOKIE}}
-        run: ./gradlew clean test "-Dauthorization=$AUTHORIZATION" "-DCookie=$COOKIE"
+          LOGIN: ${{secrets.LOGIN}}
+          PASSWORD: ${{secrets.PASSWORD}}
+        run: ./gradlew clean test "-Dauthorization=$AUTHORIZATION" "-DCookie=$COOKIE" "-Dlogin=$LOGIN" "-Dpassword=$PASSWORD"
 
       - name: Copy History
         uses: actions/checkout@v2
