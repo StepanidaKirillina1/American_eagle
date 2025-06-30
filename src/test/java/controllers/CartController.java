@@ -4,6 +4,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import models.CartPayloadData;
+import models.CartResponseData;
 import models.Item;
 
 import java.util.ArrayList;
@@ -30,13 +31,21 @@ public class CartController {
                 .baseUri(API_BASE_URL);
     }
 
-    public Response addItemToCart(CartPayloadData items) {
+    public CartResponseData addItemToCart(CartPayloadData items) {
         return given(requestSpecification)
                 .body(items)
                 .when()
                 .post(CART_ENDPOINT + "/items")
                 .then()
-                .extract().response();
+                .extract().as(CartResponseData.class);
+    }
+
+    public CartResponseData removeItemFromCart(String itemId) {
+        return given(requestSpecification)
+                .when()
+                .delete(CART_ENDPOINT + "/items?itemIds=" + itemId)
+                .then()
+                .extract().as(CartResponseData.class);
     }
 
     public Response getCartItemsCount() {
