@@ -30,10 +30,7 @@ public class CartTest {
     public void addToCartAsGuestTest() {
         cartPayloadData.setItems(TestData.getListOfProducts(ProductId.PRODUCT_ID_1, ITEM_QUANTITY));
 
-        cartController.addItemToCart(cartPayloadData)
-             .then().log().body()
-             .statusCode(202)
-             .body("cartId", Matchers.notNullValue());
+        Assertions.assertFalse(cartController.addItemToCart(cartPayloadData).getCartId().isEmpty());
     }
 
     @Test
@@ -89,5 +86,18 @@ public class CartTest {
         }
 
         Assertions.assertEquals(expectedSalePrice, actualPriceWithDiscount);
+    }
+
+    @Test
+    @Order(5)
+    public void removeItemFromCart() {
+        String firstCartItemId = cartItems.get(0).getItemId();
+
+        Assertions.assertFalse(cartController.removeItemFromCart(firstCartItemId).getCartId().isEmpty());
+
+        cartController.getCartData()
+                .then().log().body()
+                .statusCode(200)
+                .body("data.items", Matchers.hasSize(0));
     }
 }
