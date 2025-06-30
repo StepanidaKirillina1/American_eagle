@@ -45,8 +45,7 @@ public class CartTest {
     @Test
     @Order(3)
     public void testOriginalTotalPriceInCart() {
-        BigDecimal expectedPrice = null
-                ;
+        BigDecimal expectedPrice = null;
         cartItems = cartController.getCartData()
                 .then().log().body()
                 .statusCode(200)
