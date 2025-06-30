@@ -22,7 +22,7 @@ public class ProductController {
                 .header("Aelang", "en_US")
                 .header("Aecountry", "US")
                 //.header("x-access-token", tokenController.getToken())
-                .header("Authorization", "Bearer " + tokenController.getToken())
+                .header("Authorization", "Bearer " + tokenController.getGuestToken())
                 .baseUri(API_BASE_URL);
     }
 

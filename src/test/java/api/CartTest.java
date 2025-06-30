@@ -56,7 +56,6 @@ public class CartTest {
 
         for (Sku sku: skus) {
             if (ProductId.PRODUCT_ID_1.getSkuId().equals(sku.getSkuId())) {
-                //double price = (sku.getListPrice()) * ITEM_QUANTITY;
                 expectedPrice = new BigDecimal((sku.getListPrice()) * ITEM_QUANTITY)
                         .setScale(2, RoundingMode.HALF_EVEN);
             }
