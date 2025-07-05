@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.TestUtils;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -23,8 +25,7 @@ public class CartTest extends BaseTest {
     }
 
     @Test
-    public void addItemToCartViaQuickShopButton() throws InterruptedException {
-        Thread.sleep(20000);
+    public void addItemToCartViaQuickShopButton() {
         scrollToRandomLink(actions, driver, By.className("_top-link_ali1iz"));
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
         TestUtils.clickOnRandomLink(driver, By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"));
@@ -78,7 +79,11 @@ public class CartTest extends BaseTest {
     }
 
     public void scrollToRandomLink(Actions actions, WebDriver driver, By locator) {
-        List<WebElement> elements = driver.findElements(By.className("_top-link_ali1iz"));
+        //List<WebElement> elements = driver.findElements(By.className("_top-link_ali1iz"));
+        List<WebElement> elements = new WebDriverWait(driver, Duration.ofSeconds(60))
+                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+                        By.className("_top-link_ali1iz")
+                ));
 
         int randomIndex = new Random().nextInt(elements.size());
 
