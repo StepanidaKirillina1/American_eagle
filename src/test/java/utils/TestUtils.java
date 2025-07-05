@@ -5,6 +5,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import ui.BaseTest;
 
 import java.util.List;
 import java.util.Random;
@@ -25,13 +26,13 @@ public class TestUtils {
         elements.get(randomIndex).click();
     }
 
-    public static void scrollToRandomLink(Actions actions, WebDriver driver, By locator) {
-        List<WebElement> elements = driver.findElements(locator);
-
-        int randomIndex = new Random().nextInt(elements.size());
-
-        System.out.println(elements.get(randomIndex).getText());
-
-        actions.moveToElement(elements.get(randomIndex)).perform();
-    }
+//    public void scrollToRandomLink(Actions actions, WebDriver driver, By locator) {
+//        List<WebElement> elements = driver.findElements(locator);
+//
+//        int randomIndex = new Random().nextInt(elements.size());
+//
+//        System.out.println(elements.get(randomIndex).getText());
+//
+//        actions.moveToElement(elements.get(randomIndex)).perform();
+//    }
 }

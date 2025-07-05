@@ -24,7 +24,7 @@ public class CartTest extends BaseTest {
 
     @Test
     public void addItemToCartViaQuickShopButton() {
-        TestUtils.scrollToRandomLink(actions, driver, By.className("_top-link_ali1iz"));
+        scrollToRandomLink(actions, driver, By.className("_top-link_ali1iz"));
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
         TestUtils.clickOnRandomLink(driver, By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"));
 
@@ -74,5 +74,15 @@ public class CartTest extends BaseTest {
         }
 
         throw new NoSuchElementException("All sizes are out of stock");
+    }
+
+    public void scrollToRandomLink(Actions actions, WebDriver driver, By locator) {
+        List<WebElement> elements = getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+
+        int randomIndex = new Random().nextInt(elements.size());
+
+        System.out.println(elements.get(randomIndex).getText());
+
+        actions.moveToElement(elements.get(randomIndex)).perform();
     }
 }
