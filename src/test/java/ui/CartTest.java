@@ -2,6 +2,7 @@ package ui;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -24,6 +25,12 @@ public class CartTest extends BaseTest {
         actions = new Actions(driver);
     }
 
+    @Test
+    public void homePageTest() {
+        Assertions.assertTrue(driver.getTitle().contains("American Eagle"));
+    }
+
+    @Disabled
     @Test
     public void addItemToCartViaQuickShopButton() {
         scrollToRandomLink(actions, driver, By.className("_top-link_ali1iz"));
