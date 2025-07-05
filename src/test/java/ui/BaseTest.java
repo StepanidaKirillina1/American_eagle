@@ -1,9 +1,8 @@
 package ui;
 
-import config.TestPropertiesConfig;
-import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -21,12 +20,14 @@ public class BaseTest {
     WebDriver driver;
     private WebDriverWait wait5;
     private WebDriverWait wait10;
+    private WebDriverWait wait60;
 
     @BeforeEach
     public void setUp() {
         driver = initDriver();
         driver.get(TestData.UI_BASE_URL);
         driver.manage().window().maximize();
+        driver.manage().window().setSize(new Dimension(1920, 1080));
         PageFactory.initElements(driver,this);
     }
 
@@ -71,5 +72,13 @@ public class BaseTest {
         }
 
         return wait10;
+    }
+
+    public WebDriverWait getWait60() {
+        if (wait10 == null) {
+            wait10 = new WebDriverWait(driver, Duration.ofSeconds(60));
+        }
+
+        return wait60;
     }
 }

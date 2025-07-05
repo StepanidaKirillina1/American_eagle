@@ -32,7 +32,8 @@ public class CartTest extends BaseTest {
 
     @Test
     public void addItemToCartViaQuickShopButton() {
-        scrollToRandomLink(actions, driver, By.className("_top-link_ali1iz"));
+        //scrollToRandomLink(actions, driver, By.className("_top-link_ali1iz"));
+        getWait60().until(ExpectedConditions.elementToBeClickable(By.className("_top-link_ali1iz"))).click();
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
         TestUtils.clickOnRandomLink(driver, By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"));
 
@@ -84,15 +85,15 @@ public class CartTest extends BaseTest {
         throw new NoSuchElementException("All sizes are out of stock");
     }
 
-    public void scrollToRandomLink(Actions actions, WebDriver driver, By locator) {
-        //List<WebElement> elements = driver.findElements(By.className("_top-link_ali1iz"));
-        List<WebElement> elements = new WebDriverWait(driver, Duration.ofSeconds(30))
-                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
-
-        int randomIndex = new Random().nextInt(elements.size());
-
-        System.out.println(elements.get(randomIndex).getText());
-
-        actions.moveToElement(elements.get(randomIndex)).perform();
-    }
+//    public void scrollToRandomLink(Actions actions, WebDriver driver, By locator) {
+//        //List<WebElement> elements = driver.findElements(By.className("_top-link_ali1iz"));
+//        List<WebElement> elements = new WebDriverWait(driver, Duration.ofSeconds(30))
+//                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+//
+//        int randomIndex = new Random().nextInt(elements.size());
+//
+//        System.out.println(elements.get(randomIndex).getText());
+//
+//        actions.moveToElement(elements.get(randomIndex)).perform();
+//    }
 }
