@@ -39,11 +39,11 @@ public class CartTest extends BaseTest {
         Assertions.assertEquals("Account", actualTitle);
     }
 
-    @Disabled
     @Test
     public void addItemToCartViaQuickShopButton() {
         //scrollToRandomLink(actions, driver, By.className("_top-link_ali1iz"));
-        getWait60().until(ExpectedConditions.elementToBeClickable(By.className("_top-link_ali1iz"))).click();
+        actions.moveToElement(getWait60().until(ExpectedConditions.elementToBeClickable(By.className("_top-link_ali1iz")))).perform();
+        //getWait60().until(ExpectedConditions.elementToBeClickable(By.className("_top-link_ali1iz"))).click();
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
         TestUtils.clickOnRandomLink(driver, By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"));
 
