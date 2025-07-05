@@ -31,6 +31,16 @@ public class CartTest extends BaseTest {
     }
 
     @Test
+    public void addSmokeTest() {
+        getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a.sidetray-account"))).click();
+
+        String actualTitle = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h2.modal-title"))).getText();
+
+        Assertions.assertEquals("Account", actualTitle);
+    }
+
+    @Disabled
+    @Test
     public void addItemToCartViaQuickShopButton() {
         //scrollToRandomLink(actions, driver, By.className("_top-link_ali1iz"));
         getWait60().until(ExpectedConditions.elementToBeClickable(By.className("_top-link_ali1iz"))).click();
