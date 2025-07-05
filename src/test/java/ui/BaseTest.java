@@ -25,8 +25,8 @@ public class BaseTest {
     @BeforeEach
     public void setUp() {
         driver = initDriver();
-        driver.manage().window().maximize();
         driver.get(TestData.UI_BASE_URL);
+        driver.manage().window().maximize();
         PageFactory.initElements(driver,this);
     }
 

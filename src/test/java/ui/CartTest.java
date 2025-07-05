@@ -30,7 +30,6 @@ public class CartTest extends BaseTest {
         Assertions.assertTrue(driver.getTitle().contains("American Eagle"));
     }
 
-    @Disabled
     @Test
     public void addItemToCartViaQuickShopButton() {
         scrollToRandomLink(actions, driver, By.className("_top-link_ali1iz"));
@@ -87,10 +86,8 @@ public class CartTest extends BaseTest {
 
     public void scrollToRandomLink(Actions actions, WebDriver driver, By locator) {
         //List<WebElement> elements = driver.findElements(By.className("_top-link_ali1iz"));
-        List<WebElement> elements = new WebDriverWait(driver, Duration.ofSeconds(60))
-                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(
-                        By.className("_top-link_ali1iz")
-                ));
+        List<WebElement> elements = new WebDriverWait(driver, Duration.ofSeconds(30))
+                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
 
         int randomIndex = new Random().nextInt(elements.size());
 
