@@ -1,6 +1,0 @@
-"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Mon Jun 30 02:21:52 GMT 2025","Mon Jun 30 02:21:52 GMT 2025","84","","api.CartTest","","api.CartTest","testItemsPriceWithDiscount","testItemsPriceWithDiscount()",""
-"passed","Mon Jun 30 02:21:52 GMT 2025","Mon Jun 30 02:21:52 GMT 2025","733","","api.CartTest","","api.CartTest","testOriginalTotalPriceInCart","testOriginalTotalPriceInCart()",""
-"passed","Mon Jun 30 02:21:51 GMT 2025","Mon Jun 30 02:21:51 GMT 2025","696","","api.CartTest","","api.CartTest","addToCartAsGuestTest","addToCartAsGuestTest()",""
-"passed","Mon Jun 30 02:21:52 GMT 2025","Mon Jun 30 02:21:53 GMT 2025","363","","api.CartTest","","api.CartTest","removeItemFromCart","removeItemFromCart()",""
-"passed","Mon Jun 30 02:21:51 GMT 2025","Mon Jun 30 02:21:52 GMT 2025","185","","api.CartTest","","api.CartTest","getCartItemsCountTest","getCartItemsCountTest()",""
