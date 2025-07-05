@@ -24,7 +24,10 @@ public class CartTest extends BaseTest {
 
     @Test
     public void addItemToCartViaQuickShopButton() {
-        scrollToRandomLink(actions, driver, By.className("_top-link_ali1iz"));
+        //scrollToRandomLink(actions, driver, By.className("_top-link_ali1iz"));
+        getWait10()
+                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("_top-link_ali1iz")));
+
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
         TestUtils.clickOnRandomLink(driver, By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"));
 
@@ -77,7 +80,7 @@ public class CartTest extends BaseTest {
     }
 
     public void scrollToRandomLink(Actions actions, WebDriver driver, By locator) {
-        List<WebElement> elements = getWait10().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+        List<WebElement> elements = driver.findElements(By.className("_top-link_ali1iz"));
 
         int randomIndex = new Random().nextInt(elements.size());
 
