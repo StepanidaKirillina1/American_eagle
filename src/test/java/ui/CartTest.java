@@ -24,9 +24,8 @@ public class CartTest extends BaseTest {
 
     @Test
     public void addItemToCartViaQuickShopButton() throws InterruptedException {
-        //scrollToRandomLink(actions, driver, By.className("_top-link_ali1iz"));
         Thread.sleep(20000);
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a._top-link_ali1iz"))).click();
+        scrollToRandomLink(actions, driver, By.className("_top-link_ali1iz"));
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
         TestUtils.clickOnRandomLink(driver, By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"));
 
