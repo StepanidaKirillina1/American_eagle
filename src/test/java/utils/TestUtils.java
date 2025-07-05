@@ -16,6 +16,14 @@ public class TestUtils {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'start'});", element);
     }
 
+    public static void scrollAndHoverOverElement(WebDriver driver, WebElement element) {
+        ((JavascriptExecutor)driver).executeScript(
+                "arguments[0].scrollIntoView({block: 'center', behavior: 'smooth'});" +
+                      "arguments[0].dispatchEvent(new MouseEvent('mouseover', {bubbles: true}));",
+                element
+        );
+    }
+
     public static void clickOnRandomLink(WebDriver driver, By locator) {
         List<WebElement> elements = driver.findElements(locator);
 
