@@ -20,7 +20,7 @@ public class BaseTest {
     WebDriver driver;
     private WebDriverWait wait5;
     private WebDriverWait wait10;
-    private WebDriverWait wait60;
+    private WebDriverWait wait20;
 
     @BeforeEach
     public void setUp() {
@@ -37,6 +37,7 @@ public class BaseTest {
 
     private WebDriver initDriver() {
         String remoteUrl = System.getenv("SELENIUM_REMOTE_URL");
+        //String remoteUrl = "http://localhost:4444/wd/hub";
 
         if (remoteUrl != null && !remoteUrl.isEmpty()) {
             ChromeOptions options = new ChromeOptions();
@@ -51,7 +52,13 @@ public class BaseTest {
                 throw new RuntimeException("Malformed URL for Selenium Remote WebDriver", e);
             }
         } else {
-            driver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            //options.addArguments("--headless=new");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            options.setCapability("goog:loggingPrefs", Map.of("browser", "ALL"));
+            driver = new ChromeDriver(options);
         }
 
         return driver;
@@ -73,11 +80,11 @@ public class BaseTest {
         return wait10;
     }
 
-    public WebDriverWait getWait60() {
-        if (wait60 == null) {
-            wait60 = new WebDriverWait(driver, Duration.ofSeconds(600));
+    public WebDriverWait getWait20() {
+        if (wait20 == null) {
+            wait20 = new WebDriverWait(driver, Duration.ofSeconds(20));
         }
 
-        return wait60;
+        return wait20;
     }
 }

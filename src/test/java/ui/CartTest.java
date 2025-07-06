@@ -43,7 +43,8 @@ public class CartTest extends BaseTest {
     public void addItemToCartViaQuickShopButton() {
         //scrollToRandomLink(actions, driver, By.className("_top-link_ali1iz"));
         //TestUtils.scrollAndHoverOverElement(driver, driver.findElement(By.className("_top-link_ali1iz")));
-        actions.moveToElement(getWait60().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[data-test-mm-top-link]")))).perform();
+        actions.moveToElement(getWait20().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[data-test-mm-top-link]")))).perform();
+        //TestUtils.hoverElementWithJS(driver, driver.findElement(By.cssSelector("a[data-test-mm-top-link]")));
         //getWait60().until(ExpectedConditions.elementToBeClickable(By.className("_top-link_ali1iz"))).click();
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
         TestUtils.clickOnRandomLink(driver, By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"));

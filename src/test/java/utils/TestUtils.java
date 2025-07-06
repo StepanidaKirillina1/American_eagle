@@ -33,14 +33,4 @@ public class TestUtils {
 
         elements.get(randomIndex).click();
     }
-
-//    public void scrollToRandomLink(Actions actions, WebDriver driver, By locator) {
-//        List<WebElement> elements = driver.findElements(locator);
-//
-//        int randomIndex = new Random().nextInt(elements.size());
-//
-//        System.out.println(elements.get(randomIndex).getText());
-//
-//        actions.moveToElement(elements.get(randomIndex)).perform();
-//    }
 }
