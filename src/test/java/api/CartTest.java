@@ -23,7 +23,7 @@ public class CartTest {
     ProductController productController = new ProductController();
     List<CartItem> cartItems;
 
-    private static final int ITEM_QUANTITY = 3;
+    private static final int ITEM_QUANTITY = 1;
 
     @Test
     @Order(1)
