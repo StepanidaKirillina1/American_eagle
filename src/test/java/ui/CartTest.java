@@ -2,15 +2,12 @@ package ui;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.TestUtils;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -41,11 +38,7 @@ public class CartTest extends BaseTest {
 
     @Test
     public void addItemToCartViaQuickShopButton() {
-        //scrollToRandomLink(actions, driver, By.className("_top-link_ali1iz"));
-        //TestUtils.scrollAndHoverOverElement(driver, driver.findElement(By.className("_top-link_ali1iz")));
         actions.moveToElement(getWait20().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[data-test-mm-top-link]")))).perform();
-        //TestUtils.hoverElementWithJS(driver, driver.findElement(By.cssSelector("a[data-test-mm-top-link]")));
-        //getWait60().until(ExpectedConditions.elementToBeClickable(By.className("_top-link_ali1iz"))).click();
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
         TestUtils.clickOnRandomLink(driver, By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"));
 
@@ -96,16 +89,4 @@ public class CartTest extends BaseTest {
 
         throw new NoSuchElementException("All sizes are out of stock");
     }
-
-//    public void scrollToRandomLink(Actions actions, WebDriver driver, By locator) {
-//        //List<WebElement> elements = driver.findElements(By.className("_top-link_ali1iz"));
-//        List<WebElement> elements = new WebDriverWait(driver, Duration.ofSeconds(30))
-//                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
-//
-//        int randomIndex = new Random().nextInt(elements.size());
-//
-//        System.out.println(elements.get(randomIndex).getText());
-//
-//        actions.moveToElement(elements.get(randomIndex)).perform();
-//    }
 }
