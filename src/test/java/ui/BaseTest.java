@@ -2,7 +2,6 @@ package ui;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -37,11 +36,9 @@ public class BaseTest {
 
     private WebDriver initDriver() {
         String remoteUrl = System.getenv("SELENIUM_REMOTE_URL");
-        //String remoteUrl = "http://localhost:4444/wd/hub";
 
         if (remoteUrl != null && !remoteUrl.isEmpty()) {
             ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless");
             options.addArguments("--disable-gpu");
             options.addArguments("--no-sandbox");
             options.addArguments("--disable-dev-shm-usage");
@@ -52,13 +49,7 @@ public class BaseTest {
                 throw new RuntimeException("Malformed URL for Selenium Remote WebDriver", e);
             }
         } else {
-            ChromeOptions options = new ChromeOptions();
-            //options.addArguments("--headless=new");
-            options.addArguments("--disable-gpu");
-            options.addArguments("--no-sandbox");
-            options.addArguments("--disable-dev-shm-usage");
-            options.setCapability("goog:loggingPrefs", Map.of("browser", "ALL"));
-            driver = new ChromeDriver(options);
+            driver = new ChromeDriver();
         }
 
         return driver;
