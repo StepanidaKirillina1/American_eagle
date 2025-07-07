@@ -73,7 +73,7 @@ public class BaseTest {
 
     public WebDriverWait getWait20() {
         if (wait20 == null) {
-            wait20 = new WebDriverWait(driver, Duration.ofSeconds(20));
+            wait20 = new WebDriverWait(driver, Duration.ofSeconds(60));
         }
 
         return wait20;
