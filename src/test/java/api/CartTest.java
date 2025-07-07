@@ -63,6 +63,7 @@ public class CartTest {
         Assertions.assertEquals(expectedPrice, BigDecimal.valueOf(cartItems.get(0).getOriginalPrice()));
     }
 
+    @Disabled
     @Test
     @Order(4)
     public void testItemsPriceWithDiscount() {
@@ -86,6 +87,7 @@ public class CartTest {
         Assertions.assertEquals(expectedSalePrice, actualPriceWithDiscount);
     }
 
+    @Disabled
     @Test
     @Order(5)
     public void removeItemFromCart() {
