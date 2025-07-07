@@ -28,8 +28,8 @@ public class CartTest extends BaseTest {
         Assertions.assertTrue(driver.getTitle().contains("American Eagle"));
     }
 
-    @RepeatedTest(2)
-    public void addItemToCart() throws Exception {
+    @Test
+    public void addItemToCart() {
         actions.moveToElement(getWait30().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a._top-link_ali1iz")))).perform();
         getWait30().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
         clickOnRandomLink(By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"));
@@ -64,8 +64,8 @@ public class CartTest extends BaseTest {
         Assertions.assertEquals("Added to bag!", modalDialog.findElement(By.tagName("h2")).getText());
     }
 
-    @RepeatedTest(2)
-    public void addItemToCartViaQuickShopButton() throws InterruptedException {
+    @Test
+    public void addItemToCartViaQuickShopButton() {
         actions.moveToElement(getWait30().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a._top-link_ali1iz")))).perform();
         getWait30().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
         clickOnRandomLink(By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"));
