@@ -2,7 +2,6 @@ package ui;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -123,6 +122,7 @@ public class CartTest extends BaseTest {
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1[data-testid='product-name']")));
         itemPrice = Double.parseDouble(driver.findElement(By.cssSelector("[data-test-product-prices] > *:first-child")).getText()
                 .replaceAll("[^0-9.]", ""));
+
         TestUtils.scrollToItemWithJS(driver, driver.findElement(By.cssSelector("[data-test-extras='reviews']")));
 
         if (driver.findElement(By.className("dropdown-text")).getText().contains("One Size")) {
@@ -141,13 +141,12 @@ public class CartTest extends BaseTest {
 
         try {
             driver.findElement(By.cssSelector("li.qa-promo-item")).isDisplayed();
-            double discount = Double
-                    .parseDouble(driver.findElement(By.cssSelector("li.qa-promo-item"))
+            int discount = Integer
+                    .parseInt(driver.findElement(By.cssSelector("li.qa-promo-item"))
                     .getText()
                     .replaceAll("[^0-9.]", ""));
 
-            double discountedPrice = itemPrice * (1 - discount / 100.0);
-            itemPrice = Math.round(discountedPrice * 100.0) / 100.0;
+            itemPrice = roundTo2Decimals(getDiscountedValue(itemPrice, discount));
         } catch (Exception e) {
 
         }
@@ -185,5 +184,13 @@ public class CartTest extends BaseTest {
         System.out.println(elements.get(randomIndex).getText());
 
         elements.get(randomIndex).click();
+    }
+
+    public double getDiscountedValue(double originalValue, int discountPercent) {
+        return originalValue * (1 - discountPercent / 100.0);
+    }
+
+    public double roundTo2Decimals(double number) {
+        return Math.round(number * 100.0) / 100.0;
     }
 }
