@@ -30,8 +30,8 @@ public class CartTest extends BaseTest {
 
     @RepeatedTest(2)
     public void addItemToCart() throws Exception {
-        actions.moveToElement(getWait20().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a._top-link_ali1iz")))).perform();
-        getWait20().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
+        actions.moveToElement(getWait30().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a._top-link_ali1iz")))).perform();
+        getWait30().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
         clickOnRandomLink(By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"));
 
         try {
@@ -52,7 +52,7 @@ public class CartTest extends BaseTest {
         if(driver.findElement(By.className("dropdown-text")).getText().contains("One Size")) {
             driver.findElement(By.xpath("//button[@name='addToBag']")).click();
         } else {
-            getWait20().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@name='addToBag']"))).click();
+            getWait30().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@name='addToBag']"))).click();
             getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector(".dropdown-selection.open")));
             getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[role='menuitem']")));
             getAvailableSize().click();
@@ -66,8 +66,8 @@ public class CartTest extends BaseTest {
 
     @RepeatedTest(2)
     public void addItemToCartViaQuickShopButton() throws InterruptedException {
-        actions.moveToElement(getWait20().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a._top-link_ali1iz")))).perform();
-        getWait20().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
+        actions.moveToElement(getWait30().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a._top-link_ali1iz")))).perform();
+        getWait30().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
         clickOnRandomLink(By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"));
 
         try {
@@ -124,7 +124,7 @@ public class CartTest extends BaseTest {
     }
 
     public void clickOnRandomLink(By locator) {
-        List<WebElement> elements = getWait20().until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+        List<WebElement> elements = getWait30().until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
         int randomIndex = new Random().nextInt(elements.size());
 
         elements.get(randomIndex).click();

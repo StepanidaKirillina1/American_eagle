@@ -19,7 +19,7 @@ public class BaseTest {
     WebDriver driver;
     private WebDriverWait wait5;
     private WebDriverWait wait10;
-    private WebDriverWait wait20;
+    private WebDriverWait wait30;
 
     @BeforeEach
     public void setUp() {
@@ -71,11 +71,11 @@ public class BaseTest {
         return wait10;
     }
 
-    public WebDriverWait getWait20() {
-        if (wait20 == null) {
-            wait20 = new WebDriverWait(driver, Duration.ofSeconds(60));
+    public WebDriverWait getWait30() {
+        if (wait30 == null) {
+            wait30 = new WebDriverWait(driver, Duration.ofSeconds(30));
         }
 
-        return wait20;
+        return wait30;
     }
 }
