@@ -16,7 +16,7 @@ import java.time.Duration;
 import java.util.Map;
 
 public class BaseTest {
-    WebDriver driver;
+    public WebDriver driver;
     private WebDriverWait wait5;
     private WebDriverWait wait10;
     private WebDriverWait wait30;

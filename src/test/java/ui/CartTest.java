@@ -5,17 +5,33 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import utils.TestUtils;
+import utils.CommonUtils;
+import static testData.TestData.cartEndpoint;
 
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static utils.CommonUtils.convertFromStringToDouble;
+import static utils.CommonUtils.roundTo2Decimals;
+import static utils.TestUtils.*;
+
 public class CartTest extends BaseTest {
-    Actions actions;
-    private static final String OUT_OF_STOCK_TEXT = "Out of Stock Online";
-    Double itemPrice;
+    @FindBy(className = "qa-btn-add-to-bag")
+    private WebElement addToBagButton;
+
+    @FindBy(xpath = "//div[@class='modal-dialog'][not(@quickview)]")
+    private WebElement modalDialog;
+
+    @FindBy(css = "button[data-test-view-cart]")
+    private WebElement viewBagButton;
+
+    private Actions actions;
+    private Double itemPrice;
+    private int counterClickNumber = 0;
+    private final static String emptyCartMessage = "Your bag is empty. Find something you love!";
+    private final static String addedToBagMessage = "Added to bag!";
 
     @BeforeEach
     public void setUp() {
@@ -30,167 +46,97 @@ public class CartTest extends BaseTest {
 
     @Test
     public void addItemToCart() {
-        actions.moveToElement(getWait30().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a._top-link_ali1iz")))).perform();
-        getWait30().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
-        clickOnRandomLink(By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"));
+        clickOnRandomWomenCategoryItem(driver);
+        closePopupIfAvailable(driver);
+        clickOnRandomItemLink(driver, actions);
+        getFirstAvailableSize(driver);
+        addToBagButton.click();
 
-        try {
-            getWait10().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".bloomreach-weblayer")))
-                    .getShadowRoot()
-                    .findElement(By.cssSelector("button.close"))
-                    .click();
-        } catch (TimeoutException | NoSuchElementException e) {
-        }
+        getWait10().until(ExpectedConditions.visibilityOf(modalDialog));
 
-        int viewportHeight = driver.manage().window().getSize().getHeight();
-        actions.moveByOffset(0, viewportHeight / 3);
-        clickOnRandomLink(By.xpath("//img[@data-test='product-image']/ancestor::a"));
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1[data-testid='product-name']")));
-        TestUtils.scrollToItemWithJS(driver, driver.findElement(By.cssSelector("[data-test-extras='reviews']")));
-
-        if (driver.findElement(By.className("dropdown-text")).getText().contains("One Size")) {
-            driver.findElement(By.xpath("//button[@name='addToBag']")).click();
-        } else {
-            getWait30().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@name='addToBag']"))).click();
-            getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector(".dropdown-selection.open")));
-            getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[role='menuitem']")));
-            getAvailableSize().click();
-        }
-
-        WebElement modalDialog = getWait10()
-                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='modal-dialog'][not(@quickview)]")));
-
-        Assertions.assertEquals("Added to bag!", modalDialog.findElement(By.tagName("h2")).getText());
+        assertEquals(addedToBagMessage, modalDialog.findElement(By.tagName("h2")).getText());
     }
 
     @Test
     public void addItemToCartViaQuickShopButton() {
-        actions.moveToElement(getWait30().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a._top-link_ali1iz")))).perform();
-        getWait30().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
-        clickOnRandomLink(By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"));
+        clickOnRandomWomenCategoryItem(driver);
+        closePopupIfAvailable(driver);
+        addRandomItemToCartViaQuickShopButton(driver, actions);
+        getFirstAvailableSize(driver);
+        addToBagButton.click();
 
-        try {
-            getWait10().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".bloomreach-weblayer")))
-                    .getShadowRoot()
-                    .findElement(By.cssSelector("button.close"))
-                    .click();
-        } catch (TimeoutException | NoSuchElementException e) {
-        }
+        getWait10().until(ExpectedConditions.visibilityOf(modalDialog));
 
-        int viewportHeight = driver.manage().window().getSize().getHeight();
-        actions.moveByOffset(0, viewportHeight / 3);
-        clickOnQuickShopButton(actions, driver);
-
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img[data-test-item-image]")));
-        TestUtils.scrollToItemWithJS(driver, driver.findElement(By.cssSelector("a.qa-all-details-btn")));
-
-        if (driver.findElement(By.className("dropdown-text")).getText().contains("One Size")) {
-            driver.findElement(By.name("add-to-bag")).click();
-        } else {
-            driver.findElement(By.name("add-to-bag")).click();
-            getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector(".dropdown-selection.open")));
-            getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[role='menuitem']")));
-            getAvailableSize().click();
-        }
-
-        WebElement modalDialog = getWait10()
-                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='modal-dialog'][not(@quickview)]")));
-
-        Assertions.assertEquals("Added to bag!", modalDialog.findElement(By.tagName("h2")).getText());
+        assertEquals(addedToBagMessage, modalDialog.findElement(By.tagName("h2")).getText());
     }
 
     @Test
-    public void checkoutPageTest() {
-        actions.moveToElement(getWait30().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a._top-link_ali1iz")))).perform();
-        getWait30().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
-        clickOnRandomLink(By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"));
+    public void counterTest() {
+        clickOnRandomWomenCategoryItem(driver);
+        closePopupIfAvailable(driver);
+        clickOnRandomItemLink(driver, actions);
 
-        try {
-            getWait10().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".bloomreach-weblayer")))
-                    .getShadowRoot()
-                    .findElement(By.cssSelector("button.close"))
-                    .click();
-        } catch (TimeoutException | NoSuchElementException e) {
+        itemPrice = convertFromStringToDouble(driver, By.cssSelector("[data-test-product-prices] > *:first-child"));
+        getFirstAvailableSize(driver);
 
+        WebElement increaseButton = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[aria-label='increase']")));
+        if("true".equals(increaseButton.getDomAttribute("disabled"))) {
+            System.out.println("disabled");
+            addToBagButton.click();
         }
+        clickOnCounterBetween1and9();
+        addToBagButton.click();
 
-        int viewportHeight = driver.manage().window().getSize().getHeight();
-        actions.moveByOffset(0, viewportHeight / 3);
-        clickOnRandomLink(By.xpath("//img[@data-test='product-image']/ancestor::a"));
+        String actualText = getWait5()
+                    .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test-product-quantity]")))
+                    .getText();
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1[data-testid='product-name']")));
-        itemPrice = Double.parseDouble(driver.findElement(By.cssSelector("[data-test-product-prices] > *:first-child")).getText()
-                .replaceAll("[^0-9.]", ""));
+        Assertions.assertTrue(actualText.contains(String.valueOf(1 + counterClickNumber)));
 
-        TestUtils.scrollToItemWithJS(driver, driver.findElement(By.cssSelector("[data-test-extras='reviews']")));
+        CommonUtils.scrollAndClickWithJS(driver, viewBagButton);
+        getWait30().until(ExpectedConditions.urlContains(cartEndpoint));
 
-        if (driver.findElement(By.className("dropdown-text")).getText().contains("One Size")) {
-            driver.findElement(By.xpath("//button[@name='addToBag']")).click();
-        } else {
-            getWait30().until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@name='addToBag']"))).click();
-            getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector(".dropdown-selection.open")));
-            getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[role='menuitem']")));
-            getAvailableSize().click();
+        CommonUtils.scrollByViewportPercentage(driver, 60);
+
+        Assertions.assertTrue(
+                getWait5()
+                        .until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-item-quantity")))
+                        .getText()
+                        .contains(String.valueOf(1 + counterClickNumber)));
+
+        double finalCartItemPrice = convertFromStringToDouble(driver, By.cssSelector(".cart-item-price span"));
+
+        Assertions.assertEquals(roundTo2Decimals(itemPrice * (1 + counterClickNumber)), finalCartItemPrice);
+    }
+
+    @Test
+    public void removeItemFromCartTest() {
+        clickOnRandomWomenCategoryItem(driver);
+        closePopupIfAvailable(driver);
+        clickOnRandomItemLink(driver, actions);
+
+        getFirstAvailableSize(driver);
+        addToBagButton.click();
+
+        getWait10().until(ExpectedConditions.elementToBeClickable(viewBagButton)).click();
+        getWait30().until(ExpectedConditions.urlContains(cartEndpoint));
+
+        CommonUtils.scrollByViewportPercentage(driver, 60);
+        getWait10().until(ExpectedConditions.elementToBeClickable(By.name("removeCommerceItem"))).click();
+
+        String actualEmptyCartMessage = getWait30()
+                .until(ExpectedConditions.visibilityOfElementLocated(By.className("qa-empty-cart-msg")))
+                .getText();
+
+        Assertions.assertEquals(emptyCartMessage, actualEmptyCartMessage);
+    }
+
+    public void clickOnCounterBetween1and9() {
+        counterClickNumber = new Random().nextInt(9) + 1;
+        WebElement counter = getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[aria-label='increase']")));
+
+        for (int i = 1; i <= counterClickNumber; i++) {
+            counter.click();
         }
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[data-test-view-cart]"))).click();
-        getWait10().until(ExpectedConditions.urlContains("/cart"));
-        TestUtils.scrollAndClickWithJS(driver, driver.findElement(By.name("go2checkout")));
-        getWait10().until(ExpectedConditions.urlContains("/checkout"));
-
-        try {
-            driver.findElement(By.cssSelector("li.qa-promo-item")).isDisplayed();
-            int discount = Integer
-                    .parseInt(driver.findElement(By.cssSelector("li.qa-promo-item"))
-                    .getText()
-                    .replaceAll("[^0-9.]", ""));
-
-            itemPrice = roundTo2Decimals(getDiscountedValue(itemPrice, discount));
-        } catch (Exception e) {
-
-        }
-
-        Assertions.assertTrue(driver.findElement(By.cssSelector(".cart-item-info .cart-item-price span")).getText().contains(String.valueOf(itemPrice)));
-    }
-
-    public void clickOnQuickShopButton(Actions actions, WebDriver driver) {
-        List<WebElement> products = driver.findElements(By.cssSelector("[data-testid='media']"));
-        int randomIndex = new Random().nextInt(products.size());
-
-        actions.moveToElement(products.get(randomIndex)).perform();
-
-        List<WebElement> elements = driver.findElements(By.cssSelector("a.clickable.qa-show-sidetray-quickview"));
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(elements.get(randomIndex))).click();
-    }
-
-    public WebElement getAvailableSize() {
-        List<WebElement> sizes = driver.findElements(By.cssSelector("a[role='menuitem']"));
-
-        for (WebElement size : sizes) {
-            if (!size.getText().contains(OUT_OF_STOCK_TEXT)) {
-                return size;
-            }
-        }
-
-        throw new NoSuchElementException("All sizes are out of stock");
-    }
-
-    public void clickOnRandomLink(By locator) {
-        List<WebElement> elements = getWait30().until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
-        int randomIndex = new Random().nextInt(elements.size());
-
-        System.out.println(elements.get(randomIndex).getText());
-
-        elements.get(randomIndex).click();
-    }
-
-    public double getDiscountedValue(double originalValue, int discountPercent) {
-        return originalValue * (1 - discountPercent / 100.0);
-    }
-
-    public double roundTo2Decimals(double number) {
-        return Math.round(number * 100.0) / 100.0;
     }
 }
