@@ -32,6 +32,7 @@ public class CartTest extends BaseTest {
     private int counterClickNumber = 0;
     private final static String emptyCartMessage = "Your bag is empty. Find something you love!";
     private final static String addedToBagMessage = "Added to bag!";
+    private By itemPriceLocator = By.cssSelector("[data-test-product-prices] > *:first-child");
 
     @BeforeEach
     public void setUp() {
@@ -76,7 +77,7 @@ public class CartTest extends BaseTest {
         closePopupIfAvailable(driver);
         clickOnRandomItemLink(driver, actions);
 
-        itemPrice = convertFromStringToDouble(driver, By.cssSelector("[data-test-product-prices] > *:first-child"));
+        itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
         getFirstAvailableSize(driver);
 
         WebElement increaseButton = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[aria-label='increase']")));
@@ -129,6 +130,28 @@ public class CartTest extends BaseTest {
                 .getText();
 
         Assertions.assertEquals(emptyCartMessage, actualEmptyCartMessage);
+    }
+
+    @Test
+    public void orderSummaryTest() {
+        clickOnRandomWomenCategoryItem(driver);
+        closePopupIfAvailable(driver);
+        clickOnRandomItemLink(driver, actions);
+
+        itemPrice = roundTo2Decimals(convertFromStringToDouble(driver, itemPriceLocator));
+
+        getFirstAvailableSize(driver);
+        addToBagButton.click();
+
+        getWait10().until(ExpectedConditions.elementToBeClickable(viewBagButton)).click();
+        getWait30().until(ExpectedConditions.urlContains(cartEndpoint));
+
+        CommonUtils.scrollByViewportPercentage(driver, 80);
+
+        double shippingPrice = convertFromStringToDouble(driver, By.cssSelector("[data-testid='row-shipping-value']"));
+        double subTotalPrice = convertFromStringToDouble(driver, By.cssSelector("[data-testid='row-total-value']"));
+
+        assertEquals(roundTo2Decimals(itemPrice + shippingPrice), subTotalPrice);
     }
 
     public void clickOnCounterBetween1and9() {
