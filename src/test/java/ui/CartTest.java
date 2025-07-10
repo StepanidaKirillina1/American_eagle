@@ -8,6 +8,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import utils.CommonUtils;
+import utils.TestUtils;
+
 import static testData.TestData.cartEndpoint;
 
 import java.util.Random;
@@ -98,7 +100,7 @@ public class CartTest extends BaseTest {
         CommonUtils.scrollAndClickWithJS(driver, viewBagButton);
         getWait30().until(ExpectedConditions.urlContains(cartEndpoint));
 
-        CommonUtils.scrollByViewportPercentage(driver, 60);
+        CommonUtils.scrollByViewportPercentage(driver, 70);
 
         Assertions.assertTrue(
                 getWait5()
@@ -123,7 +125,7 @@ public class CartTest extends BaseTest {
         getWait10().until(ExpectedConditions.elementToBeClickable(viewBagButton)).click();
         getWait30().until(ExpectedConditions.urlContains(cartEndpoint));
 
-        CommonUtils.scrollByViewportPercentage(driver, 60);
+        CommonUtils.scrollByViewportPercentage(driver, 70);
         getWait10().until(ExpectedConditions.elementToBeClickable(By.name("removeCommerceItem"))).click();
 
         String actualEmptyCartMessage = getWait30()
@@ -147,12 +149,12 @@ public class CartTest extends BaseTest {
         getWait10().until(ExpectedConditions.elementToBeClickable(viewBagButton)).click();
         getWait30().until(ExpectedConditions.urlContains(cartEndpoint));
 
-        CommonUtils.scrollByViewportPercentage(driver, 60);
+        CommonUtils.scrollByViewportPercentage(driver, 70);
 
         getWait10().until(ExpectedConditions.elementToBeClickable(By.name("editCommerceItem"))).click();
         getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".modal-dialog.quickview")));
 
-        CommonUtils.scrollByViewportPercentage(driver, 90);
+        CommonUtils.scrollToItemWithJS(driver, editButton);
 
         WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
 
