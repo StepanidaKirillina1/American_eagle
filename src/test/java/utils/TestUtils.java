@@ -30,7 +30,7 @@ public class TestUtils {
     }
 
     public static void getFirstAvailableSize(WebDriver driver) {
-        CommonUtils.scrollByViewportPercentage(driver, 90);
+        CommonUtils.scrollByViewportPercentage(driver, 80);
 
         getWait5(driver).until(ExpectedConditions.elementToBeClickable(By.className("dropdown"))).click();
         getWait10(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector(".dropdown-selection.open")));
