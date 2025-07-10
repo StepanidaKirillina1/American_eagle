@@ -86,8 +86,6 @@ public class TestUtils {
         int viewportHeight = driver.manage().window().getSize().getHeight();
         actions.moveByOffset(0, viewportHeight / 3);
 
-        closePopupIfAvailable(driver);
-
         List<WebElement> products = driver.findElements(By.cssSelector("[data-testid='media']"));
         int randomIndex = new Random().nextInt(products.size());
 
