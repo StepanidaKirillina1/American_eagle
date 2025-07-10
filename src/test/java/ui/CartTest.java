@@ -14,8 +14,7 @@ import static testData.TestData.cartEndpoint;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static utils.CommonUtils.convertFromStringToDouble;
-import static utils.CommonUtils.roundTo2Decimals;
+import static utils.CommonUtils.*;
 import static utils.TestUtils.*;
 
 public class CartTest extends BaseTest {
@@ -40,6 +39,7 @@ public class CartTest extends BaseTest {
     private final static String emptyCartMessage = "Your bag is empty. Find something you love!";
     private final static String addedToBagMessage = "Added to bag!";
     private By itemPriceLocator = By.cssSelector("[data-test-product-prices] > *:first-child");
+    private By promoLocator = By.cssSelector("li.qa-promo-item");
 
     @BeforeEach
     public void setUp() {
@@ -51,11 +51,11 @@ public class CartTest extends BaseTest {
     public void addItemToCart() {
         clickOnRandomWomenCategoryItem(driver);
         closePopupIfAvailable(driver);
-        clickOnRandomItemLink(driver, actions);
+        clickOnRandomItemLink(driver);
         getFirstAvailableSize(driver);
         addToBagButton.click();
 
-        getWait10().until(ExpectedConditions.visibilityOf(modalDialog));
+        closePopupIfAvailable(driver);
 
         assertEquals(addedToBagMessage, modalDialog.findElement(By.tagName("h2")).getText());
     }
@@ -68,7 +68,7 @@ public class CartTest extends BaseTest {
         getFirstAvailableSize(driver);
         addToBagButton.click();
 
-        getWait10().until(ExpectedConditions.visibilityOf(modalDialog));
+        closePopupIfAvailable(driver);
 
         assertEquals(addedToBagMessage, modalDialog.findElement(By.tagName("h2")).getText());
     }
@@ -77,7 +77,7 @@ public class CartTest extends BaseTest {
     public void counterTest() {
         clickOnRandomWomenCategoryItem(driver);
         closePopupIfAvailable(driver);
-        clickOnRandomItemLink(driver, actions);
+        clickOnRandomItemLink(driver);
 
         itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
         getFirstAvailableSize(driver);
@@ -86,9 +86,11 @@ public class CartTest extends BaseTest {
 
         if("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
             addToBagButton.click();
+            closePopupIfAvailable(driver);
         }
         clickOnCounterBetween1and9();
         addToBagButton.click();
+        closePopupIfAvailable(driver);
 
         String actualText = getWait5()
                     .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test-product-quantity]")))
@@ -116,10 +118,11 @@ public class CartTest extends BaseTest {
     public void removeItemFromCartTest() {
         clickOnRandomWomenCategoryItem(driver);
         closePopupIfAvailable(driver);
-        clickOnRandomItemLink(driver, actions);
+        clickOnRandomItemLink(driver);
 
         getFirstAvailableSize(driver);
         addToBagButton.click();
+        closePopupIfAvailable(driver);
 
         getWait10().until(ExpectedConditions.elementToBeClickable(viewBagButton)).click();
         getWait30().until(ExpectedConditions.urlContains(cartEndpoint));
@@ -138,12 +141,14 @@ public class CartTest extends BaseTest {
     public void editCartItemQuantity() {
         clickOnRandomWomenCategoryItem(driver);
         closePopupIfAvailable(driver);
-        clickOnRandomItemLink(driver, actions);
+        clickOnRandomItemLink(driver);
 
         itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
 
         getFirstAvailableSize(driver);
         addToBagButton.click();
+
+        closePopupIfAvailable(driver);
 
         getWait10().until(ExpectedConditions.elementToBeClickable(viewBagButton)).click();
         getWait30().until(ExpectedConditions.urlContains(cartEndpoint));
@@ -163,6 +168,12 @@ public class CartTest extends BaseTest {
             editButton.click();
         }
 
+        try {
+            getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("notification-card-message")));
+        } catch (Exception e) {
+
+        }
+
         CommonUtils.scrollByViewportPercentage(driver, -80);
 
         String itemQuantity = getWait30()
@@ -171,7 +182,7 @@ public class CartTest extends BaseTest {
 
         Assertions.assertTrue(itemQuantity.contains(String.valueOf(1 + counterClickNumber)));
 
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("notification-card-message")));
+        calculatePriceWithDiscountIfAvailable();
         double finalCartItemPrice = convertFromStringToDouble(driver, By.cssSelector(".cart-item-price span"));
 
         Assertions.assertEquals(roundTo2Decimals(itemPrice * (1 + counterClickNumber)), finalCartItemPrice);
@@ -181,12 +192,14 @@ public class CartTest extends BaseTest {
     public void orderSummaryTest() {
         clickOnRandomWomenCategoryItem(driver);
         closePopupIfAvailable(driver);
-        clickOnRandomItemLink(driver, actions);
+        clickOnRandomItemLink(driver);
 
         itemPrice = roundTo2Decimals(convertFromStringToDouble(driver, itemPriceLocator));
 
         getFirstAvailableSize(driver);
         addToBagButton.click();
+
+        closePopupIfAvailable(driver);
 
         getWait10().until(ExpectedConditions.elementToBeClickable(viewBagButton)).click();
         getWait30().until(ExpectedConditions.urlContains(cartEndpoint));
@@ -205,6 +218,17 @@ public class CartTest extends BaseTest {
 
         for (int i = 1; i <= counterClickNumber; i++) {
             counter.click();
+        }
+    }
+
+    public void calculatePriceWithDiscountIfAvailable() {
+        try {
+            driver.findElement(promoLocator).isDisplayed();
+            double discount = convertFromStringToDouble(driver, promoLocator);
+            System.out.println("discount " + discount);
+            itemPrice = roundTo2Decimals(getDiscountedValue(itemPrice, discount));
+        } catch (Exception e) {
+
         }
     }
 }
