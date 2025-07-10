@@ -152,8 +152,7 @@ public class CartTest extends BaseTest {
         CommonUtils.scrollByViewportPercentage(driver, 70);
 
         getWait10().until(ExpectedConditions.elementToBeClickable(By.name("editCommerceItem"))).click();
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".modal-dialog.quickview")));
-
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#quickview-edit-carousel img")));
         CommonUtils.scrollToItemWithJS(driver, editButton);
 
         WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
