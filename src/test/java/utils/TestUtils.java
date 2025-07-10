@@ -30,7 +30,7 @@ public class TestUtils {
     }
 
     public static void getFirstAvailableSize(WebDriver driver) {
-        CommonUtils.scrollToItemWithJS(driver, driver.findElement(By.cssSelector("[data-test-extras='reviews']")));
+        CommonUtils.scrollToItemWithJS(driver, driver.findElement(By.xpath("//div[text()='Color:']")));
 
         getWait5(driver).until(ExpectedConditions.elementToBeClickable(By.className("dropdown"))).click();
         getWait10(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector(".dropdown-selection.open")));
@@ -75,9 +75,10 @@ public class TestUtils {
     public static void clickOnRandomItemLink(WebDriver driver, Actions actions) {
         int viewportHeight = driver.manage().window().getSize().getHeight();
         actions.moveByOffset(0, viewportHeight / 3);
-        System.out.println(driver.getCurrentUrl());
-        clickOnRandomLink(By.xpath("//img[@data-test='product-image']/ancestor::a"), driver);
 
+        closePopupIfAvailable(driver);
+
+        clickOnRandomLink(By.xpath("//img[@data-test='product-image']/ancestor::a"), driver);
 
         getWait10(driver).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1[data-testid='product-name']")));
     }
@@ -85,6 +86,8 @@ public class TestUtils {
     public static void addRandomItemToCartViaQuickShopButton(WebDriver driver, Actions actions) {
         int viewportHeight = driver.manage().window().getSize().getHeight();
         actions.moveByOffset(0, viewportHeight / 3);
+
+        closePopupIfAvailable(driver);
 
         List<WebElement> products = driver.findElements(By.cssSelector("[data-testid='media']"));
         int randomIndex = new Random().nextInt(products.size());
