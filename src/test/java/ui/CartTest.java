@@ -27,6 +27,12 @@ public class CartTest extends BaseTest {
     @FindBy(css = "button[data-test-view-cart]")
     private WebElement viewBagButton;
 
+    @FindBy(css = "button[aria-label='increase']")
+    private WebElement increaseButton;
+
+    @FindBy(css= ".btn.qa-item-btn-edit")
+    private WebElement editButton;
+
     private Actions actions;
     private Double itemPrice;
     private int counterClickNumber = 0;
@@ -38,11 +44,6 @@ public class CartTest extends BaseTest {
     public void setUp() {
         super.setUp();
         actions = new Actions(driver);
-    }
-
-    @Test
-    public void homePageTest() {
-        Assertions.assertTrue(driver.getTitle().contains("American Eagle"));
     }
 
     @Test
@@ -80,9 +81,9 @@ public class CartTest extends BaseTest {
         itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
         getFirstAvailableSize(driver);
 
-        WebElement increaseButton = getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[aria-label='increase']")));
-        if("true".equals(increaseButton.getDomAttribute("disabled"))) {
-            System.out.println("disabled");
+        WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
+
+        if("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
             addToBagButton.click();
         }
         clickOnCounterBetween1and9();
@@ -130,6 +131,50 @@ public class CartTest extends BaseTest {
                 .getText();
 
         Assertions.assertEquals(emptyCartMessage, actualEmptyCartMessage);
+    }
+
+    @Test
+    public void editCartItemQuantity() {
+        clickOnRandomWomenCategoryItem(driver);
+        closePopupIfAvailable(driver);
+        clickOnRandomItemLink(driver, actions);
+
+        itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
+
+        getFirstAvailableSize(driver);
+        addToBagButton.click();
+
+        getWait10().until(ExpectedConditions.elementToBeClickable(viewBagButton)).click();
+        getWait30().until(ExpectedConditions.urlContains(cartEndpoint));
+
+        CommonUtils.scrollByViewportPercentage(driver, 60);
+
+        getWait10().until(ExpectedConditions.elementToBeClickable(By.name("editCommerceItem"))).click();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".modal-dialog.quickview")));
+
+        CommonUtils.scrollByViewportPercentage(driver, 90);
+
+        WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
+
+        if("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
+            editButton.click();
+        } else {
+            clickOnCounterBetween1and9();
+            editButton.click();
+        }
+
+        CommonUtils.scrollByViewportPercentage(driver, -80);
+
+        String itemQuantity = getWait30()
+                .until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-item-quantity")))
+                .getText();
+
+        Assertions.assertTrue(itemQuantity.contains(String.valueOf(1 + counterClickNumber)));
+
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("notification-card-message")));
+        double finalCartItemPrice = convertFromStringToDouble(driver, By.cssSelector(".cart-item-price span"));
+
+        Assertions.assertEquals(roundTo2Decimals(itemPrice * (1 + counterClickNumber)), finalCartItemPrice);
     }
 
     @Test

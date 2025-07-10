@@ -36,3 +36,10 @@ test {
     useJUnitPlatform()
     systemProperties(System.getProperties())
 }
+
+tasks.register("UI", Test) {
+    useJUnitPlatform() {
+        includeTags "UI"
+    }
+    systemProperties(System.getProperties())
+}

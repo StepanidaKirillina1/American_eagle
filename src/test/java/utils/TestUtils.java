@@ -75,7 +75,9 @@ public class TestUtils {
     public static void clickOnRandomItemLink(WebDriver driver, Actions actions) {
         int viewportHeight = driver.manage().window().getSize().getHeight();
         actions.moveByOffset(0, viewportHeight / 3);
+        System.out.println(driver.getCurrentUrl());
         clickOnRandomLink(By.xpath("//img[@data-test='product-image']/ancestor::a"), driver);
+
 
         getWait10(driver).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1[data-testid='product-name']")));
     }
