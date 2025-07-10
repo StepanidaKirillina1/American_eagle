@@ -30,7 +30,7 @@ public class TestUtils {
     }
 
     public static void getFirstAvailableSize(WebDriver driver) {
-        CommonUtils.scrollByViewportPercentage(driver, 80);
+        CommonUtils.scrollByViewportPercentage(driver, 90);
 
         getWait5(driver).until(ExpectedConditions.elementToBeClickable(By.className("dropdown"))).click();
         getWait10(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector(".dropdown-selection.open")));
@@ -85,6 +85,8 @@ public class TestUtils {
     public static void addRandomItemToCartViaQuickShopButton(WebDriver driver, Actions actions) {
         int viewportHeight = driver.manage().window().getSize().getHeight();
         actions.moveByOffset(0, viewportHeight / 3);
+
+        closePopupIfAvailable(driver);
 
         List<WebElement> products = driver.findElements(By.cssSelector("[data-testid='media']"));
         int randomIndex = new Random().nextInt(products.size());
