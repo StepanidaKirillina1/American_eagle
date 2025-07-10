@@ -30,7 +30,7 @@ public class TestUtils {
     }
 
     public static void getFirstAvailableSize(WebDriver driver) {
-        CommonUtils.scrollByViewportPercentage(driver, 80);
+        CommonUtils.scrollToItemWithJS(driver, driver.findElement(By.xpath("//div[text()='Color:']")));
 
         getWait5(driver).until(ExpectedConditions.elementToBeClickable(By.className("dropdown"))).click();
         getWait10(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector(".dropdown-selection.open")));
@@ -59,6 +59,8 @@ public class TestUtils {
         CommonUtils.hoverOverElementWithJS(driver, driver.findElement(By.cssSelector("a[data-text='Women']")));
         getWait30(driver).until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
         clickOnRandomLink(By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"), driver);
+
+        getWait10(driver).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class^='_container'] h1")));
     }
 
     public static void closePopupIfAvailable(WebDriver driver) {
@@ -72,18 +74,13 @@ public class TestUtils {
         }
     }
 
-    public static void clickOnRandomItemLink(WebDriver driver, Actions actions) {
-        int viewportHeight = driver.manage().window().getSize().getHeight();
-        actions.moveByOffset(0, viewportHeight / 3);
+    public static void clickOnRandomItemLink(WebDriver driver) {
         clickOnRandomLink(By.xpath("//img[@data-test='product-image']/ancestor::a"), driver);
 
         getWait10(driver).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1[data-testid='product-name']")));
     }
 
     public static void addRandomItemToCartViaQuickShopButton(WebDriver driver, Actions actions) {
-        int viewportHeight = driver.manage().window().getSize().getHeight();
-        actions.moveByOffset(0, viewportHeight / 3);
-
         List<WebElement> products = driver.findElements(By.cssSelector("[data-testid='media']"));
         int randomIndex = new Random().nextInt(products.size());
 

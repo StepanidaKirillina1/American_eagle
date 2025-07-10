@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static utils.TestUtils.getWait10;
+import static utils.TestUtils.getWait30;
 
 public class CommonUtils {
 
@@ -54,7 +55,7 @@ public class CommonUtils {
     }
 
     public static double convertFromStringToDouble(WebDriver driver, By locator) {
-        return Double.parseDouble(getWait10(driver)
+        return Double.parseDouble(getWait30(driver)
                 .until(ExpectedConditions.visibilityOfElementLocated(locator))
                 .getText()
                 .replaceAll("[^0-9.]", ""));

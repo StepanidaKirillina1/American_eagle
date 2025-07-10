@@ -33,17 +33,18 @@ public class CheckoutTest extends BaseTest {
     public void checkoutPageTest() {
         clickOnRandomWomenCategoryItem(driver);
         closePopupIfAvailable(driver);
-        clickOnRandomItemLink(driver, actions);
+        clickOnRandomItemLink(driver);
 
         itemPrice = convertFromStringToDouble(driver, By.cssSelector("[data-test-product-prices] > *:first-child"));
         getFirstAvailableSize(driver);
         addToBagButton.click();
+        closePopupIfAvailable(driver);
 
         getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[data-test-view-cart]"))).click();
         getWait30().until(ExpectedConditions.urlContains(TestData.cartEndpoint));
 
         CommonUtils.scrollAndClickWithJS(driver, driver.findElement(By.name("go2checkout")));
-        getWait10().until(ExpectedConditions.urlContains("/checkout"));
+        getWait30().until(ExpectedConditions.urlContains("/checkout"));
 
         try {
             driver.findElement(promoLocator).isDisplayed();
