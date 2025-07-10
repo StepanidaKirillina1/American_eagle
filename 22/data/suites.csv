@@ -1,8 +1,0 @@
-"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Sat Jul 05 09:40:01 GMT 2025","Sat Jul 05 09:40:01 GMT 2025","606","","api.CartTest","","api.CartTest","testOriginalTotalPriceInCart","testOriginalTotalPriceInCart()",""
-"broken","Sat Jul 05 09:40:02 GMT 2025","Sat Jul 05 09:41:07 GMT 2025","65155","","ui.CartTest","","ui.CartTest","addItemToCartViaQuickShopButton","addItemToCartViaQuickShopButton()",""
-"passed","Sat Jul 05 09:40:01 GMT 2025","Sat Jul 05 09:40:01 GMT 2025","188","","api.CartTest","","api.CartTest","getCartItemsCountTest","getCartItemsCountTest()",""
-"passed","Sat Jul 05 09:40:02 GMT 2025","Sat Jul 05 09:40:02 GMT 2025","435","","api.CartTest","","api.CartTest","removeItemFromCart","removeItemFromCart()",""
-"skipped","Sat Jul 05 09:40:02 GMT 2025","Sat Jul 05 09:40:02 GMT 2025","0","","api.TokenTest","","api.TokenTest","testToken","testToken()",""
-"passed","Sat Jul 05 09:40:00 GMT 2025","Sat Jul 05 09:40:01 GMT 2025","775","","api.CartTest","","api.CartTest","addToCartAsGuestTest","addToCartAsGuestTest()",""
-"passed","Sat Jul 05 09:40:01 GMT 2025","Sat Jul 05 09:40:02 GMT 2025","126","","api.CartTest","","api.CartTest","testItemsPriceWithDiscount","testItemsPriceWithDiscount()",""
