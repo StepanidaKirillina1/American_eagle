@@ -31,6 +31,8 @@ dependencies {
     testImplementation 'io.rest-assured:rest-assured:5.5.5'
     testImplementation 'org.testng:testng:7.11.0'
     implementation 'com.github.javafaker:javafaker:1.0.2'
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0'
 }
 
 test {

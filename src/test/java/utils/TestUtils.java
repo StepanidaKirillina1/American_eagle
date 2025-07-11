@@ -29,6 +29,10 @@ public class TestUtils {
         return new WebDriverWait(driver, Duration.ofSeconds(30));
     }
 
+    public static WebDriverWait getWait60(WebDriver driver) {
+        return new WebDriverWait(driver, Duration.ofSeconds(60));
+    }
+
     public static void getFirstAvailableSize(WebDriver driver) {
         CommonUtils.scrollToItemWithJS(driver, driver.findElement(By.xpath("//div[text()='Color:']")));
 
@@ -56,7 +60,9 @@ public class TestUtils {
     }
 
     public static void clickOnRandomWomenCategoryItem(WebDriver driver) {
-        CommonUtils.hoverOverElementWithJS(driver, driver.findElement(By.cssSelector("a[data-text='Women']")));
+        WebElement womenCategory = getWait60(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[data-text='Women']")));
+        new Actions(driver).moveToElement(womenCategory).perform();
+
         getWait30(driver).until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
         clickOnRandomLink(By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"), driver);
 
