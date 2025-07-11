@@ -41,7 +41,7 @@ public class CheckoutTest extends BaseTest {
         closePopupIfAvailable(driver);
 
         getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[data-test-view-cart]"))).click();
-        getWait30().until(ExpectedConditions.urlContains(TestData.cartEndpoint));
+        getWait30().until(ExpectedConditions.urlContains(TestData.CART_ENDPOINT));
 
         CommonUtils.scrollAndClickWithJS(driver, driver.findElement(By.name("go2checkout")));
         getWait30().until(ExpectedConditions.urlContains("/checkout"));

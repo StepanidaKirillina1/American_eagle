@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import utils.CommonUtils;
 
-import static testData.TestData.cartEndpoint;
+import static testData.TestData.CART_ENDPOINT;
 
 import java.util.Random;
 
@@ -99,7 +99,7 @@ public class CartTest extends BaseTest {
         Assertions.assertTrue(actualText.contains(String.valueOf(1 + counterClickNumber)));
 
         CommonUtils.scrollAndClickWithJS(driver, viewBagButton);
-        getWait30().until(ExpectedConditions.urlContains(cartEndpoint));
+        getWait30().until(ExpectedConditions.urlContains(CART_ENDPOINT));
 
         CommonUtils.scrollByViewportPercentage(driver, 70);
 
@@ -125,7 +125,7 @@ public class CartTest extends BaseTest {
         closePopupIfAvailable(driver);
 
         getWait10().until(ExpectedConditions.elementToBeClickable(viewBagButton)).click();
-        getWait30().until(ExpectedConditions.urlContains(cartEndpoint));
+        getWait30().until(ExpectedConditions.urlContains(CART_ENDPOINT));
 
         CommonUtils.scrollByViewportPercentage(driver, 70);
         getWait10().until(ExpectedConditions.elementToBeClickable(By.name("removeCommerceItem"))).click();
@@ -151,7 +151,7 @@ public class CartTest extends BaseTest {
         closePopupIfAvailable(driver);
 
         getWait10().until(ExpectedConditions.elementToBeClickable(viewBagButton)).click();
-        getWait30().until(ExpectedConditions.urlContains(cartEndpoint));
+        getWait30().until(ExpectedConditions.urlContains(CART_ENDPOINT));
 
         CommonUtils.scrollByViewportPercentage(driver, 70);
 
@@ -202,7 +202,7 @@ public class CartTest extends BaseTest {
         closePopupIfAvailable(driver);
 
         getWait10().until(ExpectedConditions.elementToBeClickable(viewBagButton)).click();
-        getWait30().until(ExpectedConditions.urlContains(cartEndpoint));
+        getWait30().until(ExpectedConditions.urlContains(CART_ENDPOINT));
 
         CommonUtils.scrollByViewportPercentage(driver, 80);
 
