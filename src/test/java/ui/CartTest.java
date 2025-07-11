@@ -1,5 +1,6 @@
 package ui;
 
+import org.apache.logging.log4j.LogManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,7 @@ public class CartTest extends BaseTest {
     private final static String addedToBagMessage = "Added to bag!";
     private By itemPriceLocator = By.cssSelector("[data-test-product-prices] > *:first-child");
     private By promoLocator = By.cssSelector("li.qa-promo-item");
-    private static final Logger logger = LoggerFactory.getLogger(LoginTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(CartTest.class);
 
     @BeforeEach
     public void setUp() {
@@ -68,6 +69,8 @@ public class CartTest extends BaseTest {
     public void addItemToCartViaQuickShopButton() {
         clickOnRandomWomenCategoryItem(driver);
         closePopupIfAvailable(driver);
+        logger.info("the popup was cloased");
+
         addRandomItemToCartViaQuickShopButton(driver, actions);
         getFirstAvailableSize(driver);
         addToBagButton.click();
