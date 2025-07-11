@@ -1,6 +1,7 @@
 package ui;
 
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,8 +9,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import utils.CommonUtils;
 import utils.TestUtils;
 
@@ -44,7 +43,7 @@ public class CartTest extends BaseTest {
     private final static String addedToBagMessage = "Added to bag!";
     private By itemPriceLocator = By.cssSelector("[data-test-product-prices] > *:first-child");
     private By promoLocator = By.cssSelector("li.qa-promo-item");
-    private static final Logger logger = LoggerFactory.getLogger(CartTest.class);
+    private static final Logger logger = LogManager.getLogger(CartTest.class);
 
     @BeforeEach
     public void setUp() {
