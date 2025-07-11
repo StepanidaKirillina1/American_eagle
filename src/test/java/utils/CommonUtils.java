@@ -6,10 +6,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import static utils.TestUtils.getWait10;
+import java.util.Random;
+
 import static utils.TestUtils.getWait30;
 
 public class CommonUtils {
+    private static final Random random = new Random();
 
     public static void scrollToItemWithJS(WebDriver driver, WebElement element) {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'start'});", element);
@@ -59,5 +61,13 @@ public class CommonUtils {
                 .until(ExpectedConditions.visibilityOfElementLocated(locator))
                 .getText()
                 .replaceAll("[^0-9.]", ""));
+    }
+
+    public static int getRandomValueBetween1And12() {
+        return random.nextInt(12) + 1;
+    }
+
+    public static int getRandomValueBetween1And27() {
+        return random.nextInt(27) + 1;
     }
 }

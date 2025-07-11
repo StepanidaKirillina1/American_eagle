@@ -29,10 +29,10 @@ public class BaseTest {
         PageFactory.initElements(driver,this);
     }
 
-    @AfterEach
-    public void tearDown() {
-        driver.quit();
-    }
+//    @AfterEach
+//    public void tearDown() {
+//        driver.quit();
+//    }
 
     private WebDriver initDriver() {
         String remoteUrl = System.getenv("SELENIUM_REMOTE_URL");
