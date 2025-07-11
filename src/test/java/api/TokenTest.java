@@ -1,17 +1,15 @@
 package api;
 
 import controllers.TokenController;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.testng.annotations.Ignore;
+import org.junit.jupiter.api.*;
 
-@Disabled
 public class TokenTest {
-    TokenController tokenController = new TokenController();
 
+    @Tags({@Tag("API"), @Tag("Positive"), @Tag("Bot_enabled")})
     @Test
     public void testToken() {
+        TokenController tokenController = new TokenController();
+
         Assertions.assertTrue(tokenController.getAuthToken().contains("e"));
     }
 }

@@ -1,14 +1,14 @@
 package controllers;
 
-import config.TestPropertiesConfig;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.aeonbits.owner.ConfigFactory;
 import org.hamcrest.Matchers;
 
 import static io.restassured.RestAssured.given;
 import static testData.TestData.API_BASE_URL;
+import static testData.TestData.PROPERTIES_CONFIG;
+
 
 public class TokenController {
     RequestSpecification requestSpecification;
@@ -16,14 +16,13 @@ public class TokenController {
 
 
     private static final String TOKEN_ENDPOINT = "auth/oauth/";
-    TestPropertiesConfig config = ConfigFactory.create(TestPropertiesConfig.class, System.getProperties());
 
     public TokenController() {
         this.requestSpecification = given()
                 .contentType(ContentType.URLENC)
                 .formParam("grant_type", "client_credentials")
-                .header("authorization", config.getAuthorizationValue())
-                .header("Cookie", config.getCookieValue())
+                .header("authorization", PROPERTIES_CONFIG.getAuthorizationValue())
+                .header("Cookie", PROPERTIES_CONFIG.getCookieValue())
                 .baseUri(API_BASE_URL);
     }
 
@@ -55,13 +54,13 @@ public class TokenController {
         return given(freshSpec)
                 .contentType(ContentType.URLENC.withCharset("UTF-8"))
                 .formParam("grant_type", "password")
-                .formParam("username", config.getLogin())
-                .formParam("password", config.getPassword())
+                .formParam("username", PROPERTIES_CONFIG.getLogin())
+                .formParam("password", PROPERTIES_CONFIG.getPassword())
                 .header("aelang", "en_US")
                 .header("aesite", "AEO_US")
                 .header("aecountry", "US")
                 //.header("content-type", "application/x-www-form-urlencoded; charset=UTF-8")
-                .header("Authorization", config.getAuthorizationValue())
+                .header("Authorization", PROPERTIES_CONFIG.getAuthorizationValue())
                 .header("Cookie", "TLTUID=" + TLTUID + "; " + "akaalb_PROD_ALB_API=" + akaalb_PROD_ALB_API + "; " +"ak_bmsc=" + ak_bmsc + "; " + "bm_sz=" + bm_sz + "; " + "_abck=" + abckCookie + "; " + "bm_sv=" + bm_sv)
                 .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36")
                 .header("x-access-token", getGuestToken())

@@ -34,7 +34,9 @@ dependencies {
 }
 
 test {
-    useJUnitPlatform()
+    useJUnitPlatform() {
+        excludeTags "Bot_enabled"
+    }
     systemProperties(System.getProperties())
 }
 
