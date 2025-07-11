@@ -36,10 +36,12 @@ dependencies {
 }
 
 test {
+
     useJUnitPlatform() {
         excludeTags "Bot_enabled"
     }
     systemProperties(System.getProperties())
+    systemProperty 'log4j.configurationFile', 'src/test/resources/log4j2.xml'
 }
 
 tasks.register("UI", Test) {

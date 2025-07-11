@@ -42,7 +42,6 @@ public class CartTest extends BaseTest {
     private final static String emptyCartMessage = "Your bag is empty. Find something you love!";
     private final static String addedToBagMessage = "Added to bag!";
     private By itemPriceLocator = By.cssSelector("[data-test-product-prices] > *:first-child");
-    private By promoLocator = By.cssSelector("li.qa-promo-item");
     private static final Logger logger = LogManager.getLogger(CartTest.class);
 
     @BeforeEach
@@ -53,6 +52,7 @@ public class CartTest extends BaseTest {
 
     @Test
     public void addItemToCart() {
+        logger.info("start message");
         clickOnRandomWomenCategoryItem(driver);
         closePopupIfAvailable(driver);
         clickOnRandomItemLink(driver);
@@ -68,7 +68,7 @@ public class CartTest extends BaseTest {
     public void addItemToCartViaQuickShopButton() {
         clickOnRandomWomenCategoryItem(driver);
         closePopupIfAvailable(driver);
-        logger.info("the popup was cloased");
+        logger.info("the popup was closed");
 
         addRandomItemToCartViaQuickShopButton(driver, actions);
         getFirstAvailableSize(driver);
