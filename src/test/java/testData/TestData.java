@@ -1,12 +1,15 @@
 package testData;
 
 import com.github.javafaker.Faker;
+import config.TestPropertiesConfig;
 import models.Item;
+import org.aeonbits.owner.ConfigFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TestData {
+    public static final TestPropertiesConfig PROPERTIES_CONFIG = ConfigFactory.create(TestPropertiesConfig.class, System.getProperties());
     public static final String API_BASE_URL = "https://www.ae.com/ugp-api/";
     public static final String UI_BASE_URL = "https://www.ae.com/us/en";
     public static final String CART_ENDPOINT = "/cart";
@@ -25,7 +28,7 @@ public class TestData {
     }
 
     public static String generateRandomPassword() {
-        return FAKER.internet().password(8, 25, true, true);
+        return FAKER.internet().password(8, 25, true, true, true);
     }
 
     public static List<Item> getListOfProducts(ProductId productId, int quantity) {

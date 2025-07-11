@@ -7,6 +7,9 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.slf4j.ILoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.CommonUtils;
 
 import static testData.TestData.CART_ENDPOINT;
@@ -40,6 +43,7 @@ public class CartTest extends BaseTest {
     private final static String addedToBagMessage = "Added to bag!";
     private By itemPriceLocator = By.cssSelector("[data-test-product-prices] > *:first-child");
     private By promoLocator = By.cssSelector("li.qa-promo-item");
+    private static final Logger logger = LoggerFactory.getLogger(LoginTest.class);
 
     @BeforeEach
     public void setUp() {
@@ -180,10 +184,16 @@ public class CartTest extends BaseTest {
                 .until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-item-quantity")))
                 .getText();
 
+        logger.info("check itemQuantity " +  itemQuantity);
+        logger.info("price " + itemPrice);
+        logger.info("assert itemQuantity");
+
         Assertions.assertTrue(itemQuantity.contains(String.valueOf(1 + counterClickNumber)));
 
         calculatePriceWithDiscountIfAvailable();
         double finalCartItemPrice = convertFromStringToDouble(driver, By.cssSelector(".cart-item-price span"));
+
+        logger.info("check finalPrice " + finalCartItemPrice);
 
         Assertions.assertEquals(roundTo2Decimals(itemPrice * (1 + counterClickNumber)), finalCartItemPrice);
     }
