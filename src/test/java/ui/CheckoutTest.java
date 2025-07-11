@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import utils.CommonUtils;
 import testData.TestData;
+import utils.TestUtils;
 
 import static utils.CommonUtils.*;
 import static utils.TestUtils.*;
@@ -19,7 +20,6 @@ public class CheckoutTest extends BaseTest {
     @FindBy(className = "qa-btn-add-to-bag")
     private WebElement addToBagButton;
 
-    private By promoLocator = By.cssSelector("li.qa-promo-item");
     private Actions actions;
     private Double itemPrice;
 
@@ -46,13 +46,7 @@ public class CheckoutTest extends BaseTest {
         CommonUtils.scrollAndClickWithJS(driver, driver.findElement(By.name("go2checkout")));
         getWait30().until(ExpectedConditions.urlContains("/checkout"));
 
-        try {
-            driver.findElement(promoLocator).isDisplayed();
-            double discount = convertFromStringToDouble(driver, promoLocator);
-            itemPrice = roundTo2Decimals(getDiscountedValue(itemPrice, discount));
-        } catch (Exception e) {
-
-        }
+        TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice);
 
         String price = getWait5()
                 .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".cart-item-info .cart-item-price span")))

@@ -7,10 +7,10 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.CommonUtils;
+import utils.TestUtils;
 
 import static testData.TestData.CART_ENDPOINT;
 
@@ -190,7 +190,7 @@ public class CartTest extends BaseTest {
 
         Assertions.assertTrue(itemQuantity.contains(String.valueOf(1 + counterClickNumber)));
 
-        calculatePriceWithDiscountIfAvailable();
+        TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice);
         double finalCartItemPrice = convertFromStringToDouble(driver, By.cssSelector(".cart-item-price span"));
 
         logger.info("check finalPrice " + finalCartItemPrice);
@@ -228,17 +228,6 @@ public class CartTest extends BaseTest {
 
         for (int i = 1; i <= counterClickNumber; i++) {
             counter.click();
-        }
-    }
-
-    public void calculatePriceWithDiscountIfAvailable() {
-        try {
-            driver.findElement(promoLocator).isDisplayed();
-            double discount = convertFromStringToDouble(driver, promoLocator);
-            System.out.println("discount " + discount);
-            itemPrice = roundTo2Decimals(getDiscountedValue(itemPrice, discount));
-        } catch (Exception e) {
-
         }
     }
 }
