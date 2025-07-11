@@ -28,29 +28,13 @@ public class CommonUtils {
                 scrollValue);
     }
 
-    public static void hoverOverElementWithJS(WebDriver driver, WebElement element) {
-        String script =
-                "var element = arguments[0]; " +
-                        "var mouseOverEvent = new MouseEvent('mouseover', { " +
-                        "   bubbles: true, " +
-                        "   cancelable: true, " +
-                        "   view: window " +
-                        "}); " +
-                        "element.dispatchEvent(mouseOverEvent); " +
-
-                        "var mouseEnterEvent = new MouseEvent('mouseenter', { " +
-                        "   bubbles: true, " +
-                        "   cancelable: true " +
-                        "}); " +
-                        "element.dispatchEvent(mouseEnterEvent);";
-
-        ((JavascriptExecutor) driver).executeScript(script, element);
-    }
-
     public static double roundTo2Decimals(double number) {
         return Math.round(number * 100.0) / 100.0;
     }
 
+    public static double roundTo1Decimals(double number) {
+        return (long)(number * 10) / 10.0;
+    }
 
     public static double getDiscountedValue(double originalValue, double discountPercent) {
         return originalValue * (1 - discountPercent / 100.0);

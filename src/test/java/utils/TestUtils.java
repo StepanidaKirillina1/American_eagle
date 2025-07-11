@@ -13,9 +13,12 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
+import static utils.CommonUtils.*;
+
 public class TestUtils {
     private static final String OUT_OF_STOCK_TEXT = "Out of Stock Online";
-    private static By itemLinkLocator = By.cssSelector("a[role='menuitem']");
+    private static final By ITEM_LINK_LOCATOR = By.cssSelector("a[role='menuitem']");
+    private static final By PROMO_LOCATOR = By.cssSelector("li.qa-promo-item");
 
     public static WebDriverWait getWait5(WebDriver driver) {
         return new WebDriverWait(driver, Duration.ofSeconds(5));
@@ -38,9 +41,9 @@ public class TestUtils {
 
         getWait5(driver).until(ExpectedConditions.elementToBeClickable(By.className("dropdown"))).click();
         getWait10(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector(".dropdown-selection.open")));
-        getWait10(driver).until(ExpectedConditions.elementToBeClickable(itemLinkLocator));
+        getWait10(driver).until(ExpectedConditions.elementToBeClickable(ITEM_LINK_LOCATOR));
 
-        List<WebElement> sizes = driver.findElements(itemLinkLocator);
+        List<WebElement> sizes = driver.findElements(ITEM_LINK_LOCATOR);
 
         for (WebElement size : sizes) {
             if (!size.getText().contains(OUT_OF_STOCK_TEXT)) {
@@ -96,5 +99,15 @@ public class TestUtils {
 
         getWait10(driver).until(ExpectedConditions.elementToBeClickable(elements.get(randomIndex))).click();
         getWait10(driver).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img[data-test-item-image]")));
+    }
+
+    public static void calculatePriceWithDiscountIfAvailable(WebDriver driver, double itemPrice) {
+        try {
+            driver.findElement(PROMO_LOCATOR).isDisplayed();
+            double discount = convertFromStringToDouble(driver, PROMO_LOCATOR);
+            itemPrice = roundTo2Decimals(getDiscountedValue(itemPrice, discount));
+        } catch (Exception e) {
+
+        }
     }
 }

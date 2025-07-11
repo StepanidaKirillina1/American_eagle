@@ -9,10 +9,12 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import testData.ProductId;
 import testData.TestData;
+import utils.CommonUtils;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
+
+import static utils.CommonUtils.getDiscountedValue;
+import static utils.CommonUtils.roundTo2Decimals;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -23,12 +25,12 @@ public class CartTest {
     ProductController productController = new ProductController();
     List<CartItem> cartItems;
 
-    private static final int ITEM_QUANTITY = 1;
+    private static final int ITEM_QUANTITY = 2;
 
     @Test
     @Order(1)
     public void addToCartAsGuestTest() {
-        cartPayloadData.setItems(TestData.getListOfProducts(ProductId.PRODUCT_ID_1, ITEM_QUANTITY));
+        cartPayloadData.setItems(TestData.getListOfProducts(ProductId.PRODUCT_ID_2, ITEM_QUANTITY));
 
         Assertions.assertFalse(cartController.addItemToCart(cartPayloadData).getCartId().isEmpty());
     }
@@ -45,49 +47,44 @@ public class CartTest {
     @Test
     @Order(3)
     public void testOriginalTotalPriceInCart() {
-        BigDecimal expectedPrice = null;
+        double expectedPrice = 0.0;
         cartItems = cartController.getCartData()
                 .then().log().body()
                 .statusCode(200)
                 .extract().body().jsonPath().getList("data.items", CartItem.class);
 
-        List<Sku> skus = productController.getProductById(ProductId.PRODUCT_ID_1).getSkus();
+        List<Sku> skus = productController.getProductById(ProductId.PRODUCT_ID_2).getSkus();
 
         for (Sku sku: skus) {
-            if (ProductId.PRODUCT_ID_1.getSkuId().equals(sku.getSkuId())) {
-                expectedPrice = new BigDecimal((sku.getListPrice()) * ITEM_QUANTITY)
-                        .setScale(2, RoundingMode.HALF_EVEN);
+            if (ProductId.PRODUCT_ID_2.getSkuId().equals(sku.getSkuId())) {
+                expectedPrice = CommonUtils.roundTo1Decimals(sku.getListPrice() * ITEM_QUANTITY);
             }
         }
 
-        Assertions.assertEquals(expectedPrice, BigDecimal.valueOf(cartItems.get(0).getOriginalPrice()));
+        Assertions.assertEquals(expectedPrice, roundTo2Decimals(cartItems.get(0).getOriginalPrice()));
     }
 
-    @Disabled
     @Test
     @Order(4)
     public void testItemsPriceWithDiscount() {
         double expectedSalePrice = 0.0;
 
         CartItem firstCartItem = cartItems.get(0);
-        double originalPricePerItem = firstCartItem.getOriginalPrice() / ITEM_QUANTITY * (1 - firstCartItem.getDiscountPercent() / 100.0);
-        double actualPriceWithDiscount = BigDecimal.valueOf(originalPricePerItem)
-                .setScale(2, RoundingMode.HALF_EVEN)
-                .multiply(BigDecimal.valueOf(ITEM_QUANTITY))
-                .doubleValue();
 
-        List<Sku> skus = productController.getProductById(ProductId.PRODUCT_ID_1).getSkus();
+        double discountValue = getDiscountedValue(firstCartItem.getOriginalPrice(), firstCartItem.getDiscountPercent());
+        double actualPriceWithDiscount = CommonUtils.roundTo1Decimals(discountValue);
+
+        List<Sku> skus = productController.getProductById(ProductId.PRODUCT_ID_2).getSkus();
 
         for (Sku sku: skus) {
-            if (ProductId.PRODUCT_ID_1.getSkuId().equals(sku.getSkuId())) {
-                expectedSalePrice = (sku.getSalePrice()) * ITEM_QUANTITY;
+            if (ProductId.PRODUCT_ID_2.getSkuId().equals(sku.getSkuId())) {
+                expectedSalePrice = (sku.getSalePrice() * ITEM_QUANTITY);
             }
         }
 
         Assertions.assertEquals(expectedSalePrice, actualPriceWithDiscount);
     }
 
-    @Disabled
     @Test
     @Order(5)
     public void removeItemFromCart() {
