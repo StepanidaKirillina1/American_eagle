@@ -97,7 +97,7 @@ public class TestUtils {
 
         List<WebElement> elements = driver.findElements(By.cssSelector("a.clickable.qa-show-sidetray-quickview"));
 
-        getWait10(driver).until(ExpectedConditions.elementToBeClickable(elements.get(randomIndex))).click();
+        CommonUtils.scrollAndClickWithJS(driver, elements.get(randomIndex));
         getWait10(driver).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img[data-test-item-image]")));
     }
 
