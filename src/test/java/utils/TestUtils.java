@@ -1,18 +1,22 @@
 package utils;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ui.BaseTest;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
+import static testData.TestData.CART_ENDPOINT;
 import static utils.CommonUtils.*;
 
 public class TestUtils {
@@ -20,28 +24,13 @@ public class TestUtils {
     private static final By ITEM_LINK_LOCATOR = By.cssSelector("a[role='menuitem']");
     private static final By PROMO_LOCATOR = By.cssSelector("li.qa-promo-item");
 
-    public static WebDriverWait getWait5(WebDriver driver) {
-        return new WebDriverWait(driver, Duration.ofSeconds(5));
-    }
-
-    public static WebDriverWait getWait10(WebDriver driver) {
-        return new WebDriverWait(driver, Duration.ofSeconds(10));
-    }
-
-    public static WebDriverWait getWait30(WebDriver driver) {
-        return new WebDriverWait(driver, Duration.ofSeconds(30));
-    }
-
-    public static WebDriverWait getWait60(WebDriver driver) {
-        return new WebDriverWait(driver, Duration.ofSeconds(60));
-    }
-
-    public static void getFirstAvailableSize(WebDriver driver) {
+    @Step("Get the first available size of the item")
+    public static void getFirstAvailableSize(BaseTest baseTest, WebDriver driver) {
         CommonUtils.scrollToItemWithJS(driver, driver.findElement(By.xpath("//div[text()='Color:']")));
 
-        getWait5(driver).until(ExpectedConditions.elementToBeClickable(By.className("dropdown"))).click();
-        getWait10(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector(".dropdown-selection.open")));
-        getWait10(driver).until(ExpectedConditions.elementToBeClickable(ITEM_LINK_LOCATOR));
+        baseTest.getWait5().until(ExpectedConditions.elementToBeClickable(By.className("dropdown"))).click();
+        baseTest.getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector(".dropdown-selection.open")));
+        baseTest.getWait10().until(ExpectedConditions.elementToBeClickable(ITEM_LINK_LOCATOR));
 
         List<WebElement> sizes = driver.findElements(ITEM_LINK_LOCATOR);
 
@@ -55,41 +44,48 @@ public class TestUtils {
         throw new NoSuchElementException("All sizes are out of stock");
     }
 
-    public static void clickOnRandomLink(By locator, WebDriver driver) {
-        List<WebElement> elements = getWait30(driver).until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+    private static void clickOnRandomLink(By locator, BaseTest baseTest) {
+        List<WebElement> elements = baseTest.getWait30().until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
         int randomIndex = new Random().nextInt(elements.size());
 
         elements.get(randomIndex).click();
     }
 
-    public static void clickOnRandomWomenCategoryItem(WebDriver driver) {
-        WebElement womenCategory = getWait60(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[data-text='Women']")));
+    @Step("Click on a random women category item")
+    public static void clickOnRandomWomenCategoryItem(WebDriver driver, BaseTest baseTest) {
+        WebElement womenCategory = new WebDriverWait(driver, Duration.ofSeconds(60))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[data-text='Women']")));
         new Actions(driver).moveToElement(womenCategory).perform();
+        baseTest.logger.info("hovered over the women category");
 
-        getWait30(driver).until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
-        clickOnRandomLink(By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"), driver);
+        baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
+        clickOnRandomLink(By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"), baseTest);
 
-        getWait10(driver).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class^='_container'] h1")));
+        baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class^='_container'] h1")));
     }
 
-    public static void closePopupIfAvailable(WebDriver driver) {
+    @Step("Close the popup if it appears")
+    public static void closePopupIfAvailable(BaseTest baseTest) {
         try {
-            getWait10(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".bloomreach-weblayer")))
+            baseTest.getWait10().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".bloomreach-weblayer")))
                     .getShadowRoot()
                     .findElement(By.cssSelector("button.close"))
                     .click();
+            baseTest.logger.info("the popup was closed");
         } catch (TimeoutException | NoSuchElementException e) {
 
         }
     }
 
-    public static void clickOnRandomItemLink(WebDriver driver) {
-        clickOnRandomLink(By.xpath("//img[@data-test='product-image']/ancestor::a"), driver);
+    @Step("Click on a random item and add it to the cart")
+    public static void clickOnRandomItemLink(BaseTest baseTest) {
+        clickOnRandomLink(By.xpath("//img[@data-test='product-image']/ancestor::a"), baseTest);
 
-        getWait10(driver).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1[data-testid='product-name']")));
+        baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1[data-testid='product-name']")));
     }
 
-    public static void addRandomItemToCartViaQuickShopButton(WebDriver driver, Actions actions) {
+    @Step("Click on a random item via the Quick Shop button and add it to the cart")
+    public static void addRandomItemToCartViaQuickShopButton(WebDriver driver, Actions actions, BaseTest baseTest) {
         List<WebElement> products = driver.findElements(By.cssSelector("[data-testid='media']"));
         int randomIndex = new Random().nextInt(products.size());
 
@@ -98,9 +94,10 @@ public class TestUtils {
         List<WebElement> elements = driver.findElements(By.cssSelector("a.clickable.qa-show-sidetray-quickview"));
 
         CommonUtils.scrollAndClickWithJS(driver, elements.get(randomIndex));
-        getWait10(driver).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img[data-test-item-image]")));
+        baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img[data-test-item-image]")));
     }
 
+    @Step("Calculate the final price with discount if available")
     public static void calculatePriceWithDiscountIfAvailable(WebDriver driver, double itemPrice) {
         try {
             driver.findElement(PROMO_LOCATOR).isDisplayed();
@@ -109,5 +106,17 @@ public class TestUtils {
         } catch (Exception e) {
 
         }
+    }
+
+    @Step("Click on the Add to bag button")
+    public static void clickOnAddToBagButton(BaseTest baseTest) {
+        baseTest.getWait10().until(ExpectedConditions.elementToBeClickable(By.className("qa-btn-add-to-bag"))).click();
+    }
+
+    @Step("Click on the View Bag button")
+    public static void clickOnViewBagButton(BaseTest baseTest) {
+        baseTest.getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[data-test-view-cart]"))).click();
+
+        baseTest.getWait30().until(ExpectedConditions.urlContains(CART_ENDPOINT));
     }
 }

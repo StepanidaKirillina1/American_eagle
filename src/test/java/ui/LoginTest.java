@@ -1,5 +1,7 @@
 package ui;
 
+import config.TestPropertiesConfig;
+import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
@@ -7,9 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import static testData.TestData.PROPERTIES_CONFIG;
-
 public class LoginTest extends BaseTest {
+
+    public static final TestPropertiesConfig PROPERTIES_CONFIG = ConfigFactory.create(TestPropertiesConfig.class, System.getProperties());
 
     @Tags({@Tag("UI"), @Tag("Positive"), @Tag("Bot_enabled")})
     @Test

@@ -44,9 +44,49 @@ test {
     systemProperty 'log4j.configurationFile', 'src/test/resources/log4j2.xml'
 }
 
-tasks.register("UI", Test) {
+tasks.register("ui", Test) {
     useJUnitPlatform() {
         includeTags "UI"
+        excludeTags "API", "Bot_enabled"
+    }
+    systemProperties(System.getProperties())
+}
+
+tasks.register("critical", Test) {
+    useJUnitPlatform() {
+        includeTags "Critical"
+        excludeTags "Bot_enabled"
+    }
+    systemProperties(System.getProperties())
+}
+
+tasks.register("major", Test) {
+    useJUnitPlatform() {
+        includeTags "Major"
+        excludeTags "Bot_enabled"
+    }
+    systemProperties(System.getProperties())
+}
+
+tasks.register("api", Test) {
+    useJUnitPlatform() {
+        includeTags "API"
+        excludeTags "Bot_enabled", "UI"
+    }
+    systemProperties(System.getProperties())
+}
+
+tasks.register("positive", Test) {
+    useJUnitPlatform() {
+        includeTags "Positive"
+        excludeTags "Bot_enabled"
+    }
+    systemProperties(System.getProperties())
+}
+
+tasks.register("bot_enabled", Test) {
+    useJUnitPlatform() {
+        includeTags "Bot_enabled"
     }
     systemProperties(System.getProperties())
 }

@@ -11,13 +11,14 @@ import java.util.List;
 public class HomePageTest extends BaseTest {
 
     @Test
+    @Tags({@Tag("UI"), @Tag("Smoke"), @Tag("Positive")})
     public void homePageTest() {
         Assertions.assertTrue(driver.getTitle().contains("American Eagle"));
     }
 
     @Test
-    @Tags({@Tag("UI"), @Tag("Smoke")})
-    public void isCategoriesListClickable() {
+    @Tags({@Tag("UI"), @Tag("Smoke"), @Tag("Positive")})
+    public void isCategoriesTextVisible() {
         List<String> expectedCategories = List.of(
                 "Women", "Men", "Jeans", "Shoes & Accessories", "Loungewear & PJs", "Aerie", "Clearance"
         );
