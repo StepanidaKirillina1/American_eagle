@@ -40,7 +40,7 @@ public class RegisterTest extends BaseTest {
 
         CommonUtils.scrollAndClickWithJS(driver, driver.findElement(By.cssSelector(".qa-checkbox-accept-terms label")));
 
-        Assertions.assertEquals(null, submitButton.getDomAttribute("disabled"));
+        Assertions.assertNull(submitButton.getDomAttribute("disabled"));
 
         clickOnSubmitButton();
     }
@@ -75,15 +75,11 @@ public class RegisterTest extends BaseTest {
 
     @Step("Fill the password field")
     public void fillPasswordField() {
-        //password = TestData.generateRandomPassword();
-
         driver.findElement(By.cssSelector("[placeholder='Password']")).sendKeys(password);
     }
 
     @Step("Fill the confirm password field")
     public void fillConfirmPasswordField() {
-        //password = TestData.generateRandomPassword();
-
         driver.findElement(By.cssSelector("[placeholder='Confirm Password']")).sendKeys(password);
     }
 
