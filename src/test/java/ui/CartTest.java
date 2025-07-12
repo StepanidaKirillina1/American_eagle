@@ -1,18 +1,13 @@
 package ui;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import io.qameta.allure.Step;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import utils.CommonUtils;
 import utils.TestUtils;
-
-import static testData.TestData.CART_ENDPOINT;
 
 import java.util.Random;
 
@@ -21,82 +16,69 @@ import static utils.CommonUtils.*;
 import static utils.TestUtils.*;
 
 public class CartTest extends BaseTest {
-    @FindBy(className = "qa-btn-add-to-bag")
-    private WebElement addToBagButton;
-
     @FindBy(xpath = "//div[@class='modal-dialog'][not(@quickview)]")
     private WebElement modalDialog;
-
-    @FindBy(css = "button[data-test-view-cart]")
-    private WebElement viewBagButton;
 
     @FindBy(css = "button[aria-label='increase']")
     private WebElement increaseButton;
 
     @FindBy(css= ".btn.qa-item-btn-edit")
-    private WebElement editButton;
+    private WebElement updateButton;
 
     private Actions actions;
     private Double itemPrice;
     private int counterClickNumber = 0;
-    private final static String emptyCartMessage = "Your bag is empty. Find something you love!";
-    private final static String addedToBagMessage = "Added to bag!";
+    private final static String EMPTY_CART_MESSAGE = "Your bag is empty. Find something you love!";
+    private final static String ADDED_TO_BAG_MESSAGE = "Added to bag!";
     private By itemPriceLocator = By.cssSelector("[data-test-product-prices] > *:first-child");
-    private static final Logger logger = LogManager.getLogger(CartTest.class);
 
     @BeforeEach
     public void setUp() {
         super.setUp();
         actions = new Actions(driver);
+        clickOnRandomWomenCategoryItem(driver, this);
+        closePopupIfAvailable(this);
     }
 
+    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
     public void addItemToCart() {
-        logger.info("start message");
-        clickOnRandomWomenCategoryItem(driver);
-        closePopupIfAvailable(driver);
-        clickOnRandomItemLink(driver);
-        getFirstAvailableSize(driver);
-        addToBagButton.click();
+        clickOnRandomItemLink(this);
+        getFirstAvailableSize(this, driver);
+        clickOnAddToBagButton(this);
+        closePopupIfAvailable(this);
 
-        closePopupIfAvailable(driver);
-
-        assertEquals(addedToBagMessage, modalDialog.findElement(By.tagName("h2")).getText());
+        assertEquals(ADDED_TO_BAG_MESSAGE, modalDialog.findElement(By.tagName("h2")).getText());
     }
 
+    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
     public void addItemToCartViaQuickShopButton() {
-        clickOnRandomWomenCategoryItem(driver);
-        closePopupIfAvailable(driver);
-        logger.info("the popup was closed");
+        addRandomItemToCartViaQuickShopButton(driver, actions, this);
+        getFirstAvailableSize(this, driver);
+        clickOnAddToBagButton(this);
+        closePopupIfAvailable(this);
 
-        addRandomItemToCartViaQuickShopButton(driver, actions);
-        getFirstAvailableSize(driver);
-        addToBagButton.click();
-
-        closePopupIfAvailable(driver);
-
-        assertEquals(addedToBagMessage, modalDialog.findElement(By.tagName("h2")).getText());
+        assertEquals(ADDED_TO_BAG_MESSAGE, modalDialog.findElement(By.tagName("h2")).getText());
     }
 
+    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
     public void counterTest() {
-        clickOnRandomWomenCategoryItem(driver);
-        closePopupIfAvailable(driver);
-        clickOnRandomItemLink(driver);
+        clickOnRandomItemLink(this);
 
         itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
-        getFirstAvailableSize(driver);
+        getFirstAvailableSize(this, driver);
 
         WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
 
         if("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
-            addToBagButton.click();
-            closePopupIfAvailable(driver);
+            clickOnAddToBagButton(this);
+            closePopupIfAvailable(this);
         }
         clickOnCounterBetween1and9();
-        addToBagButton.click();
-        closePopupIfAvailable(driver);
+        clickOnAddToBagButton(this);
+        closePopupIfAvailable(this);
 
         String actualText = getWait5()
                     .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test-product-quantity]")))
@@ -104,9 +86,7 @@ public class CartTest extends BaseTest {
 
         Assertions.assertTrue(actualText.contains(String.valueOf(1 + counterClickNumber)));
 
-        CommonUtils.scrollAndClickWithJS(driver, viewBagButton);
-        getWait30().until(ExpectedConditions.urlContains(CART_ENDPOINT));
-
+        clickOnViewBagButton(this);
         CommonUtils.scrollByViewportPercentage(driver, 70);
 
         Assertions.assertTrue(
@@ -120,58 +100,48 @@ public class CartTest extends BaseTest {
         Assertions.assertEquals(roundTo2Decimals(itemPrice * (1 + counterClickNumber)), finalCartItemPrice);
     }
 
+    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
     public void removeItemFromCartTest() {
-        clickOnRandomWomenCategoryItem(driver);
-        closePopupIfAvailable(driver);
-        clickOnRandomItemLink(driver);
-
-        getFirstAvailableSize(driver);
-        addToBagButton.click();
-        closePopupIfAvailable(driver);
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(viewBagButton)).click();
-        getWait30().until(ExpectedConditions.urlContains(CART_ENDPOINT));
-
+        clickOnRandomItemLink(this);
+        getFirstAvailableSize(this, driver);
+        clickOnAddToBagButton(this);
+        closePopupIfAvailable(this);
+        clickOnViewBagButton(this);
         CommonUtils.scrollByViewportPercentage(driver, 70);
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.name("removeCommerceItem"))).click();
+        removeItemFromCart();
 
         String actualEmptyCartMessage = getWait30()
                 .until(ExpectedConditions.visibilityOfElementLocated(By.className("qa-empty-cart-msg")))
                 .getText();
 
-        Assertions.assertEquals(emptyCartMessage, actualEmptyCartMessage);
+        Assertions.assertEquals(EMPTY_CART_MESSAGE, actualEmptyCartMessage);
     }
 
+    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
     public void editCartItemQuantity() {
-        clickOnRandomWomenCategoryItem(driver);
-        closePopupIfAvailable(driver);
-        clickOnRandomItemLink(driver);
+        clickOnRandomItemLink(this);
 
         itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
 
-        getFirstAvailableSize(driver);
-        addToBagButton.click();
-
-        closePopupIfAvailable(driver);
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(viewBagButton)).click();
-        getWait30().until(ExpectedConditions.urlContains(CART_ENDPOINT));
+        getFirstAvailableSize(this, driver);
+        clickOnAddToBagButton(this);
+        closePopupIfAvailable(this);
+        clickOnViewBagButton(this);
 
         CommonUtils.scrollByViewportPercentage(driver, 70);
 
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.name("editCommerceItem"))).click();
-        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#quickview-edit-carousel img")));
-        CommonUtils.scrollToItemWithJS(driver, editButton);
+        clickOnEditButton();
+        CommonUtils.scrollToItemWithJS(driver, updateButton);
 
         WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
 
         if("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
-            editButton.click();
+            clickOnUpdateButton();
         } else {
             clickOnCounterBetween1and9();
-            editButton.click();
+            clickOnUpdateButton();
         }
 
         try {
@@ -200,21 +170,17 @@ public class CartTest extends BaseTest {
         Assertions.assertEquals(roundTo2Decimals(itemPrice * (1 + counterClickNumber)), finalCartItemPrice);
     }
 
+    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
     public void orderSummaryTest() {
-        clickOnRandomWomenCategoryItem(driver);
-        closePopupIfAvailable(driver);
-        clickOnRandomItemLink(driver);
+        clickOnRandomItemLink(this);
 
         itemPrice = roundTo2Decimals(convertFromStringToDouble(driver, itemPriceLocator));
 
-        getFirstAvailableSize(driver);
-        addToBagButton.click();
-
-        closePopupIfAvailable(driver);
-
-        getWait10().until(ExpectedConditions.elementToBeClickable(viewBagButton)).click();
-        getWait30().until(ExpectedConditions.urlContains(CART_ENDPOINT));
+        getFirstAvailableSize(this, driver);
+        clickOnAddToBagButton(this);
+        closePopupIfAvailable(this);
+        clickOnViewBagButton(this);
 
         CommonUtils.scrollByViewportPercentage(driver, 80);
 
@@ -224,6 +190,7 @@ public class CartTest extends BaseTest {
         assertEquals(roundTo2Decimals(itemPrice + shippingPrice), subTotalPrice);
     }
 
+    @Step("Click on the counter button between 1 and 9")
     public void clickOnCounterBetween1and9() {
         counterClickNumber = new Random().nextInt(9) + 1;
         WebElement counter = getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[aria-label='increase']")));
@@ -231,5 +198,21 @@ public class CartTest extends BaseTest {
         for (int i = 1; i <= counterClickNumber; i++) {
             counter.click();
         }
+    }
+
+    @Step("Remove item from the cart")
+    public void removeItemFromCart() {
+        getWait10().until(ExpectedConditions.elementToBeClickable(By.name("removeCommerceItem"))).click();
+    }
+
+    @Step("Click on the Edit button")
+    public void clickOnEditButton() {
+        getWait10().until(ExpectedConditions.elementToBeClickable(By.name("editCommerceItem"))).click();
+        getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#quickview-edit-carousel img")));
+    }
+
+    @Step("Click on the Update button")
+    public void clickOnUpdateButton() {
+        updateButton.click();
     }
 }

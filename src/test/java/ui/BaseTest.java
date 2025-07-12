@@ -1,5 +1,7 @@
 package ui;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
@@ -20,6 +22,7 @@ public class BaseTest {
     private WebDriverWait wait5;
     private WebDriverWait wait10;
     private WebDriverWait wait30;
+    public Logger logger = LogManager.getLogger(this);
 
     @BeforeEach
     public void setUp() {

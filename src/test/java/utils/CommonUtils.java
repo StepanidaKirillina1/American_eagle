@@ -5,10 +5,10 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.Random;
-
-import static utils.TestUtils.getWait30;
 
 public class CommonUtils {
     private static final Random random = new Random();
@@ -41,7 +41,7 @@ public class CommonUtils {
     }
 
     public static double convertFromStringToDouble(WebDriver driver, By locator) {
-        return Double.parseDouble(getWait30(driver)
+        return Double.parseDouble(new WebDriverWait(driver, Duration.ofSeconds(30))
                 .until(ExpectedConditions.visibilityOfElementLocated(locator))
                 .getText()
                 .replaceAll("[^0-9.]", ""));
