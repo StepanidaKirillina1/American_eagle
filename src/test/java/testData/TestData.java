@@ -5,7 +5,7 @@ import config.TestPropertiesConfig;
 import models.Item;
 import org.aeonbits.owner.ConfigFactory;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class TestData {
@@ -31,10 +31,16 @@ public class TestData {
         return FAKER.internet().password(8, 25, true, true, true);
     }
 
-    public static List<Item> getListOfProducts(ProductId productId, int quantity) {
-        List<Item> listOfJProducts = new ArrayList<>();
-        listOfJProducts.add(Item.builder().skuId(productId.getSkuId()).quantity(quantity).build());
-
-        return listOfJProducts;
-    }
+   public static List<Item> items = List.of(
+           Item.builder()
+                   .quantity(3)
+                   .skuId("0043101054")
+                   .build(),
+           Item.builder()
+                   .quantity(1)
+                   .skuId("0043385046")
+                   .build())
+           .stream()
+           .sorted(Comparator.comparing(Item::getSkuId))
+           .toList();
 }

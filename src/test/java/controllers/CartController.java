@@ -3,8 +3,11 @@ package controllers;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import models.CartPayloadData;
-import models.CartResponseData;
+import models.*;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
+
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static testData.TestData.API_BASE_URL;
@@ -32,6 +35,8 @@ public class CartController {
                 .when()
                 .post(CART_ENDPOINT + "/items")
                 .then()
+                .statusCode(202)
+                .body("cartId", Matchers.notNullValue())
                 .extract().as(CartResponseData.class);
     }
 
@@ -40,22 +45,36 @@ public class CartController {
                 .when()
                 .delete(CART_ENDPOINT + "/items?itemIds=" + itemId)
                 .then()
+                .statusCode(202)
                 .extract().as(CartResponseData.class);
     }
 
-    public Response getCartItemsCount() {
+    public CartData getCartItemsCount() {
         return given(requestSpecification)
                 .when()
                 .get(CART_ENDPOINT + "/count")
-                .then()
-                .extract().response();
+                .then().log().body()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getObject("data", CartData.class);
     }
 
-    public Response getCartData() {
+    public List<CartItem> getCartItemData() {
         return given(requestSpecification)
                 .when()
                 .get(CART_ENDPOINT + "?couponErrorBehavior=cart&inventoryCheck=true")
-                .then()
-                .extract().response();
+                .then().log().body()
+                .statusCode(200)
+                .extract().body().jsonPath().getList("data.items", CartItem.class);
+    }
+
+    public OrderSummary getOrderSummary() {
+        return given(requestSpecification)
+                .when()
+                .get(CART_ENDPOINT + "?couponErrorBehavior=cart&inventoryCheck=true")
+                .then().log().body()
+                .statusCode(200)
+                .extract().body().jsonPath().getObject("data.summary", OrderSummary.class);
     }
 }

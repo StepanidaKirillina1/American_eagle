@@ -1,12 +1,12 @@
 package utils;
 
 import io.qameta.allure.Step;
+import models.Item;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import ui.BaseTest;
@@ -118,5 +118,21 @@ public class TestUtils {
         baseTest.getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[data-test-view-cart]"))).click();
 
         baseTest.getWait30().until(ExpectedConditions.urlContains(CART_ENDPOINT));
+    }
+
+    public static String getSkuIdByIndex(List<Item> items, int index) {
+        return items
+                .stream()
+                .map(item -> item.getSkuId())
+                .toList()
+                .get(index);
+    }
+
+    public static int getItemQuantityByIndex(List<Item> items, int index) {
+        return items
+                .stream()
+                .map(item -> item.getQuantity())
+                .toList()
+                .get(index);
     }
 }

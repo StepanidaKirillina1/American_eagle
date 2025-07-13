@@ -1,5 +1,6 @@
 package ui;
 
+import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -15,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.CommonUtils.*;
 import static utils.TestUtils.*;
 
+@Feature("UI")
 public class CartTest extends BaseTest {
     @FindBy(xpath = "//div[@class='modal-dialog'][not(@quickview)]")
     private WebElement modalDialog;
@@ -158,7 +160,6 @@ public class CartTest extends BaseTest {
 
         logger.info("check itemQuantity " +  itemQuantity);
         logger.info("price " + itemPrice);
-        logger.info("assert itemQuantity");
 
         Assertions.assertTrue(itemQuantity.contains(String.valueOf(1 + counterClickNumber)));
 

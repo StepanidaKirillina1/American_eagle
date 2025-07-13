@@ -1,5 +1,6 @@
 package ui;
 
+import io.qameta.allure.Feature;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
@@ -8,6 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.List;
 
+@Feature("UI")
 public class HomePageTest extends BaseTest {
 
     @Test

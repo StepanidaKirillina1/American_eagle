@@ -1,5 +1,6 @@
 package ui;
 
+import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -11,6 +12,7 @@ import utils.TestUtils;
 import static utils.CommonUtils.*;
 import static utils.TestUtils.*;
 
+@Feature("UI")
 public class CheckoutTest extends BaseTest {
     private Double itemPrice;
 

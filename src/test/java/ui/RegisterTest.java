@@ -1,5 +1,6 @@
 package ui;
 
+import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
@@ -13,6 +14,7 @@ import org.openqa.selenium.support.ui.Select;
 import testData.TestData;
 import utils.CommonUtils;
 
+@Feature("UI")
 public class RegisterTest extends BaseTest {
 
     @FindBy(name = "submit")
