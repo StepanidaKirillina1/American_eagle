@@ -7,10 +7,9 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import testData.TestData;
 import utils.CommonUtils;
 import utils.TestUtils;
-
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.CommonUtils.*;
@@ -30,16 +29,19 @@ public class CartTest extends BaseTest {
     private Actions actions;
     private Double itemPrice;
     private int counterClickNumber = 0;
-    private final static String EMPTY_CART_MESSAGE = "Your bag is empty. Find something you love!";
     private final static String ADDED_TO_BAG_MESSAGE = "Added to bag!";
     private By itemPriceLocator = By.cssSelector("[data-test-product-prices] > *:first-child");
+    private int popupCounter = 0;
 
     @BeforeEach
     public void setUp() {
         super.setUp();
         actions = new Actions(driver);
         clickOnRandomWomenCategoryItem(driver, this);
-        closePopupIfAvailable(this);
+
+        if(closePopupIfAvailable(this)){
+            popupCounter++;
+        }
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
@@ -48,9 +50,14 @@ public class CartTest extends BaseTest {
         clickOnRandomItemLink(this);
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);
-        closePopupIfAvailable(this);
 
-        assertEquals(ADDED_TO_BAG_MESSAGE, modalDialog.findElement(By.tagName("h2")).getText());
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
+        assertEquals(ADDED_TO_BAG_MESSAGE,
+                getWait10().until(ExpectedConditions.visibilityOf(modalDialog)).findElement(By.tagName("h2")).getText()
+        );
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
@@ -59,9 +66,13 @@ public class CartTest extends BaseTest {
         addRandomItemToCartViaQuickShopButton(driver, actions, this);
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);
-        closePopupIfAvailable(this);
 
-        assertEquals(ADDED_TO_BAG_MESSAGE, modalDialog.findElement(By.tagName("h2")).getText());
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
+        assertEquals(ADDED_TO_BAG_MESSAGE,
+                getWait10().until(ExpectedConditions.visibilityOf(modalDialog)).findElement(By.tagName("h2")).getText());
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
@@ -75,12 +86,18 @@ public class CartTest extends BaseTest {
         WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
 
         if("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
-            clickOnAddToBagButton(this);
+            //clickOnAddToBagButton(this);
+            counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
+            if (popupCounter == 0) {
+                closePopupIfAvailable(this);
+            }
+        }
+        counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
+        clickOnAddToBagButton(this);
+
+        if (popupCounter == 0) {
             closePopupIfAvailable(this);
         }
-        clickOnCounterBetween1and9();
-        clickOnAddToBagButton(this);
-        closePopupIfAvailable(this);
 
         String actualText = getWait5()
                     .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test-product-quantity]")))
@@ -108,16 +125,20 @@ public class CartTest extends BaseTest {
         clickOnRandomItemLink(this);
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);
-        closePopupIfAvailable(this);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
         clickOnViewBagButton(this);
         CommonUtils.scrollByViewportPercentage(driver, 70);
-        removeItemFromCart();
+        removeItemFromCart(this);
 
         String actualEmptyCartMessage = getWait30()
                 .until(ExpectedConditions.visibilityOfElementLocated(By.className("qa-empty-cart-msg")))
                 .getText();
 
-        Assertions.assertEquals(EMPTY_CART_MESSAGE, actualEmptyCartMessage);
+        Assertions.assertEquals(TestData.EMPTY_CART_MESSAGE, actualEmptyCartMessage);
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
@@ -129,7 +150,11 @@ public class CartTest extends BaseTest {
 
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);
-        closePopupIfAvailable(this);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
         clickOnViewBagButton(this);
 
         CommonUtils.scrollByViewportPercentage(driver, 70);
@@ -142,7 +167,7 @@ public class CartTest extends BaseTest {
         if("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
             clickOnUpdateButton();
         } else {
-            clickOnCounterBetween1and9();
+            counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
             clickOnUpdateButton();
         }
 
@@ -180,7 +205,11 @@ public class CartTest extends BaseTest {
 
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);
-        closePopupIfAvailable(this);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
         clickOnViewBagButton(this);
 
         CommonUtils.scrollByViewportPercentage(driver, 80);
@@ -189,21 +218,6 @@ public class CartTest extends BaseTest {
         double subTotalPrice = convertFromStringToDouble(driver, By.cssSelector("[data-testid='row-total-value']"));
 
         assertEquals(roundTo2Decimals(itemPrice + shippingPrice), subTotalPrice);
-    }
-
-    @Step("Click on the counter button between 1 and 9")
-    public void clickOnCounterBetween1and9() {
-        counterClickNumber = new Random().nextInt(9) + 1;
-        WebElement counter = getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[aria-label='increase']")));
-
-        for (int i = 1; i <= counterClickNumber; i++) {
-            counter.click();
-        }
-    }
-
-    @Step("Remove item from the cart")
-    public void removeItemFromCart() {
-        getWait10().until(ExpectedConditions.elementToBeClickable(By.name("removeCommerceItem"))).click();
     }
 
     @Step("Click on the Edit button")
