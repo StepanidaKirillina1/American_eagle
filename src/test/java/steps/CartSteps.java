@@ -10,12 +10,20 @@ import java.util.List;
 public class CartSteps {
     CartController cartController = new CartController();
     CartPayloadData cartPayloadData = new CartPayloadData();
+    CartEditData cartEditData = new CartEditData();
 
     @Step("Add items to the cart")
     public CartResponseData addItemToCart(List<Item> items) {
         cartPayloadData.setItems(items);
 
         return cartController.addItemToCart(cartPayloadData);
+    }
+
+    @Step("Edit cart items")
+    public CartResponseData editCartItems(List<EditItem> items) {
+        cartEditData.setItems(items);
+
+        return cartController.editCartItems(cartEditData);
     }
 
     @Step("Get the cart data")
@@ -30,6 +38,14 @@ public class CartSteps {
                 .stream()
                 .sorted(Comparator.comparing(CartItem::getSku))
                 .toList();
+    }
+
+    public String getItemIdBySku(String sku) {
+        return cartController.getCartItemData().stream()
+                .filter(item -> item.getSku().equals(sku))
+                .findFirst()
+                .map(CartItem::getItemId)
+                .orElseThrow(() -> new RuntimeException("No item found with this sku " + sku));
     }
 
     @Step("Calculate the total sum with discount and without shipping")
