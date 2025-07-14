@@ -42,6 +42,6 @@ bin/
 .DS_Store
 
 ### Property files ###
-src/test/resources/*.properties
-/src/test/resources/default.properties
-/src/test/resources/test.properties
+#src/test/resources/*.properties
+#/src/test/resources/default.properties
+#/src/test/resources/test.properties
