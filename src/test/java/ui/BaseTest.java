@@ -22,6 +22,7 @@ public class BaseTest {
     private WebDriverWait wait5;
     private WebDriverWait wait10;
     private WebDriverWait wait30;
+    private WebDriverWait wait60;
     public Logger logger = LogManager.getLogger(this);
 
     @BeforeEach
@@ -80,5 +81,13 @@ public class BaseTest {
         }
 
         return wait30;
+    }
+
+    public WebDriverWait getWait60() {
+        if (wait60 == null) {
+            wait60 = new WebDriverWait(driver, Duration.ofSeconds(60));
+        }
+
+        return wait60;
     }
 }

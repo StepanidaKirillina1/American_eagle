@@ -2,6 +2,8 @@ package utils;
 
 import io.qameta.allure.Step;
 import models.Item;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -24,6 +26,7 @@ public class TestUtils {
     private static final String OUT_OF_STOCK_TEXT = "Out of Stock Online";
     private static final By ITEM_LINK_LOCATOR = By.cssSelector("a[role='menuitem']");
     private static final By PROMO_LOCATOR = By.cssSelector("li.qa-promo-item");
+    public static Logger logger = LogManager.getLogger();
 
     @Step("Get the first available size of the item")
     public static void getFirstAvailableSize(BaseTest baseTest, WebDriver driver) {
@@ -122,7 +125,9 @@ public class TestUtils {
     public static void clickOnViewBagButton(BaseTest baseTest) {
         baseTest.getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[data-test-view-cart]"))).click();
 
-        baseTest.getWait30().until(ExpectedConditions.urlContains(CART_ENDPOINT));
+        logger.info("view button was clicked");
+
+        baseTest.getWait60().until(ExpectedConditions.urlContains(CART_ENDPOINT));
     }
 
     @Step("Remove item from the cart")

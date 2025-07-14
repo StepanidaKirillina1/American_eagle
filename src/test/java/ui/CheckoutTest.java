@@ -2,6 +2,8 @@ package ui;
 
 import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -78,7 +80,7 @@ public class CheckoutTest extends BaseTest {
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
-    @Test
+    @RepeatedTest(3)
     public void checkSeveralQuantityItemTest() {
         itemPrice = convertFromStringToDouble(driver, By.cssSelector("[data-test-product-prices] > *:first-child"));
         getFirstAvailableSize(this, driver);
