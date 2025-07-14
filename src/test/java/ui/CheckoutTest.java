@@ -51,7 +51,7 @@ public class CheckoutTest extends BaseTest {
             closePopupIfAvailable(this);
         }
 
-        clickOnViewBagButton(this);
+        clickOnViewBagButton(this, driver);
         clickOnCheckoutButton();
 
         Assertions.assertEquals("Checkout", driver.findElement(By.cssSelector("h1.qa-page-header")).getText());
@@ -68,7 +68,7 @@ public class CheckoutTest extends BaseTest {
             closePopupIfAvailable(this);
         }
 
-        clickOnViewBagButton(this);
+        clickOnViewBagButton(this, driver);
         clickOnCheckoutButton();
         TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice);
 
@@ -89,9 +89,6 @@ public class CheckoutTest extends BaseTest {
 
         if("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
             clickOnAddToBagButton(this);
-            if (popupCounter == 0) {
-                closePopupIfAvailable(this);
-            }
         }
         counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
         clickOnAddToBagButton(this);
@@ -100,7 +97,7 @@ public class CheckoutTest extends BaseTest {
             closePopupIfAvailable(this);
         }
 
-        clickOnViewBagButton(this);
+        clickOnViewBagButton(this, driver);
         clickOnCheckoutButton();
         TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice);
 
@@ -125,7 +122,7 @@ public class CheckoutTest extends BaseTest {
             closePopupIfAvailable(this);
         }
 
-        clickOnViewBagButton(this);
+        clickOnViewBagButton(this, driver);
         clickOnCheckoutButton();
 
         TestUtils.removeItemFromCart(this);
@@ -146,7 +143,7 @@ public class CheckoutTest extends BaseTest {
             closePopupIfAvailable(this);
         }
 
-        clickOnViewBagButton(this);
+        clickOnViewBagButton(this, driver);
         clickOnCheckoutButton();
 
         fillEmailField(this);

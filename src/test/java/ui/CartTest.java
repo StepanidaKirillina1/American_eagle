@@ -86,11 +86,7 @@ public class CartTest extends BaseTest {
         WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
 
         if("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
-            //clickOnAddToBagButton(this);
-            counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
-            if (popupCounter == 0) {
-                closePopupIfAvailable(this);
-            }
+            clickOnAddToBagButton(this);
         }
         counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
         clickOnAddToBagButton(this);
@@ -105,7 +101,7 @@ public class CartTest extends BaseTest {
 
         Assertions.assertTrue(actualText.contains(String.valueOf(1 + counterClickNumber)));
 
-        clickOnViewBagButton(this);
+        clickOnViewBagButton(this, driver);
         CommonUtils.scrollByViewportPercentage(driver, 70);
 
         Assertions.assertTrue(
@@ -130,7 +126,7 @@ public class CartTest extends BaseTest {
             closePopupIfAvailable(this);
         }
 
-        clickOnViewBagButton(this);
+        clickOnViewBagButton(this, driver);
         CommonUtils.scrollByViewportPercentage(driver, 70);
         removeItemFromCart(this);
 
@@ -155,7 +151,7 @@ public class CartTest extends BaseTest {
             closePopupIfAvailable(this);
         }
 
-        clickOnViewBagButton(this);
+        clickOnViewBagButton(this, driver);
 
         CommonUtils.scrollByViewportPercentage(driver, 70);
 
@@ -210,7 +206,7 @@ public class CartTest extends BaseTest {
             closePopupIfAvailable(this);
         }
 
-        clickOnViewBagButton(this);
+        clickOnViewBagButton(this, driver);
 
         CommonUtils.scrollByViewportPercentage(driver, 80);
 

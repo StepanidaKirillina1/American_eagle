@@ -122,9 +122,11 @@ public class TestUtils {
     }
 
     @Step("Click on the View Bag button")
-    public static void clickOnViewBagButton(BaseTest baseTest) {
-        baseTest.getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[data-test-view-cart]"))).click();
+    public static void clickOnViewBagButton(BaseTest baseTest, WebDriver driver) {
+        baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='modal-dialog'][not(@quickview)]")));
+        logger.info("waitor on modal dialog");
 
+        CommonUtils.scrollAndClickWithJS(driver, driver.findElement(By.cssSelector("button[data-test-view-cart]")));
         logger.info("view button was clicked");
 
         baseTest.getWait60().until(ExpectedConditions.urlContains(CART_ENDPOINT));
