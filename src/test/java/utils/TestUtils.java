@@ -2,6 +2,8 @@ package utils;
 
 import io.qameta.allure.Step;
 import models.Item;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -9,6 +11,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import testData.TestData;
 import ui.BaseTest;
 
 import java.time.Duration;
@@ -23,6 +26,7 @@ public class TestUtils {
     private static final String OUT_OF_STOCK_TEXT = "Out of Stock Online";
     private static final By ITEM_LINK_LOCATOR = By.cssSelector("a[role='menuitem']");
     private static final By PROMO_LOCATOR = By.cssSelector("li.qa-promo-item");
+    public static Logger logger = LogManager.getLogger();
 
     @Step("Get the first available size of the item")
     public static void getFirstAvailableSize(BaseTest baseTest, WebDriver driver) {
@@ -58,23 +62,27 @@ public class TestUtils {
         new Actions(driver).moveToElement(womenCategory).perform();
         baseTest.logger.info("hovered over the women category");
 
-        baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
+        baseTest.getWait30().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
         clickOnRandomLink(By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"), baseTest);
 
         baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class^='_container'] h1")));
     }
 
     @Step("Close the popup if it appears")
-    public static void closePopupIfAvailable(BaseTest baseTest) {
+    public static boolean closePopupIfAvailable(BaseTest baseTest) {
+        int popupCounter = 0;
         try {
             baseTest.getWait10().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".bloomreach-weblayer")))
                     .getShadowRoot()
                     .findElement(By.cssSelector("button.close"))
                     .click();
-            baseTest.logger.info("the popup was closed");
+            popupCounter++;
+
         } catch (TimeoutException | NoSuchElementException e) {
 
         }
+
+        return popupCounter !=0;
     }
 
     @Step("Click on a random item and add it to the cart")
@@ -114,10 +122,53 @@ public class TestUtils {
     }
 
     @Step("Click on the View Bag button")
-    public static void clickOnViewBagButton(BaseTest baseTest) {
-        baseTest.getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[data-test-view-cart]"))).click();
+    public static void clickOnViewBagButton(BaseTest baseTest, WebDriver driver) {
+        baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='modal-dialog'][not(@quickview)]")));
+        logger.info("waitor on modal dialog");
 
-        baseTest.getWait30().until(ExpectedConditions.urlContains(CART_ENDPOINT));
+        CommonUtils.scrollAndClickWithJS(driver, driver.findElement(By.cssSelector("button[data-test-view-cart]")));
+        logger.info("view button was clicked");
+
+        baseTest.getWait60().until(ExpectedConditions.urlContains(CART_ENDPOINT));
+    }
+
+    @Step("Remove item from the cart")
+    public static void removeItemFromCart(BaseTest baseTest) {
+        baseTest.getWait10().until(ExpectedConditions.elementToBeClickable(By.name("removeCommerceItem"))).click();
+    }
+
+    @Step("Fill the email field")
+    public static void fillEmailField(BaseTest baseTest) {
+        baseTest.getWait10()
+                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[placeholder='Email']")))
+                .sendKeys(TestData.generateRandomEmail());
+    }
+
+    @Step("Fill the first name field")
+    public static void fillFirstNameField(WebDriver driver) {
+        driver.findElement(By.name("firstname")).sendKeys(TestData.generateRandomFirstName());
+    }
+
+    @Step("Fill the last name field")
+    public static void fillLastNameField(WebDriver driver) {
+        driver.findElement(By.name("lastname")).sendKeys(TestData.generateRandomLastName());
+    }
+
+    @Step("Fill the zip code field")
+    public static void fillZipCodeField(WebDriver driver) {
+        driver.findElement(By.cssSelector("[placeholder='Zip Code']")).sendKeys("99645");
+    }
+
+    @Step("Click on the counter button between 1 and 9")
+    public static int clickOnCounterBetween1and9(int counterClickNumber, BaseTest baseTest) {
+        counterClickNumber = new Random().nextInt(9) + 1;
+        WebElement counter = baseTest.getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[aria-label='increase']")));
+
+        for (int i = 1; i <= counterClickNumber; i++) {
+            counter.click();
+        }
+
+        return counterClickNumber;
     }
 
     public static String getSkuIdByIndex(List<Item> items, int index) {

@@ -13,6 +13,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import testData.TestData;
 import utils.CommonUtils;
+import utils.TestUtils;
+
+import static utils.TestUtils.*;
 
 @Feature("UI")
 public class RegisterTest extends BaseTest {
@@ -28,12 +31,12 @@ public class RegisterTest extends BaseTest {
         clickOnSideTrayAccountLink();
         clickOnCreateAccountButton();
 
-        fillEmailField();
-        fillFirstNameField();
-        fillLastNameField();
+        TestUtils.fillEmailField(this);
+        fillFirstNameField(driver);
+        fillLastNameField(driver);
         fillPasswordField();
         fillConfirmPasswordField();
-        fillZipCodeField();
+        fillZipCodeField(driver);
 
         selectBirthDayMonth();
         selectBirthDay();
@@ -58,23 +61,6 @@ public class RegisterTest extends BaseTest {
         getWait30().until(ExpectedConditions.urlContains("/create-account"));
     }
 
-    @Step("Fill the email field")
-    public void fillEmailField() {
-        getWait10()
-                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[placeholder='Email']")))
-                .sendKeys(TestData.generateRandomEmail());
-    }
-
-    @Step("Fill the first name field")
-    public void fillFirstNameField() {
-        driver.findElement(By.name("firstname")).sendKeys(TestData.generateRandomFirstName());
-    }
-
-    @Step("Fill the last name field")
-    public void fillLastNameField() {
-        driver.findElement(By.name("lastname")).sendKeys(TestData.generateRandomLastName());
-    }
-
     @Step("Fill the password field")
     public void fillPasswordField() {
         driver.findElement(By.cssSelector("[placeholder='Password']")).sendKeys(password);
@@ -83,11 +69,6 @@ public class RegisterTest extends BaseTest {
     @Step("Fill the confirm password field")
     public void fillConfirmPasswordField() {
         driver.findElement(By.cssSelector("[placeholder='Confirm Password']")).sendKeys(password);
-    }
-
-    @Step("Fill the zip code field")
-    public void fillZipCodeField() {
-        driver.findElement(By.cssSelector("[placeholder='Zip Code']")).sendKeys("85249");
     }
 
     @Step("Select the birthday month")

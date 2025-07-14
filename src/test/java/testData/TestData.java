@@ -13,6 +13,7 @@ public class TestData {
     public static final String API_BASE_URL = "https://www.ae.com/ugp-api/";
     public static final String UI_BASE_URL = "https://www.ae.com/us/en";
     public static final String CART_ENDPOINT = "/cart";
+    public final static String EMPTY_CART_MESSAGE = "Your bag is empty. Find something you love!";
     private static final Faker FAKER = new Faker();
 
     public static String generateRandomEmail() {
@@ -31,7 +32,11 @@ public class TestData {
         return FAKER.internet().password(8, 25, true, true, true);
     }
 
-   public static List<Item> items = List.of(
+    public static String generateRandomStreet() {
+        return FAKER.address().streetAddress();
+    }
+
+    public static List<Item> items = List.of(
            Item.builder()
                    .quantity(3)
                    .skuId("0043385095")
