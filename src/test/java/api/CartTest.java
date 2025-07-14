@@ -78,4 +78,29 @@ public class CartTest {
 
         Assertions.assertEquals(0, cartSteps.getCartItemData().size());
     }
+
+    @Tags({@Tag("API"), @Tag("Critical"), @Tag("Positive")})
+    @Test
+    public void editCartItems() {
+        String itemId = cartSteps.getItemIdBySku("0043385095");
+        int itemQuantity = 5;
+
+        List<EditItem> editItems = List.of(
+                EditItem.builder()
+                        .itemId(itemId)
+                        .quantity(itemQuantity)
+                        .skuId("0043385095")
+                        .build()
+        );
+
+        cartSteps.editCartItems(editItems);
+
+        int updatedItemQuantity = cartSteps.getCartItemData().stream()
+                .filter(item -> item.getSku().equals("0043385095"))
+                .findFirst()
+                .map(CartItem::getQuantity)
+                .orElse(0);
+
+        Assertions.assertEquals(itemQuantity, updatedItemQuantity);
+    }
 }

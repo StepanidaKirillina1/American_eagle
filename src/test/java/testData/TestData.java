@@ -34,11 +34,11 @@ public class TestData {
    public static List<Item> items = List.of(
            Item.builder()
                    .quantity(3)
-                   .skuId("0043101054")
+                   .skuId("0043385095")
                    .build(),
            Item.builder()
                    .quantity(1)
-                   .skuId("0043385046")
+                   .skuId("0043385079")
                    .build())
            .stream()
            .sorted(Comparator.comparing(Item::getSkuId))
