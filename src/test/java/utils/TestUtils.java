@@ -29,10 +29,14 @@ public class TestUtils {
 
     @Step("Get the first available size of the item")
     public static void getFirstAvailableSize(BaseTest baseTest, WebDriver driver) {
-        CommonUtils.scrollToItemWithJS(driver, driver.findElement(By.xpath("//div[text()='Color:']")));
+        CommonUtils.scrollToItemWithJS(driver, driver.findElement(By.xpath("//div[text()='Price:']")));
 
-        if (driver.findElement(By.xpath("//div[text()='Price:']/..//div[@data-test-product-prices]"))
-                .getText().toLowerCase().contains("sold")) {
+        if (baseTest
+                .getWait5()
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[text()='Price:']/..//div[@data-test-product-prices]")))
+                .getText()
+                .toLowerCase()
+                .contains("sold")) {
             CommonUtils.scrollAndClickWithJS(driver, driver.findElement(By.className("btn-close")));
             clickOnRandomItemLink(baseTest);
         } else {
