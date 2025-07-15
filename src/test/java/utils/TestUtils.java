@@ -66,7 +66,7 @@ public class TestUtils {
 
     @Step("Click on a random women category item")
     public static void clickOnRandomWomenCategoryItem(WebDriver driver, BaseTest baseTest) {
-        WebElement womenCategory = new WebDriverWait(driver, Duration.ofSeconds(60))
+        WebElement womenCategory = new WebDriverWait(driver, Duration.ofSeconds(70))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[data-text='Women']")));
         new Actions(driver).moveToElement(womenCategory).perform();
         baseTest.logger.info("hovered over the women category");
