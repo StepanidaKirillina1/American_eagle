@@ -33,7 +33,7 @@ public class CommonUtils {
     }
 
     public static double roundTo1Decimals(double number) {
-        return (long)(number * 10) / 10.0;
+        return (long) (number * 10) / 10.0;
     }
 
     public static double getDiscountedValue(double originalValue, double discountPercent) {

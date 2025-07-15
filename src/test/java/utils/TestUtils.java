@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
-import static testData.TestData.CART_ENDPOINT;
 import static utils.CommonUtils.*;
 
 public class TestUtils {
@@ -32,20 +31,26 @@ public class TestUtils {
     public static void getFirstAvailableSize(BaseTest baseTest, WebDriver driver) {
         CommonUtils.scrollToItemWithJS(driver, driver.findElement(By.xpath("//div[text()='Color:']")));
 
-        baseTest.getWait5().until(ExpectedConditions.elementToBeClickable(By.className("dropdown"))).click();
-        baseTest.getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector(".dropdown-selection.open")));
-        baseTest.getWait10().until(ExpectedConditions.elementToBeClickable(ITEM_LINK_LOCATOR));
+        if (driver.findElement(By.xpath("//div[text()='Price:']/..//div[@data-test-product-prices]"))
+                .getText().toLowerCase().contains("sold")) {
+            CommonUtils.scrollAndClickWithJS(driver, driver.findElement(By.className("btn-close")));
+            clickOnRandomItemLink(baseTest);
+        } else {
+            baseTest.getWait5().until(ExpectedConditions.elementToBeClickable(By.className("dropdown"))).click();
+            baseTest.getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector(".dropdown-selection.open")));
+            baseTest.getWait10().until(ExpectedConditions.elementToBeClickable(ITEM_LINK_LOCATOR));
 
-        List<WebElement> sizes = driver.findElements(ITEM_LINK_LOCATOR);
+            List<WebElement> sizes = driver.findElements(ITEM_LINK_LOCATOR);
 
-        for (WebElement size : sizes) {
-            if (!size.getText().contains(OUT_OF_STOCK_TEXT)) {
-                size.click();
-                return;
+            for (WebElement size : sizes) {
+                if (!size.getText().contains(OUT_OF_STOCK_TEXT)) {
+                    size.click();
+                    return;
+                }
             }
-        }
 
-        throw new NoSuchElementException("All sizes are out of stock");
+            throw new NoSuchElementException("All sizes are out of stock");
+        }
     }
 
     private static void clickOnRandomLink(By locator, BaseTest baseTest) {
@@ -82,7 +87,7 @@ public class TestUtils {
 
         }
 
-        return popupCounter !=0;
+        return popupCounter != 0;
     }
 
     @Step("Click on a random item and add it to the cart")
@@ -124,12 +129,12 @@ public class TestUtils {
     @Step("Click on the View Bag button")
     public static void clickOnViewBagButton(BaseTest baseTest, WebDriver driver) {
         baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='modal-dialog'][not(@quickview)]")));
-        logger.info("waitor on modal dialog");
 
         CommonUtils.scrollAndClickWithJS(driver, driver.findElement(By.cssSelector("button[data-test-view-cart]")));
         logger.info("view button was clicked");
 
-        baseTest.getWait60().until(ExpectedConditions.urlContains(CART_ENDPOINT));
+        baseTest.getWait30().until(ExpectedConditions.visibilityOfElementLocated(By.name("loginMessage")));
+        logger.info(driver.getCurrentUrl());
     }
 
     @Step("Remove item from the cart")

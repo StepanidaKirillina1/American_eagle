@@ -37,7 +37,7 @@ public class CheckoutTest extends BaseTest {
     public void setUp() {
         super.setUp();
         clickOnRandomWomenCategoryItem(driver, this);
-        if(closePopupIfAvailable(this)){
+        if (closePopupIfAvailable(this)) {
             popupCounter++;
         }
         clickOnRandomItemLink(this);
@@ -90,7 +90,7 @@ public class CheckoutTest extends BaseTest {
 
         WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
 
-        if("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
+        if ("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
             clickOnAddToBagButton(this);
         }
         counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);

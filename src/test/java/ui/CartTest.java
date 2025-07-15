@@ -28,7 +28,7 @@ public class CartTest extends BaseTest {
     @FindBy(css = "button[aria-label='increase']")
     private WebElement increaseButton;
 
-    @FindBy(css= ".btn.qa-item-btn-edit")
+    @FindBy(css = ".btn.qa-item-btn-edit")
     private WebElement updateButton;
 
     private Actions actions;
@@ -44,7 +44,7 @@ public class CartTest extends BaseTest {
         actions = new Actions(driver);
         clickOnRandomWomenCategoryItem(driver, this);
 
-        if(closePopupIfAvailable(this)){
+        if (closePopupIfAvailable(this)) {
             popupCounter++;
         }
     }
@@ -90,7 +90,7 @@ public class CartTest extends BaseTest {
 
         WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
 
-        if("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
+        if ("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
             clickOnAddToBagButton(this);
         }
         counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
@@ -101,8 +101,8 @@ public class CartTest extends BaseTest {
         }
 
         String actualText = getWait5()
-                    .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test-product-quantity]")))
-                    .getText();
+                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test-product-quantity]")))
+                .getText();
 
         Assertions.assertTrue(actualText.contains(String.valueOf(1 + counterClickNumber)));
 
@@ -165,7 +165,7 @@ public class CartTest extends BaseTest {
 
         WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
 
-        if("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
+        if ("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
             clickOnUpdateButton();
         } else {
             counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
@@ -184,7 +184,7 @@ public class CartTest extends BaseTest {
                 .until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-item-quantity")))
                 .getText();
 
-        logger.info("check itemQuantity " +  itemQuantity);
+        logger.info("check itemQuantity " + itemQuantity);
         logger.info("price " + itemPrice);
 
         Assertions.assertTrue(itemQuantity.contains(String.valueOf(1 + counterClickNumber)));
