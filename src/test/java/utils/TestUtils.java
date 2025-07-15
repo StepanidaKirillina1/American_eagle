@@ -108,7 +108,7 @@ public class TestUtils {
     @Step("Click on a random item via the Quick Shop button and add it to the cart")
     public static void addFirstItemToCartViaQuickShopButton(WebDriver driver, Actions actions, BaseTest baseTest) {
         actions.moveToElement(driver.findElement(By.cssSelector("[data-testid='media']"))).perform();
-        CommonUtils.scrollAndClickWithJS(driver, driver.findElements(By.cssSelector("a.clickable.qa-show-sidetray-quickview")).getFirst());
+        CommonUtils.scrollAndClickWithJS(driver, driver.findElements(By.cssSelector("a.clickable.qa-show-sidetray-quickview")).get(0));
 
         baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img[data-test-item-image]")));
     }
