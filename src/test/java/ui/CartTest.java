@@ -69,7 +69,7 @@ public class CartTest extends BaseTest {
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
     public void addItemToCartViaQuickShopButton() {
-        addRandomItemToCartViaQuickShopButton(driver, actions, this);
+        addFirstItemToCartViaQuickShopButton(driver, actions, this);
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);
 
@@ -202,6 +202,7 @@ public class CartTest extends BaseTest {
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
     public void orderSummaryTest() {
+        double shippingPrice = 0.0;
         clickOnRandomItemLink(this);
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);
@@ -216,9 +217,14 @@ public class CartTest extends BaseTest {
         CommonUtils.scrollByViewportPercentage(driver, 70);
         TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice);
 
-        CommonUtils.scrollByViewportPercentage(driver, 80);
-
-        double shippingPrice = convertFromStringToDouble(driver, By.cssSelector("[data-testid='row-shipping-value']"));
+        String shippingPriceText = getWait5()
+                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-testid='row-shipping-value']")))
+                .getText();
+        if (shippingPriceText.equals("Free")) {
+            shippingPrice = 0;
+        } else {
+            shippingPrice = convertFromStringToDouble(driver, By.cssSelector("[data-testid='row-shipping-value']"));
+        }
         double subTotalPrice = convertFromStringToDouble(driver, By.cssSelector("[data-testid='row-total-value']"));
 
         assertEquals(roundTo2Decimals(itemPrice + shippingPrice), subTotalPrice);

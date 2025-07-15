@@ -4,17 +4,12 @@ import io.qameta.allure.Step;
 import models.Item;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import testData.TestData;
 import ui.BaseTest;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -25,6 +20,7 @@ public class TestUtils {
     private static final String OUT_OF_STOCK_TEXT = "Out of Stock Online";
     private static final By ITEM_LINK_LOCATOR = By.cssSelector("a[role='menuitem']");
     private static final By PROMO_LOCATOR = By.cssSelector("li.qa-promo-item");
+    private static WebElement womenCategory;
     public static Logger logger = LogManager.getLogger();
 
     @Step("Get the first available size of the item")
@@ -66,8 +62,18 @@ public class TestUtils {
 
     @Step("Click on a random women category item")
     public static void clickOnRandomWomenCategoryItem(WebDriver driver, BaseTest baseTest) {
-        WebElement womenCategory = new WebDriverWait(driver, Duration.ofSeconds(70))
-                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[data-text='Women']")));
+        try {
+            womenCategory = baseTest
+                    .getWait60()
+                    .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[data-text='Women']")));
+        } catch (Exception e) {
+            JavascriptExecutor js = (JavascriptExecutor)driver;
+            js.executeScript("location.reload(true)");
+            womenCategory = baseTest
+                    .getWait60()
+                    .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[data-text='Women']")));
+        }
+
         new Actions(driver).moveToElement(womenCategory).perform();
         baseTest.logger.info("hovered over the women category");
 
@@ -102,15 +108,13 @@ public class TestUtils {
     }
 
     @Step("Click on a random item via the Quick Shop button and add it to the cart")
-    public static void addRandomItemToCartViaQuickShopButton(WebDriver driver, Actions actions, BaseTest baseTest) {
-        List<WebElement> products = driver.findElements(By.cssSelector("[data-testid='media']"));
-        int randomIndex = new Random().nextInt(products.size());
+    public static void addFirstItemToCartViaQuickShopButton(WebDriver driver, Actions actions, BaseTest baseTest) {
+        actions.moveToElement(driver.findElement(By.cssSelector("[data-testid='media']"))).perform();
 
-        actions.moveToElement(products.get(randomIndex)).perform();
+        baseTest
+                .getWait5().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a.clickable.qa-show-sidetray-quickview")))
+                .click();
 
-        List<WebElement> elements = driver.findElements(By.cssSelector("a.clickable.qa-show-sidetray-quickview"));
-
-        CommonUtils.scrollAndClickWithJS(driver, elements.get(randomIndex));
         baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img[data-test-item-image]")));
     }
 
