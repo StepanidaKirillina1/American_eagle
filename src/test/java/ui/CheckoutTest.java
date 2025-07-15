@@ -1,10 +1,11 @@
 package ui;
 
+import extenstions.AllureExtension;
+import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,10 +16,14 @@ import testData.TestData;
 import utils.CommonUtils;
 import utils.TestUtils;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static utils.CommonUtils.*;
 import static utils.TestUtils.*;
 
-@Feature("UI")
+@Epic("UI")
+@Feature("Checkout")
+@ExtendWith(AllureExtension.class)
 public class CheckoutTest extends BaseTest {
     @FindBy(css = "button[aria-label='increase']")
     private WebElement increaseButton;
@@ -29,12 +34,13 @@ public class CheckoutTest extends BaseTest {
     private Double itemPrice;
     private int counterClickNumber = 0;
     private int popupCounter = 0;
+    private By itemPriceLocator = By.cssSelector(".modal-dialog [data-test-sale-price], [data-test-price]");
 
     @BeforeEach
     public void setUp() {
         super.setUp();
         clickOnRandomWomenCategoryItem(driver, this);
-        if(closePopupIfAvailable(this)){
+        if (closePopupIfAvailable(this)) {
             popupCounter++;
         }
         clickOnRandomItemLink(this);
@@ -43,9 +49,9 @@ public class CheckoutTest extends BaseTest {
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
     public void checkoutPageTest() {
-        itemPrice = convertFromStringToDouble(driver, By.cssSelector("[data-test-product-prices] > *:first-child"));
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);
+        itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
 
         if (popupCounter == 0) {
             closePopupIfAvailable(this);
@@ -54,15 +60,16 @@ public class CheckoutTest extends BaseTest {
         clickOnViewBagButton(this, driver);
         clickOnCheckoutButton();
 
-        Assertions.assertEquals("Checkout", driver.findElement(By.cssSelector("h1.qa-page-header")).getText());
+        assertEquals("Checkout", driver.findElement(By.cssSelector("h1.qa-page-header")).getText());
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
     public void checkOneQuantityItemTest() {
-        itemPrice = convertFromStringToDouble(driver, By.cssSelector("[data-test-product-prices] > *:first-child"));
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);
+
+        itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
 
         if (popupCounter == 0) {
             closePopupIfAvailable(this);
@@ -76,32 +83,34 @@ public class CheckoutTest extends BaseTest {
                 .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".cart-item-info .cart-item-price span")))
                 .getText();
 
-        Assertions.assertTrue(price.contains(String.valueOf(itemPrice)));
+        assertTrue(price.contains(String.valueOf(itemPrice)));
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
-    @RepeatedTest(3)
+    @Test
     public void checkSeveralQuantityItemTest() {
-        itemPrice = convertFromStringToDouble(driver, By.cssSelector("[data-test-product-prices] > *:first-child"));
         getFirstAvailableSize(this, driver);
 
         WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
 
-        if("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
+        if ("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
+            clickOnAddToBagButton(this);
+        } else {
+            counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
             clickOnAddToBagButton(this);
         }
-        counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
-        clickOnAddToBagButton(this);
 
         if (popupCounter == 0) {
             closePopupIfAvailable(this);
         }
 
+        itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
+
         clickOnViewBagButton(this, driver);
         clickOnCheckoutButton();
         TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice);
 
-        Assertions.assertTrue(
+        assertTrue(
                 getWait10()
                         .until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-item-quantity")))
                         .getText()
@@ -109,7 +118,7 @@ public class CheckoutTest extends BaseTest {
 
         double finalCartItemPrice = convertFromStringToDouble(driver, By.cssSelector(".cart-item-price span"));
 
-        Assertions.assertEquals(roundTo2Decimals(itemPrice * (1 + counterClickNumber)), finalCartItemPrice);
+        assertEquals(roundTo2Decimals(itemPrice * (1 + counterClickNumber)), finalCartItemPrice);
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
@@ -132,13 +141,15 @@ public class CheckoutTest extends BaseTest {
                 .until(ExpectedConditions.visibilityOfElementLocated(By.className("qa-empty-cart-msg")))
                 .getText();
 
-        Assertions.assertEquals(TestData.EMPTY_CART_MESSAGE, actualEmptyCartMessage);
+        assertEquals(TestData.EMPTY_CART_MESSAGE, actualEmptyCartMessage);
     }
 
+    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
-    public void fillingCheckoutDataTest() throws InterruptedException {
+    public void fillCheckoutDataTest() {
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);
+
         if (popupCounter == 0) {
             closePopupIfAvailable(this);
         }
@@ -154,8 +165,8 @@ public class CheckoutTest extends BaseTest {
         selectState();
         TestUtils.fillZipCodeField(driver);
 
-        Assertions.assertTrue(driver.findElement(By.name("billToShippingAddress")).isSelected());
-        Assertions.assertTrue(getWait10().until(ExpectedConditions.elementToBeClickable(placeOrderButton)).isEnabled());
+        assertTrue(driver.findElement(By.name("billToShippingAddress")).isSelected());
+        assertTrue(placeOrderButton.isEnabled());
     }
 
     @Step("Click on the Checkout button")

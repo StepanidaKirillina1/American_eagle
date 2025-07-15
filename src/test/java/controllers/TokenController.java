@@ -1,5 +1,6 @@
 package controllers;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -23,7 +24,8 @@ public class TokenController {
                 .formParam("grant_type", "client_credentials")
                 .header("authorization", PROPERTIES_CONFIG.getAuthorizationValue())
                 .header("Cookie", PROPERTIES_CONFIG.getCookieValue())
-                .baseUri(API_BASE_URL);
+                .baseUri(API_BASE_URL)
+                .filter(new AllureRestAssured());
     }
 
     public String getGuestToken() {

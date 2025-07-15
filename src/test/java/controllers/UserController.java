@@ -1,5 +1,6 @@
 package controllers;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -25,7 +26,8 @@ public class UserController {
                 .header("Authorization", "Bearer " + tokenController.getGuestToken())
                 .header("Aesite", "AEO_US")
                 .header("Aelang", "en_US")
-                .baseUri(API_BASE_URL);
+                .baseUri(API_BASE_URL)
+                .filter(new AllureRestAssured());
     }
 
     public Response getCookieData() {

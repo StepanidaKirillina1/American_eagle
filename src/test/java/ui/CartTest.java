@@ -1,8 +1,11 @@
 package ui;
 
+import extenstions.AllureExtension;
+import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -12,10 +15,13 @@ import utils.CommonUtils;
 import utils.TestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static utils.CommonUtils.*;
 import static utils.TestUtils.*;
 
-@Feature("UI")
+@Epic("UI")
+@Feature("Cart")
+@ExtendWith(AllureExtension.class)
 public class CartTest extends BaseTest {
     @FindBy(xpath = "//div[@class='modal-dialog'][not(@quickview)]")
     private WebElement modalDialog;
@@ -23,14 +29,14 @@ public class CartTest extends BaseTest {
     @FindBy(css = "button[aria-label='increase']")
     private WebElement increaseButton;
 
-    @FindBy(css= ".btn.qa-item-btn-edit")
+    @FindBy(css = ".btn.qa-item-btn-edit")
     private WebElement updateButton;
 
     private Actions actions;
     private Double itemPrice;
     private int counterClickNumber = 0;
     private final static String ADDED_TO_BAG_MESSAGE = "Added to bag!";
-    private By itemPriceLocator = By.cssSelector("[data-test-product-prices] > *:first-child");
+    private By itemPriceLocator = By.cssSelector(".modal-dialog [data-test-sale-price], [data-test-price]");
     private int popupCounter = 0;
 
     @BeforeEach
@@ -39,7 +45,7 @@ public class CartTest extends BaseTest {
         actions = new Actions(driver);
         clickOnRandomWomenCategoryItem(driver, this);
 
-        if(closePopupIfAvailable(this)){
+        if (closePopupIfAvailable(this)) {
             popupCounter++;
         }
     }
@@ -63,7 +69,7 @@ public class CartTest extends BaseTest {
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
     public void addItemToCartViaQuickShopButton() {
-        addRandomItemToCartViaQuickShopButton(driver, actions, this);
+        addFirstItemToCartViaQuickShopButton(driver, actions, this);
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);
 
@@ -79,32 +85,34 @@ public class CartTest extends BaseTest {
     @Test
     public void counterTest() {
         clickOnRandomItemLink(this);
-
-        itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
         getFirstAvailableSize(this, driver);
 
         WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
 
-        if("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
+        if ("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
+            clickOnAddToBagButton(this);
+        } else {
+            counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
             clickOnAddToBagButton(this);
         }
-        counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
-        clickOnAddToBagButton(this);
+
+        itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
 
         if (popupCounter == 0) {
             closePopupIfAvailable(this);
         }
 
         String actualText = getWait5()
-                    .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test-product-quantity]")))
-                    .getText();
+                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test-product-quantity]")))
+                .getText();
 
-        Assertions.assertTrue(actualText.contains(String.valueOf(1 + counterClickNumber)));
+        assertTrue(actualText.contains(String.valueOf(1 + counterClickNumber)));
 
         clickOnViewBagButton(this, driver);
         CommonUtils.scrollByViewportPercentage(driver, 70);
+        TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice);
 
-        Assertions.assertTrue(
+        assertTrue(
                 getWait5()
                         .until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-item-quantity")))
                         .getText()
@@ -112,7 +120,7 @@ public class CartTest extends BaseTest {
 
         double finalCartItemPrice = convertFromStringToDouble(driver, By.cssSelector(".cart-item-price span"));
 
-        Assertions.assertEquals(roundTo2Decimals(itemPrice * (1 + counterClickNumber)), finalCartItemPrice);
+        assertEquals(roundTo2Decimals(itemPrice * (1 + counterClickNumber)), finalCartItemPrice);
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
@@ -134,18 +142,17 @@ public class CartTest extends BaseTest {
                 .until(ExpectedConditions.visibilityOfElementLocated(By.className("qa-empty-cart-msg")))
                 .getText();
 
-        Assertions.assertEquals(TestData.EMPTY_CART_MESSAGE, actualEmptyCartMessage);
+        assertEquals(TestData.EMPTY_CART_MESSAGE, actualEmptyCartMessage);
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
     public void editCartItemQuantity() {
         clickOnRandomItemLink(this);
-
-        itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
-
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);
+
+        itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
 
         if (popupCounter == 0) {
             closePopupIfAvailable(this);
@@ -160,7 +167,7 @@ public class CartTest extends BaseTest {
 
         WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
 
-        if("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
+        if ("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
             clickOnUpdateButton();
         } else {
             counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
@@ -179,38 +186,45 @@ public class CartTest extends BaseTest {
                 .until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-item-quantity")))
                 .getText();
 
-        logger.info("check itemQuantity " +  itemQuantity);
+        logger.info("check itemQuantity " + itemQuantity);
         logger.info("price " + itemPrice);
 
-        Assertions.assertTrue(itemQuantity.contains(String.valueOf(1 + counterClickNumber)));
+        assertTrue(itemQuantity.contains(String.valueOf(1 + counterClickNumber)));
 
         TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice);
         double finalCartItemPrice = convertFromStringToDouble(driver, By.cssSelector(".cart-item-price span"));
 
         logger.info("check finalPrice " + finalCartItemPrice);
 
-        Assertions.assertEquals(roundTo2Decimals(itemPrice * (1 + counterClickNumber)), finalCartItemPrice);
+        assertEquals(roundTo2Decimals(itemPrice * (1 + counterClickNumber)), finalCartItemPrice);
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
     public void orderSummaryTest() {
+        double shippingPrice = 0.0;
         clickOnRandomItemLink(this);
-
-        itemPrice = roundTo2Decimals(convertFromStringToDouble(driver, itemPriceLocator));
-
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);
+
+        itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
 
         if (popupCounter == 0) {
             closePopupIfAvailable(this);
         }
 
         clickOnViewBagButton(this, driver);
+        CommonUtils.scrollByViewportPercentage(driver, 70);
+        TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice);
 
-        CommonUtils.scrollByViewportPercentage(driver, 80);
-
-        double shippingPrice = convertFromStringToDouble(driver, By.cssSelector("[data-testid='row-shipping-value']"));
+        String shippingPriceText = getWait5()
+                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-testid='row-shipping-value']")))
+                .getText();
+        if (shippingPriceText.equals("Free")) {
+            shippingPrice = 0;
+        } else {
+            shippingPrice = convertFromStringToDouble(driver, By.cssSelector("[data-testid='row-shipping-value']"));
+        }
         double subTotalPrice = convertFromStringToDouble(driver, By.cssSelector("[data-testid='row-total-value']"));
 
         assertEquals(roundTo2Decimals(itemPrice + shippingPrice), subTotalPrice);

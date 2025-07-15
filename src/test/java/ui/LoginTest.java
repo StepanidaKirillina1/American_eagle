@@ -1,16 +1,21 @@
 package ui;
 
 import config.TestPropertiesConfig;
+import extenstions.AllureExtension;
+import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-@Feature("UI")
+@Epic("UI")
+@Feature("Login")
+@ExtendWith(AllureExtension.class)
 public class LoginTest extends BaseTest {
 
     public static final TestPropertiesConfig PROPERTIES_CONFIG = ConfigFactory.create(TestPropertiesConfig.class, System.getProperties());
