@@ -62,22 +62,20 @@ public class TestUtils {
 
     @Step("Click on a random women category item")
     public static void clickOnRandomWomenCategoryItem(WebDriver driver, BaseTest baseTest) {
-        try {
-            womenCategory = baseTest
+        try {womenCategory = baseTest
                     .getWait60()
-                    .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[data-text='Women']")));
+                    .until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[data-text='Women']")));
         } catch (Exception e) {
-            JavascriptExecutor js = (JavascriptExecutor)driver;
-            js.executeScript("location.reload(true)");
+            driver.navigate().refresh();
             womenCategory = baseTest
                     .getWait60()
-                    .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[data-text='Women']")));
+                    .until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[data-text='Women']")));
         }
 
         new Actions(driver).moveToElement(womenCategory).perform();
         baseTest.logger.info("hovered over the women category");
 
-        baseTest.getWait30().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
+        baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
         clickOnRandomLink(By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"), baseTest);
 
         baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class^='_container'] h1")));
@@ -110,10 +108,7 @@ public class TestUtils {
     @Step("Click on a random item via the Quick Shop button and add it to the cart")
     public static void addFirstItemToCartViaQuickShopButton(WebDriver driver, Actions actions, BaseTest baseTest) {
         actions.moveToElement(driver.findElement(By.cssSelector("[data-testid='media']"))).perform();
-
-        baseTest
-                .getWait5().until(ExpectedConditions.elementToBeClickable(By.cssSelector("a.clickable.qa-show-sidetray-quickview")))
-                .click();
+        CommonUtils.scrollAndClickWithJS(driver, driver.findElements(By.cssSelector("a.clickable.qa-show-sidetray-quickview")).getFirst());
 
         baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img[data-test-item-image]")));
     }
