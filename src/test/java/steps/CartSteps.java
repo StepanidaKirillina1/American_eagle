@@ -59,10 +59,21 @@ public class CartSteps {
         return totalSumWithoutShipping;
     }
 
+    public OrderSummary getOrderSummary() {
+        return cartController.getOrderSummary();
+    }
+
     @Step("Calculate the total order sum without discount and shipping")
     public double getOrderSummaryTotalWithoutShipping() {
-        OrderSummary orderSummary = cartController.getOrderSummary();
+        OrderSummary orderSummary = getOrderSummary();
         return orderSummary.getSubtotal() - orderSummary.getDiscount() - orderSummary.getShipping();
+    }
+
+    @Step("Verify if the shipping free")
+    public boolean isShippingFree() {
+        OrderSummary orderSummary = getOrderSummary();
+
+        return orderSummary.getSubtotal() >= orderSummary.getFreeShippingThreshold();
     }
 
     @Step("Remove item from the cart")
