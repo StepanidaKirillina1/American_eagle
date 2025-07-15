@@ -1,9 +1,11 @@
 package ui;
 
+import extenstions.AllureExtension;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -17,8 +19,9 @@ import java.net.URL;
 import java.time.Duration;
 import java.util.Map;
 
+@ExtendWith(AllureExtension.class)
 public class BaseTest {
-    public WebDriver driver;
+    public static WebDriver driver;
     private WebDriverWait wait5;
     private WebDriverWait wait10;
     private WebDriverWait wait30;
@@ -38,7 +41,11 @@ public class BaseTest {
         driver.quit();
     }
 
-    private WebDriver initDriver() {
+    public static WebDriver getDriver() {
+        return driver;
+    }
+
+    public static WebDriver initDriver() {
         String remoteUrl = System.getenv("SELENIUM_REMOTE_URL");
 
         if (remoteUrl != null && !remoteUrl.isEmpty()) {

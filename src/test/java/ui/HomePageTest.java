@@ -1,15 +1,20 @@
 package ui;
 
+import extenstions.AllureExtension;
+import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.List;
 
-@Feature("UI")
+@Epic("UI")
+@Feature("HomePage")
+@ExtendWith(AllureExtension.class)
 public class HomePageTest extends BaseTest {
 
     @Test

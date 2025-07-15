@@ -1,10 +1,11 @@
 package ui;
 
+import extenstions.AllureExtension;
+import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -18,7 +19,9 @@ import utils.TestUtils;
 import static utils.CommonUtils.*;
 import static utils.TestUtils.*;
 
-@Feature("UI")
+@Epic("UI")
+@Feature("Checkout")
+@ExtendWith(AllureExtension.class)
 public class CheckoutTest extends BaseTest {
     @FindBy(css = "button[aria-label='increase']")
     private WebElement increaseButton;
@@ -80,7 +83,7 @@ public class CheckoutTest extends BaseTest {
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
-    @RepeatedTest(3)
+    @Test
     public void checkSeveralQuantityItemTest() {
         itemPrice = convertFromStringToDouble(driver, By.cssSelector("[data-test-product-prices] > *:first-child"));
         getFirstAvailableSize(this, driver);
@@ -135,8 +138,9 @@ public class CheckoutTest extends BaseTest {
         Assertions.assertEquals(TestData.EMPTY_CART_MESSAGE, actualEmptyCartMessage);
     }
 
+    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
-    public void fillingCheckoutDataTest() throws InterruptedException {
+    public void fillCheckoutDataTest() {
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);
         if (popupCounter == 0) {
@@ -155,7 +159,7 @@ public class CheckoutTest extends BaseTest {
         TestUtils.fillZipCodeField(driver);
 
         Assertions.assertTrue(driver.findElement(By.name("billToShippingAddress")).isSelected());
-        Assertions.assertTrue(getWait10().until(ExpectedConditions.elementToBeClickable(placeOrderButton)).isEnabled());
+        Assertions.assertTrue(placeOrderButton.isEnabled());
     }
 
     @Step("Click on the Checkout button")

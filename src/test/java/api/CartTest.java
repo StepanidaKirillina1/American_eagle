@@ -1,5 +1,6 @@
 package api;
 
+import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import models.*;
 import org.junit.jupiter.api.*;
@@ -9,7 +10,8 @@ import utils.TestUtils;
 
 import java.util.List;
 
-@Feature("API")
+@Epic("API")
+@Feature("Cart")
 public class CartTest {
     CartSteps cartSteps;
 

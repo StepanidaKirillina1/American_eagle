@@ -1,8 +1,11 @@
 package ui;
 
+import extenstions.AllureExtension;
+import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -15,7 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.CommonUtils.*;
 import static utils.TestUtils.*;
 
-@Feature("UI")
+@Epic("UI")
+@Feature("Cart")
+@ExtendWith(AllureExtension.class)
 public class CartTest extends BaseTest {
     @FindBy(xpath = "//div[@class='modal-dialog'][not(@quickview)]")
     private WebElement modalDialog;
