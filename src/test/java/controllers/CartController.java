@@ -25,7 +25,6 @@ public class CartController {
                 .header("Aesite", "AEO_US")
                 .header("Aelang", "en_US")
                 .header("Aecountry", "US")
-                //.header("x-access-token", tokenController.getGuestToken())
                 .header("Authorization", "Bearer " + tokenController.getGuestToken())
                 .baseUri(API_BASE_URL)
                 .filter(new AllureRestAssured());;
