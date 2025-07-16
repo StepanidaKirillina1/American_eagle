@@ -1,5 +1,6 @@
 package controllers;
 
+import filter.SecureAllureFilter;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -19,7 +20,7 @@ public class TokenController {
         this.requestSpecification = given()
                 .contentType(ContentType.URLENC)
                 .baseUri(API_BASE_URL)
-                .filter(new AllureRestAssured());
+                .filter(new SecureAllureFilter());
     }
 
     public String getGuestToken() {
