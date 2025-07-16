@@ -1,13 +1,23 @@
-name: Run tests
+name: Run UI and API tests
 
 on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Type of tests to run (smoke or full)'
+        required: true
+        default: 'smoke'
+        type: choice
+        options:
+          - smoke
+          - full
 
 jobs:
-  build:
-
+  smoke_tests:
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.test_type == 'smoke')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -29,12 +39,54 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Grant execute permission for Gradle
         run: chmod +x gradlew
 
-      - name: Run tests
+      - name: Run smoke tests
+        env:
+          SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
+        run: ./gradlew clean smoke
+
+      - name: Upload smoke test logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-test-logs
+          path: |
+            build/reports/tests/smoke/
+            build/test-results/test/
+
+  full_tests:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.test_type == 'full'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+
+    services:
+      selenium:
+        image: selenium/standalone-chrome:latest
+        options: --shm-size 2g
+        ports:
+          - 4444:4444
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Grant execute permission for Gradle
+        run: chmod +x gradlew
+
+      - name: Run full tests
         env:
           SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
           AUTHORIZATION: ${{secrets.AUTHORIZATION}}
@@ -42,34 +94,37 @@ jobs:
           LOGIN: ${{secrets.LOGIN}}
           PASSWORD: ${{secrets.PASSWORD}}
         run: ./gradlew clean test "-Dauthorization=$AUTHORIZATION" "-DCookie=$COOKIE" "-Dlogin=$LOGIN" "-Dpassword=$PASSWORD"
-      - name: Upload logs
+
+      - name: Upload full test logs
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-logs
+          name: full-test-logs
           path: |
             build/reports/tests/test/
             build/test-results/test/
 
+  report:
+    needs: [smoke_tests, full_tests]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
       - name: Copy History
         uses: actions/checkout@v2
-        if: always()
         with:
-         ref: gh-pages
-         path: gh-pages
+          ref: gh-pages
+          path: gh-pages
 
       - name: Build Report
         uses: simple-elf/allure-report-action@v1.10
-        if: always()
         with:
-         allure_results: build/allure-results
-         allure_history: allure-history
-         keep_reports: 20
+          allure_results: build/allure-results
+          allure_history: allure-history
+          keep_reports: 20
 
       - name: Publish Report
-        if: always()
         uses: peaceiris/actions-gh-pages@v2
         env:
-         PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-         PUBLISH_BRANCH: gh-pages
-         PUBLISH_DIR: allure-history
+          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: allure-history
