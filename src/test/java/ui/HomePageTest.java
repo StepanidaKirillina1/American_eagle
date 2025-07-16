@@ -34,14 +34,14 @@ public class HomePageTest extends BaseTest {
         List<String> actualCategories = getWait30()
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector("li[data-test='top-link-wrapper']")))
                 .stream()
-                .map(element -> element.getText())
+                .map(element -> {
+                    String text = element.getText();
+                    if (text.contains("Today's Offers")) {
+                        return text.substring(0, 14);
+                    }
+                    return text;
+                })
                 .toList();
-
-        for (String category: actualCategories) {
-            if(category.contains("Today's Offers")) {
-                category = category.substring(0, 14);
-            }
-        }
 
         Assertions.assertEquals(expectedCategories, actualCategories);
     }
