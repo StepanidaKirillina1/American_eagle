@@ -37,6 +37,12 @@ public class HomePageTest extends BaseTest {
                 .map(element -> element.getText())
                 .toList();
 
+        for (String category: actualCategories) {
+            if(category.contains("Today's Offers")) {
+                category = category.substring(0, 14);
+            }
+        }
+
         Assertions.assertEquals(expectedCategories, actualCategories);
     }
 }
