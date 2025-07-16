@@ -4,7 +4,7 @@
 
 - [Used technologies](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#used-technologies)
 - [How to run tests from the command line](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#how-to-run-tests-from-the-command-line)
-- [View Allure Reports](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#view-allure-results)
+- [View Allure Reports](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#view-allure-reports)
 - [Test Coverage](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#test-coverage)
 
 
@@ -35,13 +35,18 @@ To generate Allure reports, please:
 
 Please verify that the path to /bin is set in your environment variables.
 
-## See Allure Report
+### See Allure Report overview
 
-<img src="images/allure-results.png" alt="JenkinsAllure" />
+<img src="images/allure-results.png" alt="AllureReportOverview" />
 
-## Example of Allure Report
+### Example of Allure Report
 
 <img src="images/allure-report-example.png" alt="AllureReportExample" />
+
+### Example of Allure Report screenshot on failure
+
+<img src="images/screenshot-on-failure.png" alt="FailureScreenshot" />
+
 
 ## Test Coverage
 
