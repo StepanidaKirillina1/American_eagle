@@ -35,13 +35,17 @@ To generate Allure reports, please:
 
 Please verify that the path to /bin is set in your environment variables.
 
-## See Allure Report
+### See Allure Report overview
 
-<img src="images/allure-results.png" alt="JenkinsAllure" />
+<img src="images/allure-results.png" alt="AllureReportOverview" />
 
-## Example of Allure Report
+### Example of Allure Report
 
 <img src="images/allure-report-example.png" alt="AllureReportExample" />
+
+### Example of Allure Report screenshot on failure
+
+<img src="images/screenshot-on-failure.png" alt="FailureScreenshot" />
 
 ## Test Coverage
 
