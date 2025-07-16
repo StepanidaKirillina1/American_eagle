@@ -47,6 +47,7 @@ Please verify that the path to /bin is set in your environment variables.
 
 <img src="images/screenshot-on-failure.png" alt="FailureScreenshot" />
 
+
 ## Test Coverage
 
 The following scenarios were automated:
