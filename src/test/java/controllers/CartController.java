@@ -1,6 +1,5 @@
 package controllers;
 
-import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import models.*;
@@ -26,8 +25,7 @@ public class CartController {
                 .header("Aelang", "en_US")
                 .header("Aecountry", "US")
                 .header("Authorization", "Bearer " + tokenController.getGuestToken())
-                .baseUri(API_BASE_URL)
-                .filter(new AllureRestAssured());;
+                .baseUri(API_BASE_URL);
     }
 
     public CartResponseData addItemToCart(CartPayloadData items) {

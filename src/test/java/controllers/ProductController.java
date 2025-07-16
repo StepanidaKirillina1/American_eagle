@@ -1,6 +1,5 @@
 package controllers;
 
-import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import models.Product;
@@ -24,8 +23,7 @@ public class ProductController {
                 .header("Aecountry", "US")
                 //.header("x-access-token", tokenController.getToken())
                 .header("Authorization", "Bearer " + tokenController.getGuestToken())
-                .baseUri(API_BASE_URL)
-                .filter(new AllureRestAssured());
+                .baseUri(API_BASE_URL);
     }
 
     public Product getProductById(ProductId productId) {

@@ -1,6 +1,5 @@
 package controllers;
 
-import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -18,8 +17,7 @@ public class TokenController {
     public TokenController() {
         this.requestSpecification = given()
                 .contentType(ContentType.URLENC)
-                .baseUri(API_BASE_URL)
-                .filter(new AllureRestAssured());
+                .baseUri(API_BASE_URL);
     }
 
     public String getGuestToken() {
