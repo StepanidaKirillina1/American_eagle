@@ -1,13 +1,11 @@
 package ui;
 
-import extenstions.AllureExtension;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -15,7 +13,6 @@ import java.util.List;
 
 @Epic("UI")
 @Feature("HomePage")
-@ExtendWith(AllureExtension.class)
 public class HomePageTest extends BaseTest {
 
     @Test
@@ -26,7 +23,7 @@ public class HomePageTest extends BaseTest {
 
     @Test
     @Tags({@Tag("UI"), @Tag("Smoke"), @Tag("Positive")})
-    public void isCategoriesTextVisible() {
+    public void isCategoriesTextVisibleTest() {
         List<String> expectedCategories = List.of(
                 "Today's Offers", "Women", "Men", "Jeans", "Shoes & Accessories", "Loungewear & PJs", "Aerie", "Clearance"
         );

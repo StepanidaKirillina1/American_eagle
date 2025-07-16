@@ -1,11 +1,9 @@
 package ui;
 
-import extenstions.AllureExtension;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,7 +21,6 @@ import static utils.TestUtils.*;
 
 @Epic("UI")
 @Feature("Checkout")
-@ExtendWith(AllureExtension.class)
 public class CheckoutTest extends BaseTest {
     @FindBy(css = "button[aria-label='increase']")
     private WebElement increaseButton;

@@ -54,7 +54,7 @@ public class CartTest {
 
     @Tags({@Tag("API"), @Tag("Critical"), @Tag("Positive")})
     @Test
-    public void totalOrderPriceWithDiscountTest() {
+    public void getTotalOrderPriceWithDiscountTest() {
         double expectedTotalSumWithoutShipping = 0.0;
         List<CartItem> cartItems = cartSteps.getCartItemData();
 
@@ -71,7 +71,7 @@ public class CartTest {
 
     @Tags({@Tag("API"), @Tag("Critical"), @Tag("Positive")})
     @Test
-    public void freeShippingTest() {
+    public void isShippingFreeTest() {
         Assertions.assertTrue(cartSteps.isShippingFree());
     }
 
