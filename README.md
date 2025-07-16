@@ -4,7 +4,7 @@
 
 - [Used technologies](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#used-technologies)
 - [How to run tests from the command line](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#how-to-run-tests-from-the-command-line)
-- [View Allure Reports](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#view-allure-results)
+- [View Allure Reports](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#view-allure-reports)
 - [Test Coverage](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#test-coverage)
 
 
