@@ -52,6 +52,14 @@ tasks.register("ui", Test) {
     systemProperties(System.getProperties())
 }
 
+tasks.register("smoke", Test) {
+    useJUnitPlatform() {
+        includeTags "Smoke"
+        excludeTags "Bot_enabled"
+    }
+    systemProperties(System.getProperties())
+}
+
 tasks.register("critical", Test) {
     useJUnitPlatform() {
         includeTags "Critical"
