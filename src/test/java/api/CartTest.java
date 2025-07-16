@@ -23,7 +23,7 @@ public class CartTest {
 
     @Tags({@Tag("API"), @Tag("Critical"), @Tag("Positive")})
     @Test
-    public void getCartItemsCountTest() throws Exception {
+    public void getCartItemsCountTest() {
         int expectedIndividualItemQuantity = 0;
         int expectedTotalQuantity = 0;
         int actualTotalQuantity = 0;

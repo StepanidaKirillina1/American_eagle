@@ -20,8 +20,7 @@ public class TestUtils {
     private static final String OUT_OF_STOCK_TEXT = "Out of Stock Online";
     private static final By ITEM_LINK_LOCATOR = By.cssSelector("a[role='menuitem']");
     private static final By PROMO_LOCATOR = By.cssSelector("li.qa-promo-item");
-    private static WebElement womenCategory;
-    public static Logger logger = LogManager.getLogger();
+    private static Logger logger = LogManager.getLogger();
 
     @Step("Get the first available size of the item")
     public static void getFirstAvailableSize(BaseTest baseTest, WebDriver driver) {
@@ -54,7 +53,7 @@ public class TestUtils {
     }
 
     private static void clickOnRandomLink(By locator, BaseTest baseTest) {
-        List<WebElement> elements = baseTest.getWait30().until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+        List<WebElement> elements = baseTest.getWait60().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
         int randomIndex = new Random().nextInt(elements.size());
 
         elements.get(randomIndex).click();
@@ -62,21 +61,11 @@ public class TestUtils {
 
     @Step("Click on a random women category item")
     public static void clickOnRandomWomenCategoryItem(WebDriver driver, BaseTest baseTest) {
-        try {womenCategory = baseTest
-                    .getWait60()
-                    .until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[data-text='Women']")));
-        } catch (Exception e) {
-            driver.navigate().refresh();
-            womenCategory = baseTest
-                    .getWait60()
-                    .until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[data-text='Women']")));
-        }
-
-        new Actions(driver).moveToElement(womenCategory).perform();
+        new Actions(driver).moveToElement(baseTest.getWait60().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[aria-label='Women']")))).perform();
         baseTest.logger.info("hovered over the women category");
+        baseTest.getWait30().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class*='opened_']")));
 
-        baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("_opened_ali1iz")));
-        clickOnRandomLink(By.cssSelector("._opened_ali1iz a[data-test-mm-column-link]"), baseTest);
+        clickOnRandomLink(By.xpath("//button[@aria-label='Women']/../div[@data-testid='megamenu-column']//a"), baseTest);
 
         baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class^='_container'] h1")));
     }
