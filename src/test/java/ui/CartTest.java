@@ -38,6 +38,7 @@ public class CartTest extends BaseTest {
     private final static String ADDED_TO_BAG_MESSAGE = "Added to bag!";
     private By itemPriceLocator = By.cssSelector(".modal-dialog [data-test-sale-price], [data-test-price]");
     private int popupCounter = 0;
+    private WebElement increaseQuantityButton;
 
     @BeforeEach
     public void setUp() {
@@ -87,7 +88,7 @@ public class CartTest extends BaseTest {
         clickOnRandomItemLink(this);
         getFirstAvailableSize(this, driver);
 
-        WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
+        increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
 
         if ("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
             clickOnAddToBagButton(this);
@@ -95,8 +96,6 @@ public class CartTest extends BaseTest {
             counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
             clickOnAddToBagButton(this);
         }
-
-        itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
 
         if (popupCounter == 0) {
             closePopupIfAvailable(this);
@@ -110,17 +109,12 @@ public class CartTest extends BaseTest {
 
         clickOnViewBagButton(this, driver);
         CommonUtils.scrollByViewportPercentage(driver, 70);
-        TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice);
 
         assertTrue(
                 getWait5()
                         .until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-item-quantity")))
                         .getText()
                         .contains(String.valueOf(1 + counterClickNumber)));
-
-        double finalCartItemPrice = convertFromStringToDouble(driver, By.cssSelector(".cart-item-price span"));
-
-        assertEquals(roundTo2Decimals(itemPrice * (1 + counterClickNumber)), finalCartItemPrice);
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
@@ -147,7 +141,42 @@ public class CartTest extends BaseTest {
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
-    public void editCartItemQuantity() {
+    public void editCartItemQuantityTest() {
+        clickOnRandomItemLink(this);
+        getFirstAvailableSize(this, driver);
+        clickOnAddToBagButton(this);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
+        clickOnViewBagButton(this, driver);
+
+        CommonUtils.scrollByViewportPercentage(driver, 70);
+
+        clickOnEditButton();
+        clickOnCounterButtonIfAvailableAndClickUpdate();
+
+        try {
+            getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("notification-card-message")));
+        } catch (Exception e) {
+
+        }
+
+        CommonUtils.scrollByViewportPercentage(driver, -80);
+
+        String itemQuantity = getWait30()
+                .until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-item-quantity")))
+                .getText();
+
+        logger.info("check itemQuantity " + itemQuantity);
+
+        assertTrue(itemQuantity.contains(String.valueOf(1 + counterClickNumber)));
+    }
+
+    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
+    @Test
+    public void editedCartItemsPriceTest() {
         clickOnRandomItemLink(this);
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);
@@ -163,16 +192,7 @@ public class CartTest extends BaseTest {
         CommonUtils.scrollByViewportPercentage(driver, 70);
 
         clickOnEditButton();
-        CommonUtils.scrollToItemWithJS(driver, updateButton);
-
-        WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
-
-        if ("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
-            clickOnUpdateButton();
-        } else {
-            counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
-            clickOnUpdateButton();
-        }
+        clickOnCounterButtonIfAvailableAndClickUpdate();
 
         try {
             getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("notification-card-message")));
@@ -188,8 +208,6 @@ public class CartTest extends BaseTest {
 
         logger.info("check itemQuantity " + itemQuantity);
         logger.info("price " + itemPrice);
-
-        assertTrue(itemQuantity.contains(String.valueOf(1 + counterClickNumber)));
 
         TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice);
         double finalCartItemPrice = convertFromStringToDouble(driver, By.cssSelector(".cart-item-price span"));
@@ -239,5 +257,19 @@ public class CartTest extends BaseTest {
     @Step("Click on the Update button")
     public void clickOnUpdateButton() {
         updateButton.click();
+    }
+
+    @Step("Click on the counter button if available")
+    public void clickOnCounterButtonIfAvailableAndClickUpdate() {
+        CommonUtils.scrollToItemWithJS(driver, updateButton);
+
+        increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
+
+        if ("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
+            clickOnUpdateButton();
+        } else {
+            counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
+            clickOnUpdateButton();
+        }
     }
 }

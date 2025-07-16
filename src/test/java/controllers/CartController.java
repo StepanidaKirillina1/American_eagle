@@ -47,7 +47,7 @@ public class CartController {
                 .body(items)
                 .when()
                 .patch(CART_ENDPOINT + ITEMS_ENDPOINT)
-                .then().log().body()
+                .then()
                 .statusCode(202)
                 .body("cartId", Matchers.notNullValue())
                 .extract().as(CartResponseData.class);
@@ -66,7 +66,7 @@ public class CartController {
         return given(requestSpecification)
                 .when()
                 .get(CART_ENDPOINT + "/count")
-                .then().log().body()
+                .then()
                 .statusCode(200)
                 .extract()
                 .jsonPath()
@@ -77,7 +77,7 @@ public class CartController {
         return given(requestSpecification)
                 .when()
                 .get(CART_ENDPOINT + CART_PARAMETERES)
-                .then().log().body()
+                .then()
                 .statusCode(200)
                 .extract().body().jsonPath().getList("data.items", CartItem.class);
     }
@@ -86,7 +86,7 @@ public class CartController {
         return given(requestSpecification)
                 .when()
                 .get(CART_ENDPOINT + CART_PARAMETERES)
-                .then().log().body()
+                .then()
                 .statusCode(200)
                 .extract().body().jsonPath().getObject("data.summary", OrderSummary.class);
     }

@@ -23,7 +23,7 @@ public class CartTest {
 
     @Tags({@Tag("API"), @Tag("Critical"), @Tag("Positive")})
     @Test
-    public void getCartItemsCountTest() throws Exception {
+    public void getCartItemsCountTest() {
         int expectedIndividualItemQuantity = 0;
         int expectedTotalQuantity = 0;
         int actualTotalQuantity = 0;
@@ -54,7 +54,7 @@ public class CartTest {
 
     @Tags({@Tag("API"), @Tag("Critical"), @Tag("Positive")})
     @Test
-    public void testTotalOrderPriceWithDiscount() {
+    public void totalOrderPriceWithDiscountTest() {
         double expectedTotalSumWithoutShipping = 0.0;
         List<CartItem> cartItems = cartSteps.getCartItemData();
 
@@ -71,7 +71,13 @@ public class CartTest {
 
     @Tags({@Tag("API"), @Tag("Critical"), @Tag("Positive")})
     @Test
-    public void removeAllItemsFromCart() {
+    public void freeShippingTest() {
+        Assertions.assertTrue(cartSteps.isShippingFree());
+    }
+
+    @Tags({@Tag("API"), @Tag("Critical"), @Tag("Positive")})
+    @Test
+    public void removeAllItemsFromCartTest() {
         List<CartItem> cartItems = cartSteps.getCartItemData();
 
         for (CartItem cartItem: cartItems) {
@@ -83,7 +89,7 @@ public class CartTest {
 
     @Tags({@Tag("API"), @Tag("Critical"), @Tag("Positive")})
     @Test
-    public void editCartItems() {
+    public void editCartItemsTest() {
         String itemId = cartSteps.getItemIdBySku("0043385095");
         int itemQuantity = 5;
 
