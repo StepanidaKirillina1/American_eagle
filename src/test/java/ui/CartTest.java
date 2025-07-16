@@ -259,7 +259,7 @@ public class CartTest extends BaseTest {
         updateButton.click();
     }
 
-    @Step("Click on the counter button if available")
+    @Step("Update the item quantity via the counter if available and click on the Update button")
     public void clickOnCounterButtonIfAvailableAndClickUpdate() {
         CommonUtils.scrollToItemWithJS(driver, updateButton);
 
