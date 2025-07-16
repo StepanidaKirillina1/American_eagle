@@ -90,15 +90,27 @@ public class CheckoutTest extends BaseTest {
     @Test
     public void checkSeveralQuantityItemTest() {
         getFirstAvailableSize(this, driver);
+        clickOnCounterIfAvailableAndClickAdd();
 
-        WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
-
-        if ("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
-            clickOnAddToBagButton(this);
-        } else {
-            counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
-            clickOnAddToBagButton(this);
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
         }
+
+        clickOnViewBagButton(this, driver);
+        clickOnCheckoutButton();
+
+        assertTrue(
+                getWait10()
+                        .until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-item-quantity")))
+                        .getText()
+                        .contains(String.valueOf(1 + counterClickNumber)));
+    }
+
+    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
+    @Test
+    public void checkSeveralQuantityItemPriceTest() {
+        getFirstAvailableSize(this, driver);
+        clickOnCounterIfAvailableAndClickAdd();
 
         if (popupCounter == 0) {
             closePopupIfAvailable(this);
@@ -109,12 +121,6 @@ public class CheckoutTest extends BaseTest {
         clickOnViewBagButton(this, driver);
         clickOnCheckoutButton();
         TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice);
-
-        assertTrue(
-                getWait10()
-                        .until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-item-quantity")))
-                        .getText()
-                        .contains(String.valueOf(1 + counterClickNumber)));
 
         double finalCartItemPrice = convertFromStringToDouble(driver, By.cssSelector(".cart-item-price span"));
 
@@ -190,5 +196,17 @@ public class CheckoutTest extends BaseTest {
     @Step("Fill the city code field")
     public void fillCityField() {
         driver.findElement(By.cssSelector("input[autocomplete='address-level2']")).sendKeys("Palmer");
+    }
+
+    @Step("Update the item quantity via the counter if available and click on the Add button")
+    public void clickOnCounterIfAvailableAndClickAdd() {
+        WebElement increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
+
+        if ("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
+            clickOnAddToBagButton(this);
+        } else {
+            counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
+            clickOnAddToBagButton(this);
+        }
     }
 }

@@ -55,8 +55,11 @@ public class TestUtils {
     private static void clickOnRandomLink(By locator, BaseTest baseTest) {
         List<WebElement> elements = baseTest.getWait60().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
         int randomIndex = new Random().nextInt(elements.size());
+        WebElement selectedItem = elements.get(randomIndex);
 
-        elements.get(randomIndex).click();
+        logger.info(selectedItem.getText());
+
+        selectedItem.click();
     }
 
     @Step("Click on a random women category item")
