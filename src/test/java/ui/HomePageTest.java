@@ -28,11 +28,11 @@ public class HomePageTest extends BaseTest {
     @Tags({@Tag("UI"), @Tag("Smoke"), @Tag("Positive")})
     public void isCategoriesTextVisible() {
         List<String> expectedCategories = List.of(
-                "Women", "Men", "Jeans", "Shoes & Accessories", "Loungewear & PJs", "Aerie", "Clearance"
+                "Today's Offers", "Women", "Men", "Jeans", "Shoes & Accessories", "Loungewear & PJs", "Aerie", "Clearance"
         );
 
         List<String> actualCategories = getWait30()
-                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("_top-link_ali1iz")))
+                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector("li[data-test='top-link-wrapper']")))
                 .stream()
                 .map(element -> element.getText())
                 .toList();
