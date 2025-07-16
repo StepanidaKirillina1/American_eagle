@@ -14,7 +14,7 @@ on:
 
 jobs:
   smoke_tests:
-    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.test_type == 'smoke')
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -51,10 +51,8 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: smoke-test-results
-          path: |
-            build/reports/tests/test/
-            build/test-results/test/
+          name: allure-results-smoke
+          path: build/allure-results
 
   full_tests:
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.test_type == 'full'
@@ -98,13 +96,11 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: full-test-results
-          path: |
-            build/reports/tests/test/
-            build/test-results/test/
+          name: allure-results-full
+          path: build/allure-results
 
-  report:
-    needs: [smoke_tests, full_tests]
+  smoke_report:
+    needs: smoke_tests
     if: always()
     runs-on: ubuntu-latest
     permissions:
@@ -113,22 +109,70 @@ jobs:
       id-token: write
 
     steps:
-      - name: Checkout Pages
+      - name: Download Smoke Results
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results-smoke
+          path: build/allure-results
+
+      - name: Copy History
         uses: actions/checkout@v2
+        if: always()
         with:
           ref: gh-pages
           path: gh-pages
 
-      - name: Build Allure Report
+      - name: Build Smoke Report
         uses: simple-elf/allure-report-action@v1.10
+        if: always()
         with:
           allure_results: build/allure-results
-          allure_history: allure-history
+          allure_history: allure-history-smoke
           keep_reports: 20
 
-      - name: Deploy Report
+      - name: Publish Smoke Report
+        if: always()
         uses: peaceiris/actions-gh-pages@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PUBLISH_BRANCH: gh-pages
-          PUBLISH_DIR: allure-history
+          PUBLISH_DIR: allure-history-smoke
+
+  full_report:
+    needs: full_tests
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Download Full Results
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results-full
+          path: build/allure-results
+
+      - name: Copy History
+        uses: actions/checkout@v2
+        if: always()
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Build Full Report
+        uses: simple-elf/allure-report-action@v1.10
+        if: always()
+        with:
+          allure_results: build/allure-results
+          allure_history: allure-history-full
+          keep_reports: 20
+
+      - name: Publish Full Report
+        if: always()
+        uses: peaceiris/actions-gh-pages@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: allure-history-full
