@@ -17,8 +17,6 @@ public class UserController {
     public UserController() {
         this.requestSpecification = given()
                 .accept(ContentType.JSON)
-                .contentType(ContentType.URLENC)
-                //.contentType("application/x-www-form-urlencoded; charset=UTF-8")
                 .formParam("login", PROPERTIES_CONFIG.getLogin())
                 .formParam("password", PROPERTIES_CONFIG.getPassword())
                 .formParam("client", "chrome")
