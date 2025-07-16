@@ -1,0 +1,41 @@
+<div>PATCH to https://www.ae.com/ugp-api/bag/v1/items</div>
+
+    <h4>Body</h4>
+    <div>
+    <pre class="preformated-text">
+{
+    &quot;items&quot;: [
+        {
+            &quot;itemId&quot;: &quot;1faf7632-d1dd-430b-a4eb-219e0029a108&quot;,
+            &quot;quantity&quot;: 5,
+            &quot;skuId&quot;: &quot;0043385095&quot;
+        }
+    ]
+}    </pre>
+    </div>
+
+    <h4>Headers</h4>
+    <div>
+            <div>Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ1MW01N0RmbXRjNXd5b1FHX1Y2bWdEaFdVWVVFcW40bUtCa29zWWxtR25NIn0.eyJleHAiOjE3NTI2MzIxNjksImlhdCI6MTc1MjYzMDM2OSwianRpIjoiNzgzNzg1YjgtNzg3Yy00NmY2LWE4ZjMtMzBhYWIyYmY2YzQ1IiwiaXNzIjoiaHR0cHM6Ly9rZXNzZWwuaW50LXByLmFlLWdjcC5pby9yZWFsbXMvQUdXQSIsInN1YiI6IjU1NzZlMzdjLTZhN2YtNGM1Yy04ZDkyLTc5MDNhNWE5NzkzNyIsInR5cCI6IkJlYXJlciIsImF6cCI6IjIwZTQyNjkwLTg5M2EtNDgwMy04OWU3LTg5YmZiNGViZjJmZSIsInNjb3BlIjoiIiwib3JkZXJJZCI6WyIzZjIzNTAzNi05ZWIyLTRiYWMtOGJhZS00NDkxZWVkNTcwMjYiXSwicHJvZmlsZUlkIjpbIjI2OWRiYWI0LTRlYjUtNGU4Ni1iMWRlLTIxYmM4MzMxMzA4ZCJdLCJzY29wZSI6Imd1ZXN0In0.Db4_xj6-yHIE58nGyR-S6EeN-ivAajixg_FQAwUeHEHMs-GGR8VeZ9Cn2XtAd3YfhQPtOeyd-vvtx5R4GZ8u3C0PHoa6PEqThecEfLSjBDPIzmil1_oXFSN9EuQnuiscYHdf-vp6o1mq_HPo0foG8EU2TkekN4NVoLiRlLTk5X5C35p4ca4IpnbYAPnvH7ic0WlfsCafO9jCvloB86S4CDBSXMI0h-7U2ylipD4Bb3H2COiMpHAaErkrWR5skSx1Umx5-cXWXcZhyqIWUqk3PtN0zu0FS9o7OQfQjMgAqJuLkVAOghXn01KjeJXDC0zKB8tewiB19v9I1w5bd7f6nQ</div>
+            <div>Accept: application/json</div>
+            <div>Aesite: AEO_US</div>
+            <div>Aecountry: US</div>
+            <div>Aelang: en_US</div>
+            <div>Content-Type: application/json</div>
+    </div>
+
+
+
+    <h4>Curl</h4>
+    <div>
+        curl -v -X PATCH &#39;https://www.ae.com/ugp-api/bag/v1/items&#39; -H &#39;Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ1MW01N0RmbXRjNXd5b1FHX1Y2bWdEaFdVWVVFcW40bUtCa29zWWxtR25NIn0.eyJleHAiOjE3NTI2MzIxNjksImlhdCI6MTc1MjYzMDM2OSwianRpIjoiNzgzNzg1YjgtNzg3Yy00NmY2LWE4ZjMtMzBhYWIyYmY2YzQ1IiwiaXNzIjoiaHR0cHM6Ly9rZXNzZWwuaW50LXByLmFlLWdjcC5pby9yZWFsbXMvQUdXQSIsInN1YiI6IjU1NzZlMzdjLTZhN2YtNGM1Yy04ZDkyLTc5MDNhNWE5NzkzNyIsInR5cCI6IkJlYXJlciIsImF6cCI6IjIwZTQyNjkwLTg5M2EtNDgwMy04OWU3LTg5YmZiNGViZjJmZSIsInNjb3BlIjoiIiwib3JkZXJJZCI6WyIzZjIzNTAzNi05ZWIyLTRiYWMtOGJhZS00NDkxZWVkNTcwMjYiXSwicHJvZmlsZUlkIjpbIjI2OWRiYWI0LTRlYjUtNGU4Ni1iMWRlLTIxYmM4MzMxMzA4ZCJdLCJzY29wZSI6Imd1ZXN0In0.Db4_xj6-yHIE58nGyR-S6EeN-ivAajixg_FQAwUeHEHMs-GGR8VeZ9Cn2XtAd3YfhQPtOeyd-vvtx5R4GZ8u3C0PHoa6PEqThecEfLSjBDPIzmil1_oXFSN9EuQnuiscYHdf-vp6o1mq_HPo0foG8EU2TkekN4NVoLiRlLTk5X5C35p4ca4IpnbYAPnvH7ic0WlfsCafO9jCvloB86S4CDBSXMI0h-7U2ylipD4Bb3H2COiMpHAaErkrWR5skSx1Umx5-cXWXcZhyqIWUqk3PtN0zu0FS9o7OQfQjMgAqJuLkVAOghXn01KjeJXDC0zKB8tewiB19v9I1w5bd7f6nQ&#39; -H &#39;Accept: application/json&#39; -H &#39;Aesite: AEO_US&#39; -H &#39;Aecountry: US&#39; -H &#39;Aelang: en_US&#39; -H &#39;Content-Type: application/json&#39; -d &#39;{
+    &quot;items&quot;: [
+        {
+            &quot;itemId&quot;: &quot;1faf7632-d1dd-430b-a4eb-219e0029a108&quot;,
+            &quot;quantity&quot;: 5,
+            &quot;skuId&quot;: &quot;0043385095&quot;
+        }
+    ]
+}&#39;
+    </div>
+
