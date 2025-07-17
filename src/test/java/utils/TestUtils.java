@@ -21,6 +21,7 @@ public class TestUtils {
     private static final By ITEM_LINK_LOCATOR = By.cssSelector("a[role='menuitem']");
     private static final By PROMO_LOCATOR = By.cssSelector("li.qa-promo-item");
     private static Logger logger = LogManager.getLogger();
+    private static final By DROPDOWN = By.className("dropdown");
 
     @Step("Get the first available size of the item")
     public static void getFirstAvailableSize(BaseTest baseTest, WebDriver driver) {
@@ -35,7 +36,8 @@ public class TestUtils {
             CommonUtils.scrollAndClickWithJS(driver, driver.findElement(By.className("btn-close")));
             clickOnRandomItemLink(baseTest);
         } else {
-            baseTest.getWait5().until(ExpectedConditions.elementToBeClickable(By.className("dropdown"))).click();
+            new Actions(driver).moveToElement(baseTest.getWait5().until(ExpectedConditions.elementToBeClickable(DROPDOWN))).perform();
+            driver.findElement(DROPDOWN).click();
             baseTest.getWait10().until(ExpectedConditions.elementToBeClickable(By.cssSelector(".dropdown-selection.open")));
             baseTest.getWait10().until(ExpectedConditions.elementToBeClickable(ITEM_LINK_LOCATOR));
 
