@@ -65,7 +65,6 @@ public class TestUtils {
     @Step("Click on a random women category item")
     public static void clickOnRandomWomenCategoryItem(WebDriver driver, BaseTest baseTest) {
         new Actions(driver).moveToElement(baseTest.getWait60().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[aria-label='Women']")))).perform();
-        baseTest.logger.info("hovered over the women category");
         baseTest.getWait30().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class*='opened_']")));
 
         clickOnRandomLink(By.xpath("//button[@aria-label='Women']/../div[@data-testid='megamenu-column']//a"), baseTest);
@@ -126,8 +125,6 @@ public class TestUtils {
         baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='modal-dialog'][not(@quickview)]")));
 
         CommonUtils.scrollAndClickWithJS(driver, driver.findElement(By.cssSelector("button[data-test-view-cart]")));
-        logger.info("view button was clicked");
-
         baseTest.getWait30().until(ExpectedConditions.visibilityOfElementLocated(By.name("loginMessage")));
         logger.info(driver.getCurrentUrl());
     }

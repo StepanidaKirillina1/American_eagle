@@ -60,7 +60,7 @@ public class CheckoutTest extends BaseTest {
         assertEquals("Checkout", driver.findElement(By.cssSelector("h1.qa-page-header")).getText());
     }
 
-    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
+    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive"), @Tag("Flaky")})
     @Test
     public void checkOneQuantityItemTest() {
         getFirstAvailableSize(this, driver);
@@ -103,7 +103,7 @@ public class CheckoutTest extends BaseTest {
                         .contains(String.valueOf(1 + counterClickNumber)));
     }
 
-    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
+    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive"), @Tag("Flaky")})
     @Test
     public void checkSeveralQuantityItemPriceTest() {
         getFirstAvailableSize(this, driver);
