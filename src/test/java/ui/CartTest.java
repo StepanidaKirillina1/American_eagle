@@ -1,11 +1,9 @@
 package ui;
 
-import extenstions.AllureExtension;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -21,7 +19,6 @@ import static utils.TestUtils.*;
 
 @Epic("UI")
 @Feature("Cart")
-@ExtendWith(AllureExtension.class)
 public class CartTest extends BaseTest {
     @FindBy(xpath = "//div[@class='modal-dialog'][not(@quickview)]")
     private WebElement modalDialog;
@@ -53,7 +50,7 @@ public class CartTest extends BaseTest {
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
-    public void addItemToCart() {
+    public void addItemToCartTest() {
         clickOnRandomItemLink(this);
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);
@@ -69,7 +66,7 @@ public class CartTest extends BaseTest {
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
     @Test
-    public void addItemToCartViaQuickShopButton() {
+    public void addItemToCartViaQuickShopButtonTest() {
         addFirstItemToCartViaQuickShopButton(driver, actions, this);
         getFirstAvailableSize(this, driver);
         clickOnAddToBagButton(this);

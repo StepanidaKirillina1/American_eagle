@@ -3,7 +3,6 @@ package controllers;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import models.Product;
-import testData.ProductId;
 
 import static io.restassured.RestAssured.given;
 import static testData.TestData.API_BASE_URL;
@@ -26,10 +25,10 @@ public class ProductController {
                 .baseUri(API_BASE_URL);
     }
 
-    public Product getProductById(ProductId productId) {
+    public Product getProductById(String productId) {
         return given(requestSpecification)
                 .when()
-                .get(PRODUCT_ENDPOINT + "?productIds=" + productId.getProductId())
+                .get(PRODUCT_ENDPOINT + "?productIds=" + productId)
                 .then().log().body()
                 .extract().body().jsonPath().getObject("data.records[0].sizes", Product.class);
     }

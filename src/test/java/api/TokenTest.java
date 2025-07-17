@@ -9,9 +9,9 @@ public class TokenTest {
 
     @Epic("API")
     @Feature("Token")
-    @Tags({@Tag("API"), @Tag("Positive"), @Tag("Bot_enabled")})
+    @Tags({@Tag("API"), @Tag("Smoke"),  @Tag("Positive"), @Tag("Bot_enabled")})
     @Test
-    public void testToken() {
+    public void getAuthTokenTest() {
         TokenController tokenController = new TokenController();
 
         Assertions.assertTrue(tokenController.getAuthToken().contains("e"));

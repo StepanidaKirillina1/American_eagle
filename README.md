@@ -10,13 +10,13 @@
 
 ## Used technologies
 
-Java 17, JUnit5, Gradle, Selenium (UI), RestAssured (API), Allure Reports, Lombok, GitHub Actions (CI/CD)
+Java 17, JUnit5, Gradle, Selenium (UI), RestAssured (API), Allure Reports, Lombok, GitHub Actions (CI/CD), Builder (patterns), PageFactory (patterns)
 
 
 ## How to run tests from the command line
 
-To execute the tests, please run the following command via the command line:
-./gradlew clean {task.name}, for instance
+To execute the tests, please run the following command via the command line:  
+./gradlew clean {task.name}, for instance,
 
 `./gradlew clean test`
 
