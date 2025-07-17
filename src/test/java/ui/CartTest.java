@@ -171,7 +171,7 @@ public class CartTest extends BaseTest {
         assertTrue(itemQuantity.contains(String.valueOf(1 + counterClickNumber)));
     }
 
-    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
+    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive"), @Tag("Flaky")})
     @Test
     public void editedCartItemsPriceTest() {
         clickOnRandomItemLink(this);
@@ -214,7 +214,7 @@ public class CartTest extends BaseTest {
         assertEquals(roundTo2Decimals(itemPrice * (1 + counterClickNumber)), finalCartItemPrice);
     }
 
-    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
+    @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive"), @Tag("Flaky")})
     @Test
     public void orderSummaryTest() {
         double shippingPrice = 0.0;

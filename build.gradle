@@ -98,3 +98,11 @@ tasks.register("bot_enabled", Test) {
     }
     systemProperties(System.getProperties())
 }
+
+tasks.register("flaky", Test) {
+    useJUnitPlatform() {
+        includeTags "Flaky"
+        excludeTags "Bot_enabled"
+    }
+    systemProperties(System.getProperties())
+}
