@@ -169,7 +169,7 @@ public class CheckoutTest extends BaseTest {
         TestUtils.fillZipCodeField(driver);
 
         assertTrue(driver.findElement(By.name("billToShippingAddress")).isSelected());
-        assertTrue(placeOrderButton.isEnabled());
+        assertTrue(getWait10().until(ExpectedConditions.elementToBeClickable(placeOrderButton)).isEnabled());
     }
 
     @Step("Click on the Checkout button")
