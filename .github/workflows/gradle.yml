@@ -41,7 +41,7 @@ jobs:
           COOKIE: ${{secrets.COOKIE}}
           LOGIN: ${{secrets.LOGIN}}
           PASSWORD: ${{secrets.PASSWORD}}
-        run: ./gradlew clean test "-Dauthorization=$AUTHORIZATION" "-DCookie=$COOKIE" "-Dlogin=$LOGIN" "-Dpassword=$PASSWORD" "-Drole=guest"
+        run: ./gradlew clean test "-Dauthorization=$AUTHORIZATION" "-DCookie=$COOKIE" "-Dlogin=$LOGIN" "-Dpassword=$PASSWORD"
       - name: Upload logs
         uses: actions/upload-artifact@v4
         if: always()
