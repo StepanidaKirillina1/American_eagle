@@ -40,6 +40,7 @@ test {
     useJUnitPlatform() {
         excludeTags "Bot_enabled"
     }
+    maxParallelForks = 3
     systemProperties(System.getProperties())
     systemProperty 'log4j.configurationFile', 'src/test/resources/log4j2.xml'
 }
