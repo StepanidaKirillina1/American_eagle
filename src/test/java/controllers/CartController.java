@@ -9,10 +9,10 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static testData.TestData.API_BASE_URL;
+import utils.TokenManager;
 
 public class CartController {
     RequestSpecification requestSpecification;
-    TokenController tokenController = new TokenController();
     private static final String CART_ENDPOINT = "bag/v1";
     private static final String ITEMS_ENDPOINT = "/items";
     private static final String CART_PARAMETERES = "?couponErrorBehavior=cart&inventoryCheck=true";
@@ -24,7 +24,7 @@ public class CartController {
                 .header("Aesite", "AEO_US")
                 .header("Aelang", "en_US")
                 .header("Aecountry", "US")
-                .header("Authorization", "Bearer " + tokenController.getGuestToken())
+                .header("Authorization", "Bearer " + TokenManager.getTokenByRole())
                 .baseUri(API_BASE_URL);
     }
 

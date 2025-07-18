@@ -1,9 +1,9 @@
 package api;
 
-import controllers.TokenController;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import org.junit.jupiter.api.*;
+import utils.TokenManager;
 
 public class TokenTest {
 
@@ -12,8 +12,6 @@ public class TokenTest {
     @Tags({@Tag("API"), @Tag("Smoke"),  @Tag("Positive"), @Tag("Bot_enabled")})
     @Test
     public void getAuthTokenTest() {
-        TokenController tokenController = new TokenController();
-
-        Assertions.assertTrue(tokenController.getAuthToken().contains("e"));
+        Assertions.assertTrue(TokenManager.getTokenByRole().contains("e"));
     }
 }
