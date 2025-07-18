@@ -19,4 +19,7 @@ public interface TestPropertiesConfig extends Config {
 
     @Key("password")
     String getPassword();
+
+    @Key("role")
+    String getRole();
 }
