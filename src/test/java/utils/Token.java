@@ -22,7 +22,7 @@ public enum Token {
                             .formParam("grant_type", "client_credentials")
                             .header("Cookie", PROPERTIES_CONFIG.getCookieValue())
                             .when()
-                            .post("auth/oauth/" + "v5/token")
+                            .post(AUTH_ENDPOINT + "v5/token")
                             .then()
                             .body("token_type", Matchers.equalTo("Bearer"))
                             .body("scope", Matchers.equalTo("guest"))
@@ -56,12 +56,14 @@ public enum Token {
                             .header("x-access-token", Token.GUEST.getToken())
                             .header("Origin", "https://www.ae.com")
                             .when()
-                            .post("auth/oauth/" + "v4/token")
+                            .post(AUTH_ENDPOINT + "v4/token")
                             .then().log().body()
                             .body("token_type", Matchers.equalTo("password"))
             );
         }
     };
+
+    private static final String AUTH_ENDPOINT = "auth/oauth/";
 
     public abstract String getToken();
 

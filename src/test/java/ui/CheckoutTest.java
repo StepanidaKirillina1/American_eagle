@@ -72,15 +72,15 @@ public class CheckoutTest extends BaseTest {
             closePopupIfAvailable(this);
         }
 
+        int itemQuantity = TestUtils.getItemQuantity(this);
+
         clickOnViewBagButton(this, driver);
         clickOnCheckoutButton();
-        TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice);
 
-        String price = getWait5()
-                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".cart-item-info .cart-item-price span")))
-                .getText();
+        double expectedCartItemPrice = roundTo2Decimals(TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice, itemQuantity));
+        double actualCartItemPrice = roundTo2Decimals(convertFromStringToDouble(driver, By.cssSelector(".cart-item-info .cart-item-price span")));
 
-        assertTrue(price.contains(String.valueOf(itemPrice)));
+        assertEquals(expectedCartItemPrice, actualCartItemPrice);
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
@@ -115,13 +115,15 @@ public class CheckoutTest extends BaseTest {
 
         itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
 
+        int itemQuantity = TestUtils.getItemQuantity(this);
+
         clickOnViewBagButton(this, driver);
         clickOnCheckoutButton();
-        TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice);
 
-        double finalCartItemPrice = convertFromStringToDouble(driver, By.cssSelector(".cart-item-price span"));
+        double expectedCartItemPrice = roundTo2Decimals(TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice, itemQuantity));
+        double actualCartItemPrice = roundTo2Decimals(convertFromStringToDouble(driver, By.cssSelector(".cart-item-price span")));
 
-        assertEquals(roundTo2Decimals(itemPrice * (1 + counterClickNumber)), finalCartItemPrice);
+        assertEquals(expectedCartItemPrice, actualCartItemPrice);
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})

@@ -29,6 +29,9 @@ public class CartTest extends BaseTest {
     @FindBy(css = ".btn.qa-item-btn-edit")
     private WebElement updateButton;
 
+    @FindBy(className = "cart-item-quantity")
+    private WebElement cartItemQuantity;
+
     private Actions actions;
     private Double itemPrice;
     private int counterClickNumber = 0;
@@ -94,22 +97,22 @@ public class CartTest extends BaseTest {
             clickOnAddToBagButton(this);
         }
 
+        logger.info("counterClickNumber " + counterClickNumber);
+
         if (popupCounter == 0) {
             closePopupIfAvailable(this);
         }
 
-        String actualText = getWait5()
-                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test-product-quantity]")))
-                .getText();
+        int itemQuantity = TestUtils.getItemQuantity(this);
 
-        assertTrue(actualText.contains(String.valueOf(1 + counterClickNumber)));
+        assertEquals(1 + counterClickNumber, itemQuantity);
 
         clickOnViewBagButton(this, driver);
         CommonUtils.scrollByViewportPercentage(driver, 70);
 
         assertTrue(
                 getWait5()
-                        .until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-item-quantity")))
+                        .until(ExpectedConditions.visibilityOf(cartItemQuantity))
                         .getText()
                         .contains(String.valueOf(1 + counterClickNumber)));
     }
@@ -162,13 +165,11 @@ public class CartTest extends BaseTest {
 
         CommonUtils.scrollByViewportPercentage(driver, -80);
 
-        String itemQuantity = getWait30()
-                .until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-item-quantity")))
-                .getText();
-
-        logger.info("check itemQuantity " + itemQuantity);
-
-        assertTrue(itemQuantity.contains(String.valueOf(1 + counterClickNumber)));
+        assertTrue(
+                getWait5()
+                        .until(ExpectedConditions.visibilityOf(cartItemQuantity))
+                        .getText()
+                        .contains(String.valueOf(1 + counterClickNumber)));
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive"), @Tag("Flaky")})
@@ -184,12 +185,13 @@ public class CartTest extends BaseTest {
             closePopupIfAvailable(this);
         }
 
+        int itemQuantity = TestUtils.getItemQuantity(this);
+
         clickOnViewBagButton(this, driver);
-
         CommonUtils.scrollByViewportPercentage(driver, 70);
-
         clickOnEditButton();
-        clickOnCounterButtonIfAvailableAndClickUpdate();
+
+        counterClickNumber = clickOnCounterButtonIfAvailableAndClickUpdate();
 
         try {
             getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.className("notification-card-message")));
@@ -199,19 +201,15 @@ public class CartTest extends BaseTest {
 
         CommonUtils.scrollByViewportPercentage(driver, -80);
 
-        String itemQuantity = getWait30()
-                .until(ExpectedConditions.visibilityOfElementLocated(By.className("cart-item-quantity")))
-                .getText();
-
+        itemQuantity += counterClickNumber;
         logger.info("check itemQuantity " + itemQuantity);
         logger.info("price " + itemPrice);
+        logger.info("counterClickNumber " + counterClickNumber);
 
-        TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice);
-        double finalCartItemPrice = convertFromStringToDouble(driver, By.cssSelector(".cart-item-price span"));
+        double expectedCartItemPrice = roundTo2Decimals(TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice, itemQuantity));
+        double actualCartItemPrice = roundTo2Decimals(convertFromStringToDouble(driver, By.cssSelector(".cart-item-info .cart-item-price span")));
 
-        logger.info("check finalPrice " + finalCartItemPrice);
-
-        assertEquals(roundTo2Decimals(itemPrice * (1 + counterClickNumber)), finalCartItemPrice);
+        assertEquals(expectedCartItemPrice, actualCartItemPrice);
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive"), @Tag("Flaky")})
@@ -228,9 +226,12 @@ public class CartTest extends BaseTest {
             closePopupIfAvailable(this);
         }
 
+        int itemQuantity = TestUtils.getItemQuantity(this);
+
         clickOnViewBagButton(this, driver);
         CommonUtils.scrollByViewportPercentage(driver, 70);
-        TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice);
+
+        double expectedCartItemPrice = TestUtils.calculatePriceWithDiscountIfAvailable(driver, itemPrice, itemQuantity);
 
         String shippingPriceText = getWait5()
                 .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-testid='row-shipping-value']")))
@@ -242,7 +243,7 @@ public class CartTest extends BaseTest {
         }
         double subTotalPrice = convertFromStringToDouble(driver, By.cssSelector("[data-testid='row-total-value']"));
 
-        assertEquals(roundTo2Decimals(itemPrice + shippingPrice), subTotalPrice);
+        assertEquals(roundTo2Decimals(expectedCartItemPrice + shippingPrice), subTotalPrice);
     }
 
     @Step("Click on the Edit button")
@@ -257,16 +258,19 @@ public class CartTest extends BaseTest {
     }
 
     @Step("Update the item quantity via the counter if available and click on the Update button")
-    public void clickOnCounterButtonIfAvailableAndClickUpdate() {
+    public int clickOnCounterButtonIfAvailableAndClickUpdate() {
         CommonUtils.scrollToItemWithJS(driver, updateButton);
 
         increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
 
         if ("true".equals(increaseQuantityButton.getDomAttribute("disabled"))) {
+            counterClickNumber = 0;
             clickOnUpdateButton();
         } else {
             counterClickNumber = TestUtils.clickOnCounterBetween1and9(counterClickNumber, this);
             clickOnUpdateButton();
         }
+
+        return counterClickNumber;
     }
 }

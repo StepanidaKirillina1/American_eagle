@@ -5,13 +5,13 @@ import io.qameta.allure.Feature;
 import org.junit.jupiter.api.*;
 import utils.TokenManager;
 
+@Epic("API")
+@Feature("Token")
 public class TokenTest {
 
-    @Epic("API")
-    @Feature("Token")
-    @Tags({@Tag("API"), @Tag("Smoke"),  @Tag("Positive"), @Tag("Bot_enabled")})
+    @Tags({@Tag("API"), @Tag("Smoke"),  @Tag("Positive")})
     @Test
-    public void getAuthTokenTest() {
-        Assertions.assertTrue(TokenManager.getTokenByRole().contains("e"));
+    public void getAccessTokenTest() {
+        Assertions.assertFalse(TokenManager.getTokenByRole().isEmpty());
     }
 }
