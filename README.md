@@ -61,7 +61,7 @@ The following scenarios were automated:
 -	The checkout form completion;
 -	New user registration;
 -	Existing user authorization;
--	Guest token retrieval;
+-	Access token retrieval;
 -	Free shipping option.
 
 
