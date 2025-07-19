@@ -14,11 +14,12 @@ import java.util.List;
 @Epic("UI")
 @Feature("HomePage")
 public class HomePageTest extends BaseTest {
+    private static final String TITLE = "Men’s & Women’s Jeans, Clothes & Accessories | American Eagle";
 
     @Test
     @Tags({@Tag("UI"), @Tag("Smoke"), @Tag("Positive")})
     public void homePageTest() {
-        Assertions.assertTrue(driver.getTitle().contains("American Eagle"));
+        Assertions.assertEquals(TITLE, driver.getTitle());
     }
 
     @Test

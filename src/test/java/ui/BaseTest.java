@@ -30,7 +30,7 @@ public class BaseTest {
 
     @BeforeEach
     public void setUp() {
-        driver = initDriver();
+        initDriver();
         driver.manage().window().maximize();
         driver.get(TestData.UI_BASE_URL);
         PageFactory.initElements(driver,this);
@@ -45,7 +45,7 @@ public class BaseTest {
         return driver;
     }
 
-    public static WebDriver initDriver() {
+    public static void initDriver() {
         String remoteUrl = System.getenv("SELENIUM_REMOTE_URL");
 
         if (remoteUrl != null && !remoteUrl.isEmpty()) {
@@ -62,8 +62,6 @@ public class BaseTest {
         } else {
             driver = new ChromeDriver();
         }
-
-        return driver;
     }
 
     public WebDriverWait getWait5() {

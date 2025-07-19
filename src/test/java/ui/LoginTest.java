@@ -29,7 +29,10 @@ public class LoginTest extends BaseTest {
         driver.findElement(By.cssSelector("input[placeholder='Password']")).sendKeys(PROPERTIES_CONFIG.getPassword());
         driver.findElement(By.name("submit")).click();
 
-        String actualLoginMessage = getWait30().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h2.modal-title"))).getText();
+        String actualLoginMessage =
+                getWait30()
+                        .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h2.modal-title")))
+                        .getText();
 
         Assertions.assertEquals(expectedLoginMessage, actualLoginMessage.toLowerCase());
     }
