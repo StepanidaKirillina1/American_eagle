@@ -7,9 +7,11 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import testData.TestData;
 import ui.BaseTest;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -22,6 +24,9 @@ public class TestUtils {
     private static final By PROMO_LOCATOR = By.cssSelector("li.qa-promo-item");
     private static Logger logger = LogManager.getLogger();
     private static final By DROPDOWN = By.className("dropdown");
+    static double promoValue;
+    static double promoQuantity;
+    static double finalPrice;
 
     @Step("Get the first available size of the item")
     public static void getFirstAvailableSize(BaseTest baseTest, WebDriver driver) {
@@ -33,7 +38,7 @@ public class TestUtils {
                 .getText()
                 .toLowerCase()
                 .contains("sold")) {
-            CommonUtils.scrollAndClickWithJS(driver, driver.findElement(By.className("btn-close")));
+            driver.navigate().back();
             clickOnRandomItemLink(baseTest);
         } else {
             new Actions(driver).moveToElement(baseTest.getWait5().until(ExpectedConditions.elementToBeClickable(DROPDOWN))).perform();
@@ -106,15 +111,42 @@ public class TestUtils {
         baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img[data-test-item-image]")));
     }
 
+    /**
+     * Tests the following discount scenarios:
+     * <ul>
+     *   <li>Case 1: No discounts applied</li>
+     *   <li>Case 2: "Applied! 2 for $62 USD Aerie Bras"</li>
+     *   <li>Case 3: "Applied! $10 off" (fixed-amount discount)</li>
+     * </ul>
+     */
     @Step("Calculate the final price with discount if available")
-    public static void calculatePriceWithDiscountIfAvailable(WebDriver driver, double itemPrice) {
+    public static double calculatePriceWithDiscountIfAvailable(WebDriver driver, double itemPrice, int actualQuantity) {
         try {
-            driver.findElement(PROMO_LOCATOR).isDisplayed();
+            WebElement promoElement = new WebDriverWait(driver, Duration.ofSeconds(10))
+                    .until(ExpectedConditions.visibilityOfElementLocated(PROMO_LOCATOR));
+
+            String promoElementText = promoElement.getText();
+            String quantityForPromo = promoElementText.split(" ")[1];
+
+            if (Character.isDigit(quantityForPromo.charAt(0))) {
+                promoValue = convertFromStringToDouble(promoElementText.split(" ")[3]);
+                promoQuantity = convertFromStringToDouble(quantityForPromo);
+
+                if (actualQuantity % 2 == 0) {
+                    finalPrice = (actualQuantity / promoQuantity) * promoValue;
+                } else {
+                    finalPrice = Math.floor(actualQuantity / promoQuantity) * promoValue + itemPrice;
+                }
+            }
+        } catch (AssertionError e) {
             double discount = convertFromStringToDouble(driver, PROMO_LOCATOR);
             itemPrice = roundTo2Decimals(getDiscountedValue(itemPrice, discount));
+            finalPrice = actualQuantity * itemPrice;
         } catch (Exception e) {
-
+            finalPrice = actualQuantity * itemPrice;
         }
+
+        return finalPrice;
     }
 
     @Step("Click on the Add to bag button")
@@ -184,5 +216,14 @@ public class TestUtils {
                 .map(item -> item.getQuantity())
                 .toList()
                 .get(index);
+    }
+
+    public static int getItemQuantity(BaseTest baseTest) {
+        return Integer.parseInt(
+                baseTest.getWait30()
+                        .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test-product-quantity]")))
+                        .getText()
+                        .split(" ")[1]
+        );
     }
 }

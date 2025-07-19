@@ -43,6 +43,10 @@ public class CommonUtils {
                 .replaceAll("[^0-9.]", ""));
     }
 
+    public static double convertFromStringToDouble(String text) {
+        return Double.parseDouble(text.replaceAll("[^0-9.]", ""));
+    }
+
     public static int getRandomValueBetween1And12() {
         return random.nextInt(12) + 1;
     }
