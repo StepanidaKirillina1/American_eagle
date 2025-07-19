@@ -33,13 +33,14 @@ public class TestUtils {
         CommonUtils.scrollToItemWithJS(driver, driver.findElement(By.xpath("//div[text()='Price:']")));
 
         if (baseTest
-                .getWait5()
+                .getWait10()
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[text()='Price:']/..//div[@data-test-product-prices]")))
                 .getText()
                 .toLowerCase()
                 .contains("sold")) {
             driver.navigate().back();
             clickOnRandomItemLink(baseTest);
+            getFirstAvailableSize(baseTest, driver);
         } else {
             new Actions(driver).moveToElement(baseTest.getWait5().until(ExpectedConditions.elementToBeClickable(DROPDOWN))).perform();
             driver.findElement(DROPDOWN).click();
