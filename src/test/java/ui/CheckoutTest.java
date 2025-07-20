@@ -47,6 +47,11 @@ public class CheckoutTest extends BaseTest {
     @Test
     public void checkoutPageTest() {
         getFirstAvailableSize(this, driver);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
         clickOnAddToBagButton(this);
         itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
 
@@ -64,6 +69,11 @@ public class CheckoutTest extends BaseTest {
     @Test
     public void checkOneQuantityItemTest() {
         getFirstAvailableSize(this, driver);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
         clickOnAddToBagButton(this);
 
         itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
@@ -87,6 +97,11 @@ public class CheckoutTest extends BaseTest {
     @Test
     public void checkSeveralQuantityItemTest() {
         getFirstAvailableSize(this, driver);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
         clickOnCounterIfAvailableAndClickAdd();
 
         if (popupCounter == 0) {
@@ -107,6 +122,11 @@ public class CheckoutTest extends BaseTest {
     @Test
     public void checkSeveralQuantityItemPriceTest() {
         getFirstAvailableSize(this, driver);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
         clickOnCounterIfAvailableAndClickAdd();
 
         if (popupCounter == 0) {
@@ -130,6 +150,11 @@ public class CheckoutTest extends BaseTest {
     @Test
     public void removeItemTest() {
         getFirstAvailableSize(this, driver);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
         clickOnAddToBagButton(this);
 
         if (popupCounter == 0) {
@@ -153,6 +178,11 @@ public class CheckoutTest extends BaseTest {
     @Test
     public void fillCheckoutDataTest() {
         getFirstAvailableSize(this, driver);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
         clickOnAddToBagButton(this);
 
         if (popupCounter == 0) {

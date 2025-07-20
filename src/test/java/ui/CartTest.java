@@ -56,6 +56,11 @@ public class CartTest extends BaseTest {
     public void addItemToCartTest() {
         clickOnRandomItemLink(this);
         getFirstAvailableSize(this, driver);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
         clickOnAddToBagButton(this);
 
         if (popupCounter == 0) {
@@ -72,6 +77,11 @@ public class CartTest extends BaseTest {
     public void addItemToCartViaQuickShopButtonTest() {
         addFirstItemToCartViaQuickShopButton(driver, actions, this);
         getFirstAvailableSize(this, driver);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
         clickOnAddToBagButton(this);
 
         if (popupCounter == 0) {
@@ -89,6 +99,10 @@ public class CartTest extends BaseTest {
     public void counterTest() {
         clickOnRandomItemLink(this);
         getFirstAvailableSize(this, driver);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
 
         increaseQuantityButton = getWait10().until(ExpectedConditions.elementToBeClickable(increaseButton));
 
@@ -124,6 +138,11 @@ public class CartTest extends BaseTest {
     public void removeItemFromCartTest() {
         clickOnRandomItemLink(this);
         getFirstAvailableSize(this, driver);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
         clickOnAddToBagButton(this);
 
         if (popupCounter == 0) {
@@ -146,6 +165,11 @@ public class CartTest extends BaseTest {
     public void editCartItemQuantityTest() {
         clickOnRandomItemLink(this);
         getFirstAvailableSize(this, driver);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
         clickOnAddToBagButton(this);
 
         if (popupCounter == 0) {
@@ -179,6 +203,11 @@ public class CartTest extends BaseTest {
     public void editedCartItemsPriceTest() {
         clickOnRandomItemLink(this);
         getFirstAvailableSize(this, driver);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
         clickOnAddToBagButton(this);
 
         itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
@@ -220,6 +249,11 @@ public class CartTest extends BaseTest {
         double shippingPrice = 0.0;
         clickOnRandomItemLink(this);
         getFirstAvailableSize(this, driver);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
         clickOnAddToBagButton(this);
 
         itemPrice = convertFromStringToDouble(driver, itemPriceLocator);
