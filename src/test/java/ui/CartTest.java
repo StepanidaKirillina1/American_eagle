@@ -20,8 +20,8 @@ import static utils.TestUtils.*;
 @Epic("UI")
 @Feature("Cart")
 public class CartTest extends BaseTest {
-    @FindBy(xpath = "//div[@class='modal-dialog'][not(@quickview)]")
-    private WebElement modalDialog;
+    @FindBy(xpath = "//div[@class='modal-dialog'][not(@quickview)]//h2")
+    private WebElement modalDialogTitle;
 
     @FindBy(css = "button[aria-label='increase']")
     private WebElement increaseButton;
@@ -62,9 +62,9 @@ public class CartTest extends BaseTest {
             closePopupIfAvailable(this);
         }
 
-        assertEquals(ADDED_TO_BAG_MESSAGE,
-                getWait10().until(ExpectedConditions.visibilityOf(modalDialog)).findElement(By.tagName("h2")).getText()
-        );
+        assertEquals(
+                ADDED_TO_BAG_MESSAGE,
+                getWait10().until(ExpectedConditions.visibilityOf(modalDialogTitle)).getText());
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
@@ -78,8 +78,10 @@ public class CartTest extends BaseTest {
             closePopupIfAvailable(this);
         }
 
-        assertEquals(ADDED_TO_BAG_MESSAGE,
-                getWait10().until(ExpectedConditions.visibilityOf(modalDialog)).findElement(By.tagName("h2")).getText());
+        assertEquals(
+                ADDED_TO_BAG_MESSAGE,
+                getWait10().until(ExpectedConditions.visibilityOf(modalDialogTitle)).getText()
+        );
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
@@ -236,6 +238,7 @@ public class CartTest extends BaseTest {
         String shippingPriceText = getWait5()
                 .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-testid='row-shipping-value']")))
                 .getText();
+
         if (shippingPriceText.equals("Free")) {
             shippingPrice = 0;
         } else {
