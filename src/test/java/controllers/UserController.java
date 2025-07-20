@@ -3,7 +3,7 @@ package controllers;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import utils.TokenManager;
+import utils.Token;
 
 import static io.restassured.RestAssured.given;
 import static testData.TestData.API_BASE_URL;
@@ -20,7 +20,7 @@ public class UserController {
                 .formParam("password", PROPERTIES_CONFIG.getPassword())
                 .formParam("client", "chrome")
                 .formParam("os", "Windows 10")
-                .header("Authorization", "Bearer " + TokenManager.getTokenByRole())
+                .header("Authorization", "Bearer " + Token.GUEST.getToken())
                 .header("Aesite", "AEO_US")
                 .header("Aelang", "en_US")
                 .baseUri(API_BASE_URL);

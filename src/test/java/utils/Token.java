@@ -17,15 +17,14 @@ public enum Token {
     GUEST {
         @Override
         public String getToken() {
-            return extractToken(
-                    buildTokenRequest()
-                            .formParam("grant_type", "client_credentials")
-                            .header("Cookie", PROPERTIES_CONFIG.getCookieValue())
-                            .when()
-                            .post(AUTH_ENDPOINT + "v5/token")
-                            .then()
-                            .body("token_type", Matchers.equalTo("Bearer"))
-                            .body("scope", Matchers.equalTo("guest"))
+            return extractToken(buildTokenRequest()
+                    .formParam("grant_type", "client_credentials")
+                    .header("Cookie", PROPERTIES_CONFIG.getCookieValue())
+                    .when()
+                    .post(AUTH_ENDPOINT + "v5/token")
+                    .then()
+                    .body("token_type", Matchers.equalTo("Bearer"))
+                    .body("scope", Matchers.equalTo("guest"))
             );
         }
     },
@@ -51,7 +50,8 @@ public enum Token {
                             .header("aelang", "en_US")
                             .header("aesite", "AEO_US")
                             .header("aecountry", "US")
-                            .header("Cookie", "TLTUID=" + TLTUID + "; " + "akaalb_PROD_ALB_API=" + akaalb_PROD_ALB_API + "; " +"ak_bmsc=" + ak_bmsc + "; " + "bm_sz=" + bm_sz + "; " + "_abck=" + abckCookie + "; " + "bm_sv=" + bm_sv)
+                            .header("Cookie", PROPERTIES_CONFIG.getCookieValue())
+                            .header("Cookie", "TLTUID=" + TLTUID + "; " + "akaalb_PROD_ALB_API=" + akaalb_PROD_ALB_API + "; " + "ak_bmsc=" + ak_bmsc + "; " + "bm_sz=" + bm_sz + "; " + "_abck=" + abckCookie + "; " + "bm_sv=" + bm_sv)
                             .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36")
                             .header("x-access-token", Token.GUEST.getToken())
                             .header("Origin", "https://www.ae.com")
