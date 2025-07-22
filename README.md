@@ -29,7 +29,7 @@ Also, the values of properties can be passed using the -D flag.
 
 ## View Allure Reports
 
-To generate Allure reports, please:
+### To generate Allure reports locally, please:
 1.	Navigate to the reports directory: cd ./build/
 2.	Run `allure serve`
 
@@ -47,6 +47,23 @@ Please verify that the path to /bin is set in your environment variables.
 
 <img src="images/screenshot-on-failure.png" alt="FailureScreenshot" />
 
+### To generate Allure reports in GitHub Actions, please:
+1. Navigate to the project’s page [American_eagle](https://github.com/StepanidaKirillina1/American_eagle)
+2. Click on the Actions tab after the CI build completion
+
+<img src="images/Actions.png" alt="ActionsTab"/>
+
+3. Click on the latest pages build and deployment link 
+
+<img src="images/pages.png" alt="pagesBuildAndDeployment"/>
+
+4. Click on the deploy link 
+
+<img src="images/deploy.png" alt="deploy"/>
+
+5. You will be redirected to the Allure Reports page
+
+<img src="images/allure-results.png" alt="AllureReportOverview" />
 
 ## Test Coverage
 
