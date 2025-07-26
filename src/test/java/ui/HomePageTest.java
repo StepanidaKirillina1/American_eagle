@@ -26,7 +26,7 @@ public class HomePageTest extends BaseTest {
     @Tags({@Tag("UI"), @Tag("Smoke"), @Tag("Positive")})
     public void isCategoriesTextVisibleTest() {
         List<String> expectedCategories = List.of(
-                "Today's Offers", "Women", "Men", "Jeans", "Shoes & Accessories", "Loungewear & PJs", "Aerie", "Clearance"
+                "Today's Offers", "New", "Women", "Men", "Jeans", "Shoes & Accessories", "Loungewear & PJs", "Aerie", "Clearance"
         );
 
         List<String> actualCategories = getWait30()

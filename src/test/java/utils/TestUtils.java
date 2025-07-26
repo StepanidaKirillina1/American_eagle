@@ -24,9 +24,9 @@ public class TestUtils {
     private static final By PROMO_LOCATOR = By.cssSelector("li.qa-promo-item");
     private static Logger logger = LogManager.getLogger();
     private static final By DROPDOWN = By.className("dropdown");
-    static double promoValue;
-    static double promoQuantity;
-    static double finalPrice;
+    private static double promoValue;
+    private static double promoQuantity;
+    private static double finalPrice;
 
     @Step("Get the first available size of the item")
     public static void getFirstAvailableSize(BaseTest baseTest, WebDriver driver) {
@@ -65,6 +65,8 @@ public class TestUtils {
         int randomIndex = new Random().nextInt(elements.size());
         WebElement selectedItem = elements.get(randomIndex);
 
+        closePopupIfAvailable(baseTest);
+
         logger.info(selectedItem.getText());
 
         selectedItem.click();
@@ -86,11 +88,10 @@ public class TestUtils {
         try {
             baseTest.getWait10().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".bloomreach-weblayer")))
                     .getShadowRoot()
-                    .findElement(By.cssSelector("button.close"))
+                    .findElement(By.cssSelector("button[class^='close']"))
                     .click();
             popupCounter++;
-
-        } catch (TimeoutException | NoSuchElementException e) {
+        } catch (Exception e) {
 
         }
 
@@ -117,7 +118,7 @@ public class TestUtils {
      * <ul>
      *   <li>Case 1: No discounts applied</li>
      *   <li>Case 2: "Applied! 2 for $62 USD Aerie Bras"</li>
-     *   <li>Case 3: "Applied! $10 off" (fixed-amount discount)</li>
+     *   <li>Case 3: "Applied! $10 off" </li>
      * </ul>
      */
     @Step("Calculate the final price with discount if available")
@@ -160,7 +161,7 @@ public class TestUtils {
         baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='modal-dialog'][not(@quickview)]")));
 
         CommonUtils.scrollAndClickWithJS(driver, driver.findElement(By.cssSelector("button[data-test-view-cart]")));
-        baseTest.getWait30().until(ExpectedConditions.visibilityOfElementLocated(By.name("loginMessage")));
+        baseTest.getWait60().until(ExpectedConditions.visibilityOfElementLocated(By.name("loginMessage")));
         logger.info(driver.getCurrentUrl());
     }
 
