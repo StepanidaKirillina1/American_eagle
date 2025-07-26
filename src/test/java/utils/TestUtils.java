@@ -60,16 +60,15 @@ public class TestUtils {
         }
     }
 
-    private static void clickOnRandomLink(By locator, BaseTest baseTest) {
+    private static void clickOnRandomLink(By locator, BaseTest baseTest, WebDriver driver) {
         List<WebElement> elements = baseTest.getWait60().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
         int randomIndex = new Random().nextInt(elements.size());
         WebElement selectedItem = elements.get(randomIndex);
 
         closePopupIfAvailable(baseTest);
-
         logger.info(selectedItem.getText());
 
-        selectedItem.click();
+        CommonUtils.scrollAndClickWithJS(driver, selectedItem);
     }
 
     @Step("Click on a random women category item")
@@ -77,9 +76,11 @@ public class TestUtils {
         new Actions(driver).moveToElement(baseTest.getWait60().until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[aria-label='Women']")))).perform();
         baseTest.getWait30().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class*='opened_']")));
 
-        clickOnRandomLink(By.xpath("//button[@aria-label='Women']/../div[@data-testid='megamenu-column']//a"), baseTest);
+        clickOnRandomLink(By.xpath("//button[@aria-label='Women']/../div[@data-testid='megamenu-column']//a"), baseTest, baseTest.getDriver());
 
         baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class^='_container'] h1")));
+
+        CommonUtils.scrollByViewportPercentage(baseTest.getDriver(), 100);
     }
 
     @Step("Close the popup if it appears")
@@ -100,7 +101,7 @@ public class TestUtils {
 
     @Step("Click on a random item and add it to the cart")
     public static void clickOnRandomItemLink(BaseTest baseTest) {
-        clickOnRandomLink(By.xpath("//img[@data-test='product-image']/ancestor::a[@data-testid]"), baseTest);
+        clickOnRandomLink(By.xpath("//img[@data-test='product-image']/ancestor::a[@data-testid]"), baseTest, baseTest.getDriver());
 
         closePopupIfAvailable(baseTest);
 
