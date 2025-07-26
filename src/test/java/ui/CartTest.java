@@ -76,6 +76,11 @@ public class CartTest extends BaseTest {
     @Test
     public void addItemToCartViaQuickShopButtonTest() {
         addFirstItemToCartViaQuickShopButton(driver, actions, this);
+
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
+
         getFirstAvailableSize(this, driver);
 
         if (popupCounter == 0) {

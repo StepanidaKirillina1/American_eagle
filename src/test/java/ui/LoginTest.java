@@ -15,13 +15,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 @Feature("Login")
 public class LoginTest extends BaseTest {
 
-    public static final TestPropertiesConfig PROPERTIES_CONFIG = ConfigFactory.create(TestPropertiesConfig.class, System.getProperties());
+    private static final TestPropertiesConfig PROPERTIES_CONFIG = ConfigFactory.create(TestPropertiesConfig.class, System.getProperties());
+    private static final String EXPECTED_LOGIN_MESSAGE = "test's account";
 
     @Tags({@Tag("UI"), @Tag("Positive"), @Tag("Bot_enabled")})
     @Test
     public void existingUserLoginTest() {
-        String expectedLoginMessage = "test's account";
-
         getWait30().until(ExpectedConditions.elementToBeClickable(By.className("sidetray-account"))).click();
         getWait10().until(ExpectedConditions.elementToBeClickable(By.name("signin"))).click();
 
@@ -34,6 +33,6 @@ public class LoginTest extends BaseTest {
                         .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h2.modal-title")))
                         .getText();
 
-        Assertions.assertEquals(expectedLoginMessage, actualLoginMessage.toLowerCase());
+        Assertions.assertEquals(EXPECTED_LOGIN_MESSAGE, actualLoginMessage.toLowerCase());
     }
 }
