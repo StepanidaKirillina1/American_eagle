@@ -41,6 +41,9 @@ public class CheckoutTest extends BaseTest {
             popupCounter++;
         }
         clickOnRandomItemLink(this);
+        if (popupCounter == 0) {
+            closePopupIfAvailable(this);
+        }
     }
 
     @Tags({@Tag("UI"), @Tag("Critical"), @Tag("Positive")})
