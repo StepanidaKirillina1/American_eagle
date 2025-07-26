@@ -100,7 +100,9 @@ public class TestUtils {
 
     @Step("Click on a random item and add it to the cart")
     public static void clickOnRandomItemLink(BaseTest baseTest) {
-        clickOnRandomLink(By.xpath("//img[@data-test='product-image']/ancestor::a"), baseTest);
+        clickOnRandomLink(By.xpath("//img[@data-test='product-image']/ancestor::a[@data-testid]"), baseTest);
+
+        closePopupIfAvailable(baseTest);
 
         baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1[data-testid='product-name']")));
     }
@@ -109,6 +111,8 @@ public class TestUtils {
     public static void addFirstItemToCartViaQuickShopButton(WebDriver driver, Actions actions, BaseTest baseTest) {
         actions.moveToElement(driver.findElement(By.cssSelector("[data-testid='media']"))).perform();
         CommonUtils.scrollAndClickWithJS(driver, driver.findElements(By.cssSelector("a.clickable.qa-show-sidetray-quickview")).get(0));
+
+        closePopupIfAvailable(baseTest);
 
         baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img[data-test-item-image]")));
     }
