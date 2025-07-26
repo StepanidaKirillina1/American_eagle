@@ -3,7 +3,7 @@
 
 
 - [Used technologies](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#used-technologies)
-- [How to run tests from the command line](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#how-to-run-tests-from-the-command-line)
+- [How to run tests](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#how-to-run-tests)
 - [View Allure Reports](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#view-allure-reports)
 - [Test Coverage](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#test-coverage)
 
@@ -13,10 +13,11 @@
 Java 17, JUnit5, Gradle, Selenium (UI), RestAssured (API), Allure Reports, Lombok, GitHub Actions (CI/CD), Builder (patterns), PageFactory (patterns)
 
 
-## How to run tests from the command line
+## How to run tests
 
-To execute the tests, please run the following command via the command line:  
-./gradlew clean {task.name}, for instance,
+### To run tests locally from the command line, please:
+
+execute the following command via the command line ./gradlew clean {task.name}, for instance,
 
 `./gradlew clean test`
 
@@ -26,6 +27,21 @@ Please ensure all required properties are filled locally.
 
 Also, the values of properties can be passed using the -D flag.
 
+### To run tests on the remote server, please:
+1. Navigate to the project’s page [American_eagle](https://github.com/StepanidaKirillina1/American_eagle)
+2. Click on the Actions tab 
+
+<img src="images/Actions.png" alt="ActionsTab"/>
+
+3. Click on the job’s name in the left side menu (Run tests)
+
+<img src="images/run tests.png" alt="runTestsJob" />
+
+4. Click on the Run workflow button 
+
+<img src="images/run workflow.png" alt="runWorkflowButton" />
+
+5. Wait for the tests to complete
 
 ## View Allure Reports
 
