@@ -34,12 +34,12 @@ public class TestUtils {
 
         CommonUtils.scrollToItemWithJS(driver, driver.findElement(By.xpath("//div[text()='Price:']")));
 
-        if (baseTest
-                .getWait10()
-                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(., 'Subscribe')]")))
-                .getText()
-                .toLowerCase()
-                .contains("subscribe")) {
+        List<WebElement> subscribeButtons = driver.findElements(
+                By.xpath("//button[contains(., 'Subscribe')]")
+        );
+        boolean isSubscribeDisplayed = !subscribeButtons.isEmpty() && subscribeButtons.get(0).getText().toLowerCase().contains("subscribe");
+
+        if (isSubscribeDisplayed) {
             LOGGER.info("item is currently unavailable");
             driver.navigate().back();
             clickOnRandomItemLink(baseTest);
