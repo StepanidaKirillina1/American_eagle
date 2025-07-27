@@ -30,23 +30,7 @@ public class TestUtils {
 
     @Step("Get the first available size of the item")
     public static void getFirstAvailableSize(BaseTest baseTest, WebDriver driver) {
-        try {
-            baseTest
-                    .getWait10()
-                    .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-testid='megamenu-column'][class*='opened']")));
-
-            Dimension viewportSize = driver.manage().window().getSize();
-            int centerX = viewportSize.getWidth() / 2;
-            int centerY = viewportSize.getHeight() / 2;
-
-            Actions actions = new Actions(driver);
-            actions.moveByOffset(centerX, centerY).perform();
-
-            LOGGER.info("the menu was open");
-
-        } catch (Exception e) {
-
-        }
+        closeOpenMenuIfAvailable(baseTest, driver);
 
         CommonUtils.scrollToItemWithJS(driver, driver.findElement(By.xpath("//div[text()='Price:']")));
 
@@ -56,6 +40,7 @@ public class TestUtils {
                 .getText()
                 .toLowerCase()
                 .contains("sold")) {
+            LOGGER.info("item was sold");
             driver.navigate().back();
             clickOnRandomItemLink(baseTest);
             getFirstAvailableSize(baseTest, driver);
@@ -97,8 +82,6 @@ public class TestUtils {
         clickOnRandomLink(By.xpath("//button[@aria-label='Women']/../div[@data-testid='megamenu-column']//a"), baseTest, baseTest.getDriver());
 
         baseTest.getWait10().until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class^='_container'] h1")));
-
-        CommonUtils.scrollByViewportPercentage(baseTest.getDriver(), 100);
     }
 
     @Step("Close the popup if it appears")
@@ -119,6 +102,7 @@ public class TestUtils {
 
     @Step("Click on a random item and add it to the cart")
     public static void clickOnRandomItemLink(BaseTest baseTest) {
+        closeOpenMenuIfAvailable(baseTest, baseTest.getDriver());
         clickOnRandomLink(By.xpath("//img[@data-test='product-image']/ancestor::a[@data-testid]"), baseTest, baseTest.getDriver());
 
         closePopupIfAvailable(baseTest);
@@ -250,5 +234,25 @@ public class TestUtils {
                         .getText()
                         .split(" ")[1]
         );
+    }
+
+    public static void closeOpenMenuIfAvailable(BaseTest baseTest, WebDriver driver) {
+        try {
+            baseTest
+                    .getWait5()
+                    .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-testid='megamenu-column'][class*='opened']")));
+
+            Dimension viewportSize = driver.manage().window().getSize();
+            int centerX = viewportSize.getWidth() / 2;
+            int centerY = viewportSize.getHeight() / 2;
+
+            Actions actions = new Actions(driver);
+            actions.moveByOffset(centerX, centerY).perform();
+
+            LOGGER.info("the menu was open");
+
+        } catch (Exception e) {
+
+        }
     }
 }
