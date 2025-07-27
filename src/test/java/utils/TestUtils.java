@@ -36,11 +36,11 @@ public class TestUtils {
 
         if (baseTest
                 .getWait10()
-                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[text()='Price:']/..//div[@data-test-product-prices]")))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(., 'Subscribe')]")))
                 .getText()
                 .toLowerCase()
-                .contains("sold")) {
-            LOGGER.info("item was sold");
+                .contains("subscribe")) {
+            LOGGER.info("item is currently unavailable");
             driver.navigate().back();
             clickOnRandomItemLink(baseTest);
             getFirstAvailableSize(baseTest, driver);
