@@ -22,7 +22,7 @@ public class TestUtils {
     private static final String OUT_OF_STOCK_TEXT = "Out of Stock Online";
     private static final By ITEM_LINK_LOCATOR = By.cssSelector("a[role='menuitem']");
     private static final By PROMO_LOCATOR = By.cssSelector("li.qa-promo-item");
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final By DROPDOWN = By.className("dropdown");
     private static double promoValue;
     private static double promoQuantity;
@@ -30,6 +30,24 @@ public class TestUtils {
 
     @Step("Get the first available size of the item")
     public static void getFirstAvailableSize(BaseTest baseTest, WebDriver driver) {
+        try {
+            baseTest
+                    .getWait10()
+                    .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-testid='megamenu-column'][class*='opened']")));
+
+            Dimension viewportSize = driver.manage().window().getSize();
+            int centerX = viewportSize.getWidth() / 2;
+            int centerY = viewportSize.getHeight() / 2;
+
+            Actions actions = new Actions(driver);
+            actions.moveByOffset(centerX, centerY).perform();
+
+            LOGGER.info("the menu was open");
+
+        } catch (Exception e) {
+
+        }
+
         CommonUtils.scrollToItemWithJS(driver, driver.findElement(By.xpath("//div[text()='Price:']")));
 
         if (baseTest
@@ -66,7 +84,7 @@ public class TestUtils {
         WebElement selectedItem = elements.get(randomIndex);
 
         closePopupIfAvailable(baseTest);
-        logger.info(selectedItem.getText());
+        LOGGER.info(selectedItem.getText());
 
         CommonUtils.scrollAndClickWithJS(driver, selectedItem);
     }
@@ -167,7 +185,7 @@ public class TestUtils {
 
         CommonUtils.scrollAndClickWithJS(driver, driver.findElement(By.cssSelector("button[data-test-view-cart]")));
         baseTest.getWait60().until(ExpectedConditions.visibilityOfElementLocated(By.name("loginMessage")));
-        logger.info(driver.getCurrentUrl());
+        LOGGER.info(driver.getCurrentUrl());
     }
 
     @Step("Remove item from the cart")
