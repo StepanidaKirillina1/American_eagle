@@ -43,4 +43,14 @@ public class HomePageTest extends BaseTest {
 
         Assertions.assertEquals(expectedCategories, actualCategories);
     }
+
+    @Test
+    @Tags({@Tag("UI"), @Tag("Smoke"), @Tag("Positive")})
+    public void cartCounterTest() {
+        String cartCounterValue = getWait10()
+                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[href='/us/en/cart'] span[data-test-content]")))
+                .getText();
+
+        Assertions.assertEquals("0", cartCounterValue);
+    }
 }
