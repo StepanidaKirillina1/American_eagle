@@ -4,8 +4,9 @@
 
 - [Used technologies](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#used-technologies)
 - [How to run tests](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#how-to-run-tests)
-- [View Allure Reports](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#view-allure-reports)
-- [Test Coverage](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#test-coverage)
+- [View Allure reports](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#view-allure-reports)
+- [Test coverage](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#test-coverage)
+- [Test plan](https://github.com/StepanidaKirillina1/American_eagle?tab=readme-ov-file#test-plan)
 
 
 ## Used technologies
@@ -81,7 +82,7 @@ Please verify that the path to /bin is set in your environment variables.
 
 <img src="images/allure-results.png" alt="AllureReportOverview" />
 
-## Test Coverage
+## Test coverage
 
 The following scenarios were automated:
 -	Adding items to the cart;
@@ -96,5 +97,10 @@ The following scenarios were automated:
 -	Existing user authorization;
 -	Access token retrieval;
 -	Free shipping option.
+
+## Test plan 
+
+Please refer to the test plan for more details [Test plan](https://docs.google.com/spreadsheets/d/1C29JccENFUaQlkE8aRPBH9PW4pZinP0R-ZKghEyiTp8/edit?gid=0#gid=0)
+
 
 
